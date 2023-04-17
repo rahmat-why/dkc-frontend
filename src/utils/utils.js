@@ -8,3 +8,7 @@ export const formatDate = (date) => {
     const formattedDate = moment(date).format('DD MMMM YYYY');
     return formattedDate
 }
+
+export const externalApi = () => {
+    return "https://background.angel-ping.my.id"
+}

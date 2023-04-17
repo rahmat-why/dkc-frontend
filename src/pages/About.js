@@ -1,45 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+
+import axios from 'axios';
+
 import { Container, Grid } from "@mui/material"
 import { Visi, Misi, Achievement, PotensiSegment, Navbar, Footer } from "../components"
-
-const dataVisi = [
-  {
-    goal_id: "GOALxx",
-    description: "Descxx",
-    type: "VISI"
-  },
-  {
-    goal_id: "GOALxx",
-    description: "Descxx",
-    type: "VISI"
-  }
-]
-
-const dataMisi = [
-  {
-    goal_id: "GOALxx",
-    description: "Descxx",
-    type: "MISI"
-  },
-  {
-    goal_id: "GOALxx",
-    description: "Descxx",
-    type: "MISI"
-  }
-]
-
-const dataAchievement = [
-  {
-    achievement_id: "ACHxx",
-    title: "Titlexx",
-    description: "Descxx"
-  },
-  {
-    achievement_id: "ACHxx",
-    title: "Titlexx",
-    description: "Descxx"
-  }
-]
+import { externalApi } from "./../utils/utils.js"
 
 const dataPotensiSegment = [
   {
@@ -53,6 +18,39 @@ const dataPotensiSegment = [
 ]
 
 export default function About() {
+  const [dataVisi, setVisi] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/goals/visi')
+      .then(response => {
+        setVisi(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  const [dataMisi, setMisi] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/goals/misi')
+      .then(response => {
+        setMisi(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  const [dataAchievement, setAchievement] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/achievements')
+      .then(response => {
+        setAchievement(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
       <Navbar />

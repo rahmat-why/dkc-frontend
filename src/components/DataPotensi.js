@@ -1,3 +1,7 @@
+import React, { useState, useEffect } from 'react'
+
+import axios from 'axios';
+
 import { 
   Table, 
   TableBody, 
@@ -8,124 +12,27 @@ import {
   Card, 
   CardContent, 
   Container, 
-  Typography
+  Typography,
+  Box
 } from '@mui/material';
 
 import ModalView from "./Admin/Agenda/ModalView"
+import { externalApi } from "./../utils/utils.js"
 
 export default function DataPotensi(props) {
-  const  { dataSchool } = props
+  const  { dataSchool, dkr_id } = props
+  const [dataPotensi, setDataPotensi] = useState([]);
 
-  const dataPotensi = [
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    }
-  ]
+  const viewDataPotensi = (school_id) => {
+    console.log([school_id, dkr_id])
+    axios.get(externalApi()+'/api/data-potensi/'+school_id+'/'+dkr_id)
+      .then(response => {
+        setDataPotensi(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 
   return (
     <Card sx={{ mt: 1, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
@@ -163,29 +70,32 @@ export default function DataPotensi(props) {
                     <TableCell align="center">{row.school_name}</TableCell>
                     <TableCell align="center">
                       {/* View */}
-                      <ModalView title="Data Potensi SMA">
-                        <Table aria-label="simple table">
-                          <TableHead>
-                            <TableRow>
-                              <TableCell align="left">Tingkat</TableCell>
-                              <TableCell align="left">Total Anggota</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {dataPotensi.map((row) => (
-                              <TableRow
-                                key={row.data_id}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                              >
-                                <TableCell component="th" scope="row">
-                                  {row.stage_name}
-                                </TableCell>
-                                <TableCell align="left">{row.total_member}</TableCell>
+                      <Box onClick={() => viewDataPotensi(row.school_id)}>
+                        <ModalView title="Data Potensi SMA">
+                          <Table aria-label="simple table">
+                            <TableHead>
+                              <TableRow>
+                                <TableCell align="left">Tingkat</TableCell>
+                                <TableCell align="left">Total Anggota</TableCell>
                               </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </ModalView>
+                            </TableHead>
+                            <TableBody>
+                              {dataPotensi.map((row) => (
+                                <TableRow
+                                  key={row.data_id}
+                                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                  <TableCell component="th" scope="row">
+                                    {row.stage_name}
+                                  </TableCell>
+                                  <TableCell align="left">{row.total_member}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </ModalView>
+                      </Box>
+                      
                     </TableCell>
                   </TableRow>
                 ))}

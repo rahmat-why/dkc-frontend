@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types';
 import { Tabs, Tab, Typography, Box, Card, CardContent, ListItem, ListItemText, Container, Grid } from '@mui/material';
 import { 
@@ -39,12 +39,14 @@ function a11yProps(index) {
   };
 }
 
-export default function AreaDkr() {
+export default function AreaDkr(props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const { dataDkr1, dataDkr2, dataDkr3, dataDkr4, dataDkr5 } = props
 
   return (
     <Card sx={{ mt: 3, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
@@ -64,43 +66,107 @@ export default function AreaDkr() {
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="DKR Kab. Bogor">
               <Tab label="Wilayah 1" {...a11yProps(0)} />
-              <Tab label="Item Two" {...a11yProps(1)} />
-              <Tab label="Item Three" {...a11yProps(2)} />
+              <Tab label="Wilayah 2" {...a11yProps(1)} />
+              <Tab label="Wilayah 3" {...a11yProps(2)} />
+              <Tab label="Wilayah 4" {...a11yProps(3)} />
+              <Tab label="Wilayah 5" {...a11yProps(4)} />
             </Tabs>
           </Box>
           
           <Container maxWidth="lg">
             <TabPanel value={value} index={0}>
               <Grid container spacing={2} sx={{ mt: 1 }}>
-                <Grid item xs={6} md={3} align="center">
-                  <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
-                    <ListItem alignItems="flex-start">
-                      <ListItemText
-                        primary="Parungpanjang"
-                      />
-                      <NavigateNextIcon fontSize="medium" />
-                    </ListItem>
-                  </Box>
-                </Grid>
-                <Grid item xs={6} md={3} align="center">
-                  <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
-                    <Link to="/dkr/Tenjo" className="link">
-                      <ListItem alignItems="flex-start">
-                        <ListItemText
-                          primary="Tenjo"
-                        />
-                        <NavigateNextIcon fontSize="medium" />
-                      </ListItem>
-                    </Link>
-                  </Box>
-                </Grid>
+                {dataDkr1.map((dkr, index) => (
+                  <Grid item xs={6} md={3} align="center">
+                    <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
+                      <Link to={`/dkr/${dkr.dkr_id}`} className="link">
+                        <ListItem alignItems="flex-start">
+                          <ListItemText
+                            primary={dkr.name}
+                          />
+                          <NavigateNextIcon fontSize="medium" />
+                        </ListItem>
+                      </Link>
+                    </Box>
+                  </Grid>
+                ))}
               </Grid>
             </TabPanel>
+
             <TabPanel value={value} index={1}>
-              Item Two
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                {dataDkr2.map((dkr, index) => (
+                  <Grid item xs={6} md={3} align="center">
+                    <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
+                      <Link to={`/dkr/${dkr.dkr_id}`} className="link">
+                        <ListItem alignItems="flex-start">
+                          <ListItemText
+                            primary={dkr.name}
+                          />
+                          <NavigateNextIcon fontSize="medium" />
+                        </ListItem>
+                      </Link>
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
             </TabPanel>
+
             <TabPanel value={value} index={2}>
-              Item Three
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                {dataDkr3.map((dkr, index) => (
+                  <Grid item xs={6} md={3} align="center">
+                    <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
+                      <Link to={`/dkr/${dkr.dkr_id}`} className="link">
+                        <ListItem alignItems="flex-start">
+                          <ListItemText
+                            primary={dkr.name}
+                          />
+                          <NavigateNextIcon fontSize="medium" />
+                        </ListItem>
+                      </Link>
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
+            </TabPanel>
+
+            <TabPanel value={value} index={3}>
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                {dataDkr4.map((dkr, index) => (
+                  <Grid item xs={6} md={3} align="center">
+                    <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
+                      <Link to={`/dkr/${dkr.dkr_id}`} className="link">
+                        <ListItem alignItems="flex-start">
+                          <ListItemText
+                            primary={dkr.name}
+                          />
+                          <NavigateNextIcon fontSize="medium" />
+                        </ListItem>
+                      </Link>
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
+            </TabPanel>
+
+            <TabPanel value={value} index={4}>
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                {dataDkr5.map((dkr, index) => (
+                  <Grid item xs={6} md={3} align="center">
+                    <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
+                      <Link to={`/dkr/${dkr.dkr_id}`} className="link">
+                        <ListItem alignItems="flex-start">
+                          <ListItemText
+                            primary={dkr.name}
+                          />
+                          <NavigateNextIcon fontSize="medium" />
+                        </ListItem>
+                      </Link>
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
             </TabPanel>
           </Container>
 

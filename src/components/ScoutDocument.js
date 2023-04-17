@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Table, TableBody, TableCell, Container, TableHead, TableRow, Paper, Typography } from "@mui/material"
+import { Table, TableBody, TableCell, Container, TableHead, TableRow, Paper, Typography, Button } from "@mui/material"
+import { externalApi } from "./../utils/utils.js"
 
 export default function ScoutDocument(props) {
   const { dataScoutDocument } = props
@@ -32,7 +33,9 @@ export default function ScoutDocument(props) {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="left">{row.file}</TableCell>
+              <TableCell align="left">
+                <Button href={externalApi()+row.document} target="_blank">Unduh disini</Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

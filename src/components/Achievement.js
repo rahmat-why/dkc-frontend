@@ -36,7 +36,7 @@ export default function Achievement(props) {
                   <Grid item md={10} xs={9} align="left">
                     <ListItem alignItems="flex-start">
                       <ListItemText
-                        primary="DKC Kabupaten Bogor Tergiat 1 se-Jawa Barat"
+                        primary={achievement.title}
                         secondary={
                           <React.Fragment>
                             <Typography

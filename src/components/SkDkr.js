@@ -1,7 +1,18 @@
-import { Typography, Card, CardContent, Container, Button } from '@mui/material'
+import { Typography, Card, CardContent, Container, Button, Box } from '@mui/material'
 import React from 'react'
+import { externalApi } from "./../utils/utils.js"
 
 export default function SkDkr(props) {
+  const { dataSkDkr } = props
+  
+  const documentSkDkr = () => {
+    if(!dataSkDkr) {
+      return <Box>Belum diupload!</Box>
+    }else{
+      return <Button href={externalApi()+dataSkDkr.document} target="_blank">Unduh disini</Button>
+    }
+  }
+
   return (
     <Card sx={{ mt: 1, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
       <CardContent>
@@ -18,9 +29,7 @@ export default function SkDkr(props) {
           </Typography>
           
           <Typography align="center">
-            <Button href="" target="_blank">
-              Unduh disini
-            </Button>
+            {documentSkDkr()}
           </Typography>
         </Container>
       </CardContent>

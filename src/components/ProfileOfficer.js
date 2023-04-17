@@ -39,12 +39,14 @@ function a11yProps(index) {
   };
 }
 
-export default function ProfileOfficer() {
+export default function ProfileOfficer(props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const { dataOfficer1, dataOfficer2, dataOfficer3, dataOfficer4, dataOfficer5 } = props
 
   return (
     <Card sx={{ mt: 3, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
@@ -64,57 +66,231 @@ export default function ProfileOfficer() {
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="Profil Pengurus DKC Kab. Bogor">
               <Tab label="Unsur pimpinan" {...a11yProps(0)} />
-              <Tab label="Item Two" {...a11yProps(1)} />
-              <Tab label="Item Three" {...a11yProps(2)} />
+              <Tab label="Bid. Kajian Kepramukaan" {...a11yProps(1)} />
+              <Tab label="Bid. Kegiatan" {...a11yProps(2)} />
+              <Tab label="Bid. Pembinaan dan Pengembangan" {...a11yProps(3)} />
+              <Tab label="Bid. Penelitian dan Evaluasi" {...a11yProps(4)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12} md={3} align="right">
-                <CardMedia 
-                  component="img"
-                  alt="Sambutan DKC Kab.Bogor"
-                  image="https://app.angel-ping.my.id/adm/dkc/adm/assets/file/profil/97-Ahmad%20Ridwan.jpeg"
-                  title="Sambutan DKC Kab.Bogor"
-                />
+            {dataOfficer1.map((row) => (
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} md={3} align="right">
+                  <CardMedia 
+                    component="img"
+                    alt="Sambutan DKC Kab.Bogor"
+                    image={row.image}
+                    title="Sambutan DKC Kab.Bogor"
+                  />
+                </Grid>
+                <Grid item xs={12} md={9} align="left">
+                  <Typography variant="body1" fontWeight="bold">
+                    {row.name}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
+                    {row.nta}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    {row.stage_id} | {row.education} | {row.city}
+                  </Typography>
+                  
+                  <List sx={{ width: '100%', maxWidth: 360 }}>
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <InstagramIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={row.instagram} />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <FacebookIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={row.facebook} />
+                    </ListItem>
+                  </List>
+                </Grid>  
               </Grid>
-              <Grid item xs={12} md={9} align="left">
-                <Typography variant="body1" fontWeight="bold">
-                  Ahmad Ridwan
-                </Typography>
-                <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
-                  0901.2025.04
-                </Typography>
-                <Typography variant="body1" sx={{ mt: 2 }}>
-                  Pandega | SMKN 1 Cibinong | Cibinong
-                </Typography>
-                
-                <List sx={{ width: '100%', maxWidth: 360 }}>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <InstagramIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="021xx" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <FacebookIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="email@gmail" />
-                  </ListItem>
-                </List>
-              </Grid>  
-            </Grid>
+            ))}
           </TabPanel>
           <TabPanel value={value} index={1}>
-            Item Two
+            {dataOfficer2.map((row) => (
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} md={3} align="right">
+                  <CardMedia 
+                    component="img"
+                    alt="Sambutan DKC Kab.Bogor"
+                    image={row.image}
+                    title="Sambutan DKC Kab.Bogor"
+                  />
+                </Grid>
+                <Grid item xs={12} md={9} align="left">
+                  <Typography variant="body1" fontWeight="bold">
+                    {row.name}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
+                    {row.nta}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    {row.stage_id} | {row.education} | {row.city}
+                  </Typography>
+                  
+                  <List sx={{ width: '100%', maxWidth: 360 }}>
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <InstagramIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={row.instagram} />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <FacebookIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={row.facebook} />
+                    </ListItem>
+                  </List>
+                </Grid>  
+              </Grid>
+            ))}
           </TabPanel>
           <TabPanel value={value} index={2}>
-            Item Three
+            {dataOfficer3.map((row) => (
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} md={3} align="right">
+                  <CardMedia 
+                    component="img"
+                    alt="Sambutan DKC Kab.Bogor"
+                    image={row.image}
+                    title="Sambutan DKC Kab.Bogor"
+                  />
+                </Grid>
+                <Grid item xs={12} md={9} align="left">
+                  <Typography variant="body1" fontWeight="bold">
+                    {row.name}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
+                    {row.nta}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    {row.stage_id} | {row.education} | {row.city}
+                  </Typography>
+                  
+                  <List sx={{ width: '100%', maxWidth: 360 }}>
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <InstagramIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={row.instagram} />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <FacebookIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={row.facebook} />
+                    </ListItem>
+                  </List>
+                </Grid>  
+              </Grid>
+            ))}
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            {dataOfficer4.map((row) => (
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} md={3} align="right">
+                  <CardMedia 
+                    component="img"
+                    alt="Sambutan DKC Kab.Bogor"
+                    image={row.image}
+                    title="Sambutan DKC Kab.Bogor"
+                  />
+                </Grid>
+                <Grid item xs={12} md={9} align="left">
+                  <Typography variant="body1" fontWeight="bold">
+                    {row.name}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
+                    {row.nta}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    {row.stage_id} | {row.education} | {row.city}
+                  </Typography>
+                  
+                  <List sx={{ width: '100%', maxWidth: 360 }}>
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <InstagramIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={row.instagram} />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <FacebookIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={row.facebook} />
+                    </ListItem>
+                  </List>
+                </Grid>  
+              </Grid>
+            ))}
+          </TabPanel>
+          <TabPanel value={value} index={4}>
+            {dataOfficer5.map((row) => (
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} md={3} align="right">
+                  <CardMedia 
+                    component="img"
+                    alt="Sambutan DKC Kab.Bogor"
+                    image={row.image}
+                    title="Sambutan DKC Kab.Bogor"
+                  />
+                </Grid>
+                <Grid item xs={12} md={9} align="left">
+                  <Typography variant="body1" fontWeight="bold">
+                    {row.name}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
+                    {row.nta}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    {row.stage_id} | {row.education} | {row.city}
+                  </Typography>
+                  
+                  <List sx={{ width: '100%', maxWidth: 360 }}>
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <InstagramIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={row.instagram} />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <FacebookIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={row.facebook} />
+                    </ListItem>
+                  </List>
+                </Grid>  
+              </Grid>
+            ))}
           </TabPanel>
         </Box>
       </CardContent>

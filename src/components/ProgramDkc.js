@@ -35,12 +35,15 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs() {
+export default function VerticalTabs(props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  
+  const { dataProgram2023, dataProgram2024, dataProgram2025 } = props
+  console.log([dataProgram2023, dataProgram2024, dataProgram2025])
 
   return (
     <Card sx={{ mt: 3, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
@@ -70,18 +73,39 @@ export default function VerticalTabs() {
         >
           <Tab label="Tahun 2023" {...a11yProps(0)} />
           <Tab label="Tahun 2024" {...a11yProps(1)} />
+          <Tab label="Tahun 2025" {...a11yProps(2)} />
         </Tabs>
         <TabPanel value={value} index={0}>
-          <Typography variant="body1">
-            Jota Joti
-          </Typography>
-          <Divider sx={{ mt: 2, mb: 2 }}/>
-          <Typography variant="body1">
-            Gladian Pimpinan Satuan Tersebar 5 Wilayah
-          </Typography>
+          {dataProgram2023.map((row) => (
+            <Box>
+              <Typography variant="body1">
+                {row.program_name}
+              </Typography>
+              <Divider sx={{ mt: 2, mb: 2 }}/>
+            </Box>
+          ))}
         </TabPanel>
+
         <TabPanel value={value} index={1}>
-          Item Two
+          {dataProgram2024.map((row) => (
+            <Box>
+              <Typography variant="body1">
+                {row.program_name}
+              </Typography>
+              <Divider sx={{ mt: 2, mb: 2 }}/>
+            </Box>
+          ))}
+        </TabPanel>
+
+        <TabPanel value={value} index={2}>
+          {dataProgram2025.map((row) => (
+            <Box>
+              <Typography variant="body1">
+                {row.program_name}
+              </Typography>
+              <Divider sx={{ mt: 2, mb: 2 }}/>
+            </Box>
+          ))}
         </TabPanel>
       </Box>
     </Card>
