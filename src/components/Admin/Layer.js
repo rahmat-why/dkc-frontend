@@ -1,21 +1,52 @@
 import React, { useState } from 'react'
-import { Card, CardContent, Typography, List, CardMedia, Box, TextField } from "@mui/material"
+import axios from 'axios';
+import { Card, CardContent, Typography, List, CardMedia, Box, TextField, Button } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
+import { externalApi } from "./../../utils/utils.js"
 
 export default function Layer(props) {
-  const [layer, setLayer] = useState('');
+  const { dataLayer } = props
+  const [image, setImage] = useState('');
   const [errors, setErrors] = useState({});
+
+  const handleFileChange = (event) => {
+    setImage(event.target.files[0]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation
     const errors = {};
-    if (!layer) errors.layer = 'Layer is required';
+    if (!image) errors.image = 'image is required';
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', image);
+    formData.append('type', 'LAYER')
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      try {
+        axios.post(externalApi()+'/api/banners', formData)
+        .then(response => console.log(response.data))
+        .catch(error => console.error(error));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  const handleDelete = async (banner_id) => {
+    if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
+      axios.delete(externalApi()+'/api/banners/'+banner_id)
+      .then(response => console.log(response.data))
+      .catch(error => console.error(error));
+
+      window.location.reload()
     }
   }
 
@@ -40,10 +71,9 @@ export default function Layer(props) {
                   type="file"
                   variant="outlined"
                   fullWidth
-                  value={layer}
-                  onChange={(e) => setLayer(e.target.value)}
-                  error={!!errors.layer}
-                  helperText={errors.layer ? errors.layer : ''}
+                  onChange={handleFileChange}
+                  error={!!errors.image}
+                  helperText={errors.image ? errors.image : ''}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -52,11 +82,18 @@ export default function Layer(props) {
               
             </Box>
           
-            <CardMedia
-              sx={{ height: 200 }}
-              image="https://app.angel-ping.my.id/adm/dkc/adm/assets/file/layer/64-DEWAN%20KERJA%20CABANG%20KABUPATEN%20BOGOR%20(2).png"
-              title="{product.image}"
-            />
+            {dataLayer.map((layer, index) => (
+              <Box>
+                <CardMedia
+                  sx={{ height: 200, mt: 3 }}
+                  image={externalApi()+layer.image}
+                  title={layer.image}
+                />
+                <Button onClick={() => handleDelete(layer.banner_id)}>
+                  Delete
+                </Button>
+              </Box>
+            ))}
             {/* <MenuTooltip align="right">
               <MenuItem>Delete</MenuItem>
             </MenuTooltip> */}

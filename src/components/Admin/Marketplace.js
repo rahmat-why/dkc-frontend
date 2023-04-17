@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import { 
   Table, 
   TableBody, 
@@ -17,6 +18,7 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import { externalApi } from "./../../utils/utils.js"
 
 export default function Marketplace(props) {
   const { dataProduct } = props
@@ -24,6 +26,10 @@ export default function Marketplace(props) {
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
   const [image, setImage] = useState('');
+
+  const handleFileChange = (event) => {
+    setImage(event.target.files[0]);
+  };
   
   const [errors, setErrors] = useState({});
 
@@ -33,17 +39,38 @@ export default function Marketplace(props) {
     // Validation
     const errors = {};
     if (!name) errors.name = 'Nama produk harus diisi!';
-    if (!link) errors.nta = 'Link redirect harus diisi!';
+    if (!link) errors.link = 'Link redirect harus diisi!';
     if (!image) errors.nta = 'Image harus diisi!';
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
     }
+
+    const formData = new FormData();
+    formData.append('image', image);
+    formData.append('name', name);
+    formData.append('link', link);
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      try {
+        axios.post(externalApi()+'/api/products', formData)
+        .then(response => console.log(response.data))
+        .catch(error => console.error(error));
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 
-  const handleDelete = async (e) => {
-  
+  const handleDelete = async (product_id) => {
+    if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
+      axios.delete(externalApi()+'/api/products/'+product_id)
+      .then(response => console.log(response.data))
+      .catch(error => console.error(error));
+
+      window.location.reload()
+    }
   }
 
   return (
@@ -90,8 +117,7 @@ export default function Marketplace(props) {
                   type="file"
                   variant="outlined"
                   fullWidth
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
+                  onChange={handleFileChange}
                   error={!!errors.image}
                   helperText={errors.image ? errors.image : ''}
                   InputLabelProps={{
@@ -119,7 +145,7 @@ export default function Marketplace(props) {
                     <TableCell align="left">
                       <CardMedia
                         sx={{ height: 140, width: 100 }}
-                        image={row.image}
+                        image={externalApi()+row.image}
                         title={row.name}
                       />
                     </TableCell>
@@ -133,7 +159,7 @@ export default function Marketplace(props) {
                     </TableCell>
                     <TableCell align="left">
                       <MenuTooltip>
-                        <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                        <MenuItem onClick={() => handleDelete(row.product_id)}>Delete</MenuItem>
                       </MenuTooltip>
                     </TableCell>
                   </TableRow>

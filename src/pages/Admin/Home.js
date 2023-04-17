@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { Sidebar, AgendaAdmin, LayerAdmin, MarketplaceAdmin } from "../../components"
+import { externalApi } from "./../../utils/utils.js"
 
 import { 
   Box, 
@@ -7,50 +9,40 @@ import {
   Grid
 } from "@mui/material"
 
-const dataAgenda = [
-  {
-    agenda_id: "AGDxx",
-    title: "Titlexx",
-    schedule_date: "2022-03-26"
-  },
-  {
-    agenda_id: "AGDxx",
-    title: "Titlexx",
-    schedule_date: "2022-03-26"
-  }
-]
-
-const dataLayer = [
-  {
-    banner_id: "LYRXX",
-    image: "https://app.angel-ping.my.id/adm/dkc/adm/assets/file/layer/497-DEWAN%20KERJA%20CABANG%20KABUPATEN%20BOGOR.png",
-    type: "LAYER",
-    label: "Label1"
-  },
-  {
-    banner_id: "LYRXX",
-    image: "https://app.angel-ping.my.id/adm/dkc/adm/assets/file/layer/64-DEWAN%20KERJA%20CABANG%20KABUPATEN%20BOGOR%20(2).png",
-    type: "LAYER",
-    label: "Label2"
-  }
-];
-
-const dataProduct = [
-  {
-    product_id: "PRDxx",
-    image: "https://app.angel-ping.my.id/adm/dkc/adm/assets/file/layer/64-DEWAN%20KERJA%20CABANG%20KABUPATEN%20BOGOR%20(2).png",
-    name: "Namexx",
-    link: "https://www.google.com"
-  },
-  {
-    product_id: "PRDxx",
-    image: "https://app.angel-ping.my.id/adm/dkc/adm/assets/file/layer/64-DEWAN%20KERJA%20CABANG%20KABUPATEN%20BOGOR%20(2).png",
-    name: "Namexx",
-    link: "https://www.google.com"
-  }
-]
-
 export default function Home() {
+  const [dataAgenda, setAgenda] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/agendas')
+      .then(response => {
+        setAgenda(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  const [dataLayer, setLayer] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/banners')
+      .then(response => {
+        setLayer(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  const [dataProduct, setProduct] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/products')
+      .then(response => {
+        setProduct(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
       <Box sx={{ display: 'flex' }}>
@@ -67,10 +59,12 @@ export default function Home() {
               <LayerAdmin dataLayer={dataLayer} />
             </Grid>
             <Grid item xs={12} md={6}>
-              <AgendaAdmin dataAgenda={dataAgenda} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <MarketplaceAdmin dataProduct={dataProduct} />
+              <Grid item xs={12} md={12}>
+                <AgendaAdmin dataAgenda={dataAgenda} />
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <MarketplaceAdmin dataProduct={dataProduct} />
+              </Grid>
             </Grid>
           </Grid>
         </Box>

@@ -1,36 +1,60 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import { Card, CardContent, Typography, List, ListItem, ListItemText, Divider, Box, TextField, MenuItem } from "@mui/material"
 import { formatDate } from '../../utils/utils';
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import { externalApi } from "./../../utils/utils.js"
 
 export default function Agenda(props) {
   const { dataAgenda } = props
   
-  const [title, setTitle] = useState('');
-  const [scheduleDate, setScheduleDate] = useState('');
   const [errors, setErrors] = useState({});
+
+  const [formData, setFormData] = useState({
+    title: '',
+    scheduleAt: ''
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation
     const errors = {};
-    if (!title) errors.title = 'Title harus diisi!';
-    if (!scheduleDate) errors.scheduleDate = 'Schedule date harus diisi!';
+    if (!formData.title) errors.title = 'Title harus diisi!';
+    if (!formData.scheduleAt) errors.scheduleAt ='Schedule date harus diisi!';
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
     }
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      axios.post(externalApi()+'/api/agendas', formData)
+        .then(response => console.log(response.data))
+        .catch(error => console.error(error));
+    
+      window.location.reload()
+    }
   }
 
-  const handleUpdate = async (e) => {
-  
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleUpdate = async (agenda_id) => {
+    
   }
 
-  const handleDelete = async (e) => {
-  
+  const handleDelete = async (agenda_id) => {
+    if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
+      axios.delete(externalApi()+'/api/agendas/'+agenda_id)
+      .then(response => console.log(response.data))
+      .catch(error => console.error(error));
+
+      window.location.reload()
+    }
   }
 
   return (
@@ -50,24 +74,26 @@ export default function Agenda(props) {
               </Typography>
               <ModalCreate handleSubmit={handleSubmit} title="Upload Agenda" type="UPLOAD">
                 <TextField 
+                  name="title"
                   label="Title*" 
                   variant="outlined"
                   fullWidth
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  value={formData.title}
+                  onChange={handleInputChange}
                   error={!!errors.title}
                   helperText={errors.title ? errors.title : ''}
                 />
 
                 <TextField
+                  name="scheduleAt"
                   label="Schedule date*"
                   type="date"
                   variant="outlined"
                   fullWidth
-                  value={scheduleDate}
-                  onChange={(e) => setScheduleDate(e.target.value)}
-                  error={!!errors.scheduleDate}
-                  helperText={errors.scheduleDate ? errors.scheduleDate : ''}
+                  value={formData.scheduleAt}
+                  onChange={handleInputChange}
+                  error={!!errors.scheduleAt}
+                  helperText={errors.scheduleAt ? errors.scheduleAt : ''}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -90,7 +116,7 @@ export default function Agenda(props) {
                         color="text.secondary"
                         sx={{ mt: 1 }}
                       >
-                        {formatDate(agenda.schedule_date)}
+                        {formatDate(agenda.scheduleAt)}
                       </Typography>
                       
                     </React.Fragment>
@@ -98,7 +124,7 @@ export default function Agenda(props) {
                 />
                 <MenuTooltip style={{ marginLeft: 'auto' }}>
                   <MenuItem onClick={handleUpdate}>Update</MenuItem>
-                  <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                  <MenuItem onClick={() => handleDelete(agenda.agenda_id)}>Delete</MenuItem>
                 </MenuTooltip>
               </ListItem>
             ))}
