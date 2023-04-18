@@ -55,8 +55,8 @@ export default function Marketplace(props) {
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
         axios.post(externalApi()+'/api/products', formData)
-        .then(response => console.log(response.data))
-        .catch(error => console.error(error));
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
       } catch (error) {
         console.error(error);
       }
@@ -66,8 +66,8 @@ export default function Marketplace(props) {
   const handleDelete = async (product_id) => {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/products/'+product_id)
-      .then(response => console.log(response.data))
-      .catch(error => console.error(error));
+      .then(response => window.alert("Data berhasil dihapus!"))
+      .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
 
       window.location.reload()
     }
