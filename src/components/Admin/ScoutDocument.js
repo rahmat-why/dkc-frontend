@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { 
   Table, 
   TableBody, 
@@ -11,15 +12,22 @@ import {
   List, 
   Box, 
   TextField,
-  Button
+  Button,
+  MenuItem
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
+import MenuTooltip from "./Agenda/MenuTooltip"
+import { externalApi } from "./../../utils/utils.js"
 
 export default function ScoutDocument(props) {
   const { dataScoutDocument } = props
 
   const [name, setName] = useState('');
   const [document, setDocument] = useState('');
+
+  const handleFileChange = (event) => {
+    setDocument(event.target.files[0]);
+  };
   
   const [errors, setErrors] = useState({});
 
@@ -34,6 +42,32 @@ export default function ScoutDocument(props) {
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('document', document)
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      try {
+        axios.post(externalApi()+'/api/scout-documents', formData)
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      } catch (error) {
+        window.alert("Terjadi kesalahan! data gagal ditambah!");
+      }
+    }
+
+    window.location.reload()
+  }
+
+  const handleDelete = async (document_id) => {
+    if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
+      axios.delete(externalApi()+'/api/scout-documents/'+document_id)
+      .then(response => window.alert("Data berhasil dihapus!"))
+      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+
+      // window.location.reload()
     }
   }
 
@@ -68,8 +102,7 @@ export default function ScoutDocument(props) {
                   type="file"
                   variant="outlined"
                   fullWidth
-                  value={document}
-                  onChange={(e) => setDocument(e.target.value)}
+                  onChange={handleFileChange}
                   error={!!errors.document}
                   helperText={errors.document ? errors.document : ''}
                   InputLabelProps={{
@@ -84,6 +117,7 @@ export default function ScoutDocument(props) {
                 <TableRow>
                   <TableCell align="left">Nama</TableCell>
                   <TableCell align="left">Document</TableCell>
+                  <TableCell align="left">#</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -99,6 +133,11 @@ export default function ScoutDocument(props) {
                       <Button href={row.document} target="_blank">
                         Document
                       </Button>
+                    </TableCell>
+                    <TableCell>
+                      <MenuTooltip>
+                        <MenuItem onClick={() => handleDelete(row.document_id)}>Delete</MenuItem>
+                      </MenuTooltip>
                     </TableCell>
                   </TableRow>
                 ))}

@@ -1,16 +1,23 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import { Card, CardContent, Typography, Grid, CardMedia, List, Box, TextField } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
+import { externalApi } from "./../../utils/utils.js"
 
 export default function SpeechLeader(props) {
-  const [description, setDescription] = useState('');
-  const [name, setName] = useState('');
-  const [nta, setNta] = useState('');
-  const [image, setImage] = useState('');
-  
-  const [errors, setErrors] = useState({});
 
   const { dataSpeechLeader } = props
+
+  const [description, setDescription] = useState(dataSpeechLeader.description);
+  const [name, setName] = useState(dataSpeechLeader.name);
+  const [nta, setNta] = useState(dataSpeechLeader.nta);
+  const [image, setImage] = useState('');
+
+  const handleFileChange = (event) => {
+    setImage(event.target.files[0]);
+  };
+  
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,10 +27,29 @@ export default function SpeechLeader(props) {
     if (!description) errors.description = 'Description is required';
     if (!name) errors.name = 'Nama Ketua DKC is required';
     if (!nta) errors.nta = 'NTA is required';
+    if (!image) errors.image = 'Image is required';
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
+    }
+
+    const formData = new FormData();
+    formData.append('description', description);
+    formData.append('name', name);
+    formData.append('nta', nta);
+    formData.append('image', image);
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      try {
+        axios.post(externalApi()+'/api/speechs', formData)
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      } catch (error) {
+        console.error(error);
+      }
+
+      window.location.reload()
     }
   }
 
@@ -75,6 +101,19 @@ export default function SpeechLeader(props) {
                   helperText={errors.description ? errors.description : ''}
                   sx={{ mt: 3 }}
                 />
+                <TextField
+                  label="Image* (silahkan upload ulang)"
+                  type="file"
+                  variant="outlined"
+                  fullWidth
+                  onChange={handleFileChange}
+                  error={!!errors.image}
+                  helperText={errors.image ? errors.image : ''}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  sx={{ mt: 3 }}
+                />
               </ModalCreate>
             </Box>
             <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -93,20 +132,9 @@ export default function SpeechLeader(props) {
                 <CardMedia 
                   component="img"
                   alt="Sambutan DKC Kab.Bogor"
-                  image={dataSpeechLeader.image}
+                  image={externalApi()+dataSpeechLeader.image}
                   title="Sambutan DKC Kab.Bogor"
                 />
-                <ModalCreate handleSubmit={handleSubmit} title="Update Foto Ketua DKC" type="UPLOAD">
-                  <TextField
-                    type="file"
-                    variant="outlined"
-                    fullWidth
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
-                    error={!!errors.image}
-                    helperText={errors.image ? errors.image : ''}
-                  />
-                </ModalCreate>
               </Grid>
             </Grid>
           </Box>

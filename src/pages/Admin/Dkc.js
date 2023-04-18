@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { Sidebar, SpeechLeaderAdmin, ProfileOfficerAdmin, AreaCoordinatorAdmin,ProgramDkcAdmin } from "../../components"
 
 import { 
@@ -6,73 +7,130 @@ import {
   Toolbar,
   Grid
 } from "@mui/material"
+import { externalApi } from "./../../utils/utils.js"
 
-const dataSpeechLeader = {
-  speech_id: "SPCxx",
-  name: "Namexx",
-  nta: "NTAxx",
-  image: "https://app.angel-ping.my.id/adm/dkc/adm/assets/file/visimisi/194-visi.jpg",
-  description: "Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools. Explore the origins, history and meaning of the famous passage, and learn how Lorem Ipsum went from"
-}
-
-const dataProfileOfficer = [
+const dataStage = [
   {
-    officer_id: "OFCxx",
-    name: "Namexx",
-    nta: "NTAxx",
-    image: "https://app.angel-ping.my.id/adm/dkc/adm/assets/file/profil/97-Ahmad%20Ridwan.jpeg",
-    stage_name: "Stagexx",
-    scope_name: "Scopexx",
-    education: "Univxx",
-    city: "Cityxx",
-    instagram: "http://xx",
-    facebook: "http://xx"
+    stage_id: "STG01",
+    name: "Calon Penegak"
   },
   {
-    officer_id: "OFCxx",
-    name: "Namexx",
-    nta: "NTAxx",
-    image: "https://app.angel-ping.my.id/adm/dkc/adm/assets/file/profil/97-Ahmad%20Ridwan.jpeg",
-    stage_name: "Stagexx",
-    scope_name: "Scopexx",
-    education: "Univxx",
-    city: "Cityxx",
-    instagram: "http://xx",
-    facebook: "http://xx"
+    stage_id: "STG02",
+    name: "Penegak Bantara"
+  },
+  {
+    stage_id: "STG03",
+    name: "Penegak Laksana"
+  },
+  {
+    stage_id: "STG04",
+    name: "Penegak Garuda"
+  },
+  {
+    stage_id: "STG05",
+    name: "Calon Pandega"
+  },
+  {
+    stage_id: "STG06",
+    name: "Pandega"
+  },
+  {
+    stage_id: "STG07",
+    name: "Pandega Garuda"
   }
 ]
 
-const dataAreaCoordinator = [
+const dataScope = [
   {
-    coordinator_id: "CORxx",
-    name: "Namexx",
-    nta: "NTAxx",
-    image: "https://app.angel-ping.my.id/adm/dkc/adm/assets/file/profil/97-Ahmad%20Ridwan.jpeg",
-    area_name: "Areaxx"
+    scope_id: "SC01",
+    name: "Unsur Pimpinan"
   },
   {
-    coordinator_id: "CORxx",
-    name: "Namexx",
-    nta: "NTAxx",
-    image: "https://app.angel-ping.my.id/adm/dkc/adm/assets/file/profil/751-Vera%20Silviani.jpeg",
-    area_name: "Areaxx"
+    scope_id: "SC02",
+    name: "Bid. Kajian Kepramukaan"
+  },
+  {
+    scope_id: "SC03",
+    name: "Bid. Kegiatan"
+  },
+  {
+    scope_id: "SC04",
+    name: "Bid. Pembinaan dan Pengembangan"
+  },
+  {
+    scope_id: "SC05",
+    name: "Bid. Penelitian dan Evaluasi"
   }
 ]
 
-const dataProgramDkc = [
+const areas = [
   {
-    agenda_id: "AGDxx",
-    title: "Titlexx",
-    schedule_date: "2022-03-26"
+    area_id: "WIL01",
+    name: "Wilayah 1"
   },
   {
-    agenda_id: "AGDxx",
-    title: "Titlexx",
-    schedule_date: "2022-03-26"
+    area_id: "WIL02",
+    name: "Wilayah 2"
+  },
+  {
+    area_id: "WIL03",
+    name: "Wilayah 3"
+  },
+  {
+    area_id: "WIL04",
+    name: "Wilayah 4"
+  },
+  {
+    area_id: "WIL05",
+    name: "Wilayah 5"
   }
 ]
 
 export default function Dkc() {
+  const [dataSpeechLeader, setSpeechLeader] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/speechs')
+      .then(response => {
+        setSpeechLeader(response.data.data[0]);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+  
+  const [dataProfileOfficer, setProfileOfficer] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/officers')
+      .then(response => {
+        setProfileOfficer(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+  
+  const [dataProgramDkc, setProgramDkc] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/programs-dkc')
+      .then(response => {
+        setProgramDkc(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  const [dataAreaCoordinator, setAreaCoordinator] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/area-coordinators')
+      .then(response => {
+        setAreaCoordinator(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
       <Box sx={{ display: 'flex' }}>
@@ -90,7 +148,7 @@ export default function Dkc() {
             </Grid>
 
             <Grid item xs={12} md={12}>
-              <ProfileOfficerAdmin dataProfileOfficer={dataProfileOfficer} />
+              <ProfileOfficerAdmin dataProfileOfficer={dataProfileOfficer} dataStage={dataStage} dataScope={dataScope} />
             </Grid>
 
             <Grid item xs={12} md={12}>
@@ -98,7 +156,7 @@ export default function Dkc() {
             </Grid>
 
             <Grid item xs={12} md={12}>
-              <AreaCoordinatorAdmin dataAreaCoordinator={dataAreaCoordinator} />
+              <AreaCoordinatorAdmin dataAreaCoordinator={dataAreaCoordinator} areas={areas} />
             </Grid>
           </Grid>
         </Box>

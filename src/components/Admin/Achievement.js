@@ -96,7 +96,7 @@ export default function Achievement(props) {
             </Box>
 
             {dataAchievement.map((achievement, index) => (
-              <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }} key={achievement.achievement_id}>
                 <Grid container spacing={2}>
                   <Grid item md={2} xs={3} align="right">
                     <CardMedia

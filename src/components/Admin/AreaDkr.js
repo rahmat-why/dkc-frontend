@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import { 
   Table, 
   TableBody, 
@@ -11,33 +12,88 @@ import {
   List, 
   Box, 
   TextField,
-  Button,
-  IconButton
+  MenuItem
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
-import { Settings as SettingsIcon } from '@mui/icons-material';
+import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
+import { externalApi } from "./../../utils/utils.js"
 
 export default function AreaDkr(props) {
-  const { dataAreaDkr } = props
+  const { dataAreaDkr, areas } = props
+  const [dkr_id, setDkrId] = useState('');
 
-  const [description, setDescription] = useState('');
-  const [name, setName] = useState('');
-  const [nta, setNta] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    area_id: '',
+    username: '',
+    password: ''
+  });
   
   const [errors, setErrors] = useState({});
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation
     const errors = {};
-    if (!description) errors.description = 'Description is required';
-    if (!name) errors.name = 'Nama Ketua DKC is required';
-    if (!nta) errors.nta = 'NTA is required';
+    if (!formData.name) errors.name = 'Name is required';
+    if (!formData.area_id) errors.area_id = 'Area is required';
+    if (!formData.username) errors.username = 'Username is required';
+    if (!formData.password) errors.password = 'Password is required';
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
+    }
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      axios.post(externalApi()+'/api/dkr', formData)
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+    
+      // window.location.reload()
+    }
+  }
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const [open, setOpen] = useState(false);
+
+  const handleUpdate = (dkr) => {
+    setOpen(true);
+    setFormData({ name: dkr.name, area_id: dkr.area_id, username: dkr.username, password: dkr.password })
+    setDkrId(dkr.dkr_id)
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!formData.name) errors.name = 'Name is required';
+    if (!formData.area_id) errors.area_id = 'Area is required';
+    if (!formData.username) errors.username = 'Username is required';
+    if (!formData.password) errors.password = 'Password is required';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      axios.put(externalApi()+'/api/dkr/'+dkr_id, formData)
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+    
+      // window.location.reload()
     }
   }
 
@@ -61,32 +117,51 @@ export default function AreaDkr(props) {
                 <TextField
                   label="Nama*"
                   variant="outlined"
+                  name="name"
                   fullWidth
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={formData.name}
+                  onChange={handleInputChange}
                   error={!!errors.name}
                   helperText={errors.name ? errors.name : ''}
                 />
                 <TextField
                   label="Area*"
                   variant="outlined"
+                  name="area_id"
                   fullWidth
-                  value={nta}
-                  onChange={(e) => setNta(e.target.value)}
-                  error={!!errors.nta}
-                  helperText={errors.nta ? errors.nta : ''}
+                  select
+                  value={formData.area_id}
+                  onChange={handleInputChange}
+                  error={!!errors.area_id}
+                  helperText={errors.area_id ? errors.area_id : ''}
+                  sx={{ mt: 3 }}
+                >
+                  {areas.map((area) => (
+                    <MenuItem key={area.id} value={area.area_id}>
+                      {area.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  label="Username*"
+                  variant="outlined"
+                  name="username"
+                  fullWidth
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  error={!!errors.username}
+                  helperText={errors.username ? errors.username : ''}
                   sx={{ mt: 3 }}
                 />
                 <TextField
-                  label="Sambutan*"
+                  label="Password*"
                   variant="outlined"
+                  name="password"
                   fullWidth
-                  value={description}
-                  multiline
-                  rows={4}
-                  onChange={(e) => setDescription(e.target.value)}
-                  error={!!errors.description}
-                  helperText={errors.description ? errors.description : ''}
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  error={!!errors.password}
+                  helperText={errors.password ? errors.password : ''}
                   sx={{ mt: 3 }}
                 />
               </ModalCreate>
@@ -96,7 +171,7 @@ export default function AreaDkr(props) {
                 <TableRow>
                   <TableCell align="left">Nama</TableCell>
                   <TableCell align="left">Area</TableCell>
-                  <TableCell align="left">Akun</TableCell>
+                  <TableCell align="left">#</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -110,13 +185,64 @@ export default function AreaDkr(props) {
                     </TableCell>
                     <TableCell align="left">{row.area_name}</TableCell>
                     <TableCell align="left">
-                      <Button sx={{ height: '35px', backgroundColor: '#4040A1' }} size="small" variant="contained">
-                        View 
-                        <IconButton><SettingsIcon fontSize='small' sx={{ color: "#fff" }} /></IconButton>
-                      </Button>
+                      <MenuTooltip style={{ marginLeft: 'auto' }}>
+                        <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
+                      </MenuTooltip>
                     </TableCell>
                   </TableRow>
                 ))}
+                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update DKR" handleClose={handleClose}>
+                  <TextField
+                    label="Nama*"
+                    variant="outlined"
+                    name="name"
+                    fullWidth
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name : ''}
+                  />
+                  <TextField
+                    label="Area*"
+                    variant="outlined"
+                    name="area_id"
+                    fullWidth
+                    select
+                    value={formData.area_id}
+                    onChange={handleInputChange}
+                    error={!!errors.area_id}
+                    helperText={errors.area_id ? errors.area_id : ''}
+                    sx={{ mt: 3 }}
+                  >
+                    {areas.map((area) => (
+                      <MenuItem key={area.id} value={area.area_id}>
+                        {area.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <TextField
+                    label="Username*"
+                    variant="outlined"
+                    name="username"
+                    fullWidth
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    error={!!errors.username}
+                    helperText={errors.username ? errors.username : ''}
+                    sx={{ mt: 3 }}
+                  />
+                  <TextField
+                    label="Password*"
+                    variant="outlined"
+                    name="password"
+                    fullWidth
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    error={!!errors.password}
+                    helperText={errors.password ? errors.password : ''}
+                    sx={{ mt: 3 }}
+                  />
+                </ModalUpdate>
               </TableBody>
             </Table>
           </Box>

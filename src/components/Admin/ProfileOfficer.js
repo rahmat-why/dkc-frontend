@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import { 
   Table, 
   TableBody, 
@@ -12,16 +13,20 @@ import {
   Box, 
   TextField,
   Grid,
-  CardMedia
+  CardMedia,
+  MenuItem
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
+import MenuTooltip from "./Agenda/MenuTooltip"
+import { externalApi } from "./../../utils/utils.js"
 
 export default function ProfileOfficer(props) {
-  const { dataProfileOfficer } = props
+  const { dataProfileOfficer, dataStage, dataScope } = props
 
   const [name, setName] = useState('');
   const [nta, setNta] = useState('');
-  const [stage, setStage] = useState('');
+  const [stage_id, setStageId] = useState('');
+  const [scope_id, setScopeId] = useState('');
   const [education, setEducation] = useState('');
   const [city, setCity] = useState('');
   const [instagram, setInstagram] = useState('');
@@ -30,6 +35,10 @@ export default function ProfileOfficer(props) {
   
   const [errors, setErrors] = useState({});
 
+  const handleFileChange = (event) => {
+    setImage(event.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,7 +46,8 @@ export default function ProfileOfficer(props) {
     const errors = {};
     if (!name) errors.name = 'Nama harus diisi';
     if (!nta) errors.nta = 'NTA harus diisi';
-    if (!stage) errors.stage = 'Stage harus diisi';
+    if (!stage_id) errors.stage_id = 'Tingkat harus diisi';
+    if (!scope_id) errors.scope_id = 'Posisi harus diisi';
     if (!education) errors.education = 'Pendidikan harus diisi';
     if (!city) errors.city = 'Kota/Kab harus diisi';
     if (!instagram) errors.instagram = 'Akun instagram harus diisi';
@@ -47,6 +57,36 @@ export default function ProfileOfficer(props) {
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('nta', nta);
+    formData.append('stage_id', stage_id);
+    formData.append('scope_id', scope_id);
+    formData.append('education', education);
+    formData.append('city', city);
+    formData.append('instagram', instagram);
+    formData.append('facebook', facebook);
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      try {
+        axios.post(externalApi()+'/api/officers', formData)
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  const handleDelete = async (officer_id) => {
+    if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
+      axios.delete(externalApi()+'/api/officers/'+officer_id)
+      .then(response => window.alert("Data berhasil dihapus!"))
+      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+
+      window.location.reload()
     }
   }
 
@@ -72,6 +112,7 @@ export default function ProfileOfficer(props) {
                     <TextField
                       label="Nama*"
                       variant="outlined"
+                      name="name"
                       fullWidth
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -83,6 +124,7 @@ export default function ProfileOfficer(props) {
                     <TextField
                       label="NTA*"
                       variant="outlined"
+                      name="nta"
                       fullWidth
                       value={nta}
                       onChange={(e) => setNta(e.target.value)}
@@ -91,20 +133,52 @@ export default function ProfileOfficer(props) {
                     />
                   </Grid>
                 </Grid>
+
+                <Grid container spacing={2}>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="stage_id"
+                      label="Tingkat*"
+                      variant="outlined"
+                      name="stage_id"
+                      select
+                      value={stage_id}
+                      onChange={(e) => setStageId(e.target.value)}
+                      fullWidth
+                      sx={{ mt: 3 }}
+                    >
+                      {dataStage.map((stage) => (
+                        <MenuItem key={stage.stage_id} value={stage.stage_id}>
+                          {stage.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="scope_id"
+                      label="Posisi*"
+                      variant="outlined"
+                      name="scope_id"
+                      select
+                      value={scope_id}
+                      onChange={(e) => setScopeId(e.target.value)}
+                      fullWidth
+                      sx={{ mt: 3 }}
+                    >
+                      {dataScope.map((scope) => (
+                        <MenuItem key={scope.scope_id} value={scope.scope_id}>
+                          {scope.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                </Grid>
                 
-                <TextField
-                  label="Tingkat*"
-                  variant="outlined"
-                  fullWidth
-                  value={stage}
-                  onChange={(e) => setStage(e.target.value)}
-                  error={!!errors.stage}
-                  helperText={errors.stage ? errors.stage : ''}
-                  sx={{ mt: 3 }}
-                />
                 <TextField
                   label="Pendidikan*"
                   variant="outlined"
+                  name="education"
                   fullWidth
                   value={education}
                   onChange={(e) => setEducation(e.target.value)}
@@ -118,6 +192,7 @@ export default function ProfileOfficer(props) {
                 <TextField
                   label="Kota/Kab*"
                   variant="outlined"
+                  name="city"
                   fullWidth
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
@@ -131,6 +206,7 @@ export default function ProfileOfficer(props) {
                     <TextField
                       label="Akun Instagram*"
                       variant="outlined"
+                      name="instagram"
                       fullWidth
                       value={instagram}
                       onChange={(e) => setInstagram(e.target.value)}
@@ -146,6 +222,7 @@ export default function ProfileOfficer(props) {
                     <TextField
                       label="Akun Facebook*"
                       variant="outlined"
+                      name="facebook"
                       fullWidth
                       value={facebook}
                       onChange={(e) => setFacebook(e.target.value)}
@@ -163,8 +240,7 @@ export default function ProfileOfficer(props) {
                   type="file"
                   variant="outlined"
                   fullWidth
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
+                  onChange={handleFileChange}
                   error={!!errors.image}
                   helperText={errors.image ? errors.image : ''}
                   InputLabelProps={{
@@ -181,10 +257,12 @@ export default function ProfileOfficer(props) {
                   <TableCell align="left">Nama</TableCell>
                   <TableCell align="left">NTA</TableCell>
                   <TableCell align="left">Tingkat</TableCell>
+                  <TableCell align="left">Posisi</TableCell>
                   <TableCell align="left">Pendidikan</TableCell>
                   <TableCell align="left">Kota/Kab</TableCell>
                   <TableCell align="left">Instagram</TableCell>
                   <TableCell align="left">Facebook</TableCell>
+                  <TableCell align="left">#</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -204,11 +282,18 @@ export default function ProfileOfficer(props) {
                       {row.name}
                     </TableCell>
                     <TableCell align="left">{row.nta}</TableCell>
-                    <TableCell align="left">{row.stage_name}</TableCell>
+                    <TableCell align="left">{row.stage_id}</TableCell>
+                    <TableCell align="left">{row.scope_id}</TableCell>
                     <TableCell align="left">{row.education}</TableCell>
                     <TableCell align="left">{row.city}</TableCell>
                     <TableCell align="left">{row.instagram}</TableCell>
                     <TableCell align="left">{row.facebook}</TableCell>
+                    <TableCell align="left">
+                      <MenuTooltip style={{ marginLeft: 'auto' }}>
+                        <MenuItem>Update</MenuItem>
+                        <MenuItem onClick={() => handleDelete(row.officer)}>Delete</MenuItem>
+                      </MenuTooltip>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

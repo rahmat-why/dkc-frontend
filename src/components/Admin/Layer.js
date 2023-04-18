@@ -83,7 +83,7 @@ export default function Layer(props) {
             </Box>
           
             {dataLayer.map((layer, index) => (
-              <Box>
+              <Box key={layer.banner_id}>
                 <CardMedia
                   sx={{ height: 200, mt: 3 }}
                   image={externalApi()+layer.image}

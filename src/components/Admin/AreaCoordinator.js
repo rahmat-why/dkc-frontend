@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import { 
   Table, 
   TableBody, 
@@ -16,13 +17,14 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import { externalApi } from "./../../utils/utils.js"
 
 export default function AreaCoordinator(props) {
-  const { dataAreaCoordinator } = props
+  const { dataAreaCoordinator, areas } = props
 
   const [name, setName] = useState('');
   const [nta, setNta] = useState('');
-  const [area, setArea] = useState('');
+  const [area_id, setAreaId] = useState('');
   const [image, setImage] = useState('');
   
   const [errors, setErrors] = useState({});
@@ -34,44 +36,43 @@ export default function AreaCoordinator(props) {
     const errors = {};
     if (!name) errors.name = 'Nama harus diisi';
     if (!nta) errors.nta = 'NTA harus diisi';
-    if (!area) errors.area = 'Area harus diisi';
+    if (!area_id) errors.area_id = 'Area harus diisi';
     if (!image) errors.image = 'Foto harus diisi';
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
     }
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('nta', nta);
+    formData.append('area_id', area_id);
+    formData.append('image', image);
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      try {
+        axios.post(externalApi()+'/api/area-coordinators', formData)
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 
-  const handleArea = (event) => {
-    setArea(event.target.value);
+  const handleFileChange = (event) => {
+    setImage(event.target.files[0]);
   };
 
-  const areas = [
-    {
-      area_id: "AREA1",
-      name: "Wilayah 1"
-    },
-    {
-      area_id: "AREA2",
-      name: "Wilayah 2"
-    },
-    {
-      area_id: "AREA3",
-      name: "Wilayah 3"
-    },
-    {
-      area_id: "AREA4",
-      name: "Wilayah 4"
-    },
-    {
-      area_id: "AREA5",
-      name: "Wilayah 5"
-    }
-  ]
+  const handleDelete = async (coordinator_id) => {
+    if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
+      axios.delete(externalApi()+'/api/area-coordinators/'+coordinator_id)
+      .then(response => window.alert("Data berhasil dihapus!"))
+      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
 
-  const handleDelete = async (e) => {
-  
+      // window.location.reload()
+    }
   }
 
   return (
@@ -115,10 +116,10 @@ export default function AreaCoordinator(props) {
                   variant="outlined"
                   fullWidth
                   select
-                  value={area}
-                  onChange={handleArea}
-                  error={!!errors.area}
-                  helperText={errors.area ? errors.area : ''}
+                  value={area_id}
+                  onChange={(e) => setAreaId(e.target.value)}
+                  error={!!errors.area_id}
+                  helperText={errors.area_id ? errors.area_id : ''}
                   sx={{ mt: 3 }}
                 >
                   {areas.map((area) => (
@@ -132,8 +133,7 @@ export default function AreaCoordinator(props) {
                   type="file"
                   variant="outlined"
                   fullWidth
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
+                  onChange={handleFileChange}
                   error={!!errors.image}
                   helperText={errors.image ? errors.image : ''}
                   InputLabelProps={{
@@ -173,7 +173,7 @@ export default function AreaCoordinator(props) {
                     <TableCell align="left">{row.area_name}</TableCell>
                     <TableCell align="left">
                       <MenuTooltip>
-                        <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                        <MenuItem onClick={() => handleDelete(row.coordinator_id)}>Delete</MenuItem>
                       </MenuTooltip>
                     </TableCell>
                   </TableRow>

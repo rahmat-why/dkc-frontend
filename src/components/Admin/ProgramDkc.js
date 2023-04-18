@@ -1,34 +1,57 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import { Card, CardContent, Typography, List, ListItem, ListItemText, Divider, Box, TextField, MenuItem } from "@mui/material"
-import { formatDate } from '../../utils/utils';
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import { externalApi } from "./../../utils/utils.js"
 
 export default function ProgramDkc(props) {
   const { dataProgramDkc } = props
   
-  const [title, setTitle] = useState('');
   const [errors, setErrors] = useState({});
-  const [year, setYear] = useState('');
+
+  const [formData, setFormData] = useState({
+    program_name: '',
+    year: ''
+  });
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from(new Array(5), (val, index) => currentYear + index);
-
-  const handleYearChange = (event) => {
-    setYear(event.target.value);
-  };
+  const years = Array.from(new Array(3), (val, index) => currentYear + index);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation
     const errors = {};
-    if (!title) errors.title = 'Title is required';
-    if (!year) errors.year = 'Year is required';
+    if (!formData.program_name) errors.program_name = 'Program name is required';
+    if (!formData.year) errors.year = 'Year is required';
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
+    }
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      axios.post(externalApi()+'/api/programs-dkc', formData)
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+    
+      window.location.reload()
+    }
+  }
+  
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleDelete = async (program_id) => {
+    if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
+      axios.delete(externalApi()+'/api/programs-dkc/'+program_id)
+      .then(response => window.alert("Data berhasil dihapus!"))
+      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+
+      window.location.reload()
     }
   }
 
@@ -47,24 +70,26 @@ export default function ProgramDkc(props) {
               >
                 PROGRAM DKC
               </Typography>
-              <ModalCreate handleSubmit={handleSubmit} title="Create Agenda" type="ADD">
+              <ModalCreate handleSubmit={handleSubmit} title="Upload Program DKC" type="ADD">
                 <TextField 
-                  label="Title*" 
+                  label="Program name*" 
                   variant="outlined"
+                  name="program_name"
                   fullWidth
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  error={!!errors.title}
-                  helperText={errors.title ? errors.title : ''}
+                  value={formData.program_name}
+                  onChange={handleInputChange}
+                  error={!!errors.program_name}
+                  helperText={errors.program_name ? errors.program_name : ''}
                 />
 
                 <TextField
                   id="year"
                   label="Year*"
                   variant="outlined"
+                  name="year"
                   select
-                  value={year}
-                  onChange={handleYearChange}
+                  value={formData.year}
+                  onChange={handleInputChange}
                   fullWidth
                   sx={{ mt: 3 }}
                 >
@@ -78,10 +103,10 @@ export default function ProgramDkc(props) {
               
             </Box>
 
-            {dataProgramDkc.map((agenda, index) => (
-              <ListItem alignItems="flex-start" justify="space-between">
+            {dataProgramDkc.map((program, index) => (
+              <ListItem key={program.program_id} alignItems="flex-start" justify="space-between">
                 <ListItemText
-                  primary={agenda.title}
+                  primary={program.program_name}
                   secondary={
                     <React.Fragment>
                       <Divider sx={{ mt: 1 }} />
@@ -91,15 +116,14 @@ export default function ProgramDkc(props) {
                         color="text.secondary"
                         sx={{ mt: 1 }}
                       >
-                        {formatDate(agenda.schedule_date)}
+                        {program.year}
                       </Typography>
                       
                     </React.Fragment>
                   }
                 />
                 <MenuTooltip style={{ marginLeft: 'auto' }}>
-                  <MenuItem>Update</MenuItem>
-                  <MenuItem>Delete</MenuItem>
+                  <MenuItem onClick={() => handleDelete(program.program_id)}>Delete</MenuItem>
                 </MenuTooltip>
               </ListItem>
             ))}

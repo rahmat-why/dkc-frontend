@@ -88,7 +88,7 @@ export default function Misi(props) {
             <Grid container spacing={2} sx={{ mt: 1 }}>
               <Grid item xs={12} md={9} align="left">
                 {dataMisi.map((misi, index) => (
-                  <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box key={misi.goal_id} sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Typography variant="body1" gutterBottom>
                       {misi.description}
                     </Typography>

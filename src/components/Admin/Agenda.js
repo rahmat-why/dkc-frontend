@@ -43,10 +43,6 @@ export default function Agenda(props) {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleUpdate = async (agenda_id) => {
-    
-  }
-
   const handleDelete = async (agenda_id) => {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
       axios.delete(externalApi()+'/api/agendas/'+agenda_id)
@@ -104,7 +100,7 @@ export default function Agenda(props) {
             </Box>
 
             {dataAgenda.map((agenda, index) => (
-              <ListItem alignItems="flex-start" justify="space-between">
+              <ListItem alignItems="flex-start" justify="space-between" key={agenda.agenda_id}>
                 <ListItemText
                   primary={agenda.title}
                   secondary={
@@ -123,7 +119,6 @@ export default function Agenda(props) {
                   }
                 />
                 <MenuTooltip style={{ marginLeft: 'auto' }}>
-                  <MenuItem onClick={handleUpdate}>Update</MenuItem>
                   <MenuItem onClick={() => handleDelete(agenda.agenda_id)}>Delete</MenuItem>
                 </MenuTooltip>
               </ListItem>

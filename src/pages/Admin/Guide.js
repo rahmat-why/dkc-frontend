@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { Sidebar, ScoutDocumentAdmin } from "../../components"
+import { externalApi } from "./../../utils/utils.js"
 
 import { 
   Box, 
@@ -7,20 +9,18 @@ import {
   Grid
 } from "@mui/material"
 
-const dataScoutDocument = [
-  {
-    document_id: "DKRxx",
-    name: "Namexx",
-    document: "areaxx"
-  },
-  {
-    document_id: "DKRxx",
-    name: "Namexx",
-    document: "areaxx"
-  }
-]
-
 export default function Guide() {
+  const [dataScoutDocument, setScoutDocument] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/scout-documents')
+      .then(response => {
+        setScoutDocument(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
       <Box sx={{ display: 'flex' }}>
