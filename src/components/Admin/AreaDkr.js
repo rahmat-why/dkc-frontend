@@ -17,7 +17,7 @@ import {
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
 import ModalUpdate from "./Agenda/ModalUpdate"
-import { externalApi } from "./../../utils/utils.js"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function AreaDkr(props) {
   const { dataAreaDkr, areas } = props
@@ -52,11 +52,11 @@ export default function AreaDkr(props) {
     }
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      axios.post(externalApi()+'/api/dkr', formData)
+      axios.post(externalApi()+'/api/dkr', formData, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
     
-      // window.location.reload()
+      window.location.reload()
     }
   }
 
@@ -89,11 +89,11 @@ export default function AreaDkr(props) {
     }
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
-      axios.put(externalApi()+'/api/dkr/'+dkr_id, formData)
+      axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
     
-      // window.location.reload()
+      window.location.reload()
     }
   }
 
@@ -183,7 +183,7 @@ export default function AreaDkr(props) {
                     <TableCell component="th" scope="row">
                       {row.name}
                     </TableCell>
-                    <TableCell align="left">{row.area_name}</TableCell>
+                    <TableCell align="left">{row.area.name}</TableCell>
                     <TableCell align="left">
                       <MenuTooltip style={{ marginLeft: 'auto' }}>
                         <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
@@ -226,7 +226,7 @@ export default function AreaDkr(props) {
                     name="username"
                     fullWidth
                     value={formData.username}
-                    onChange={handleInputChange}
+                    disabled
                     error={!!errors.username}
                     helperText={errors.username ? errors.username : ''}
                     sx={{ mt: 3 }}

@@ -11,6 +11,7 @@ import {
   Typography,
   Button
 } from "@mui/material"
+import { externalApi } from '../utils/utils';
 
 export default function GpReport(props) {
   const { dataGpReport1, dataGpReport2 } = props
@@ -50,7 +51,7 @@ export default function GpReport(props) {
                     </TableCell>
                     <TableCell align="left">{row.year}</TableCell>
                     <TableCell align="left">
-                      <Button href={row.document} target="_blank">
+                      <Button href={externalApi()+row.document} target="_blank">
                         Document
                       </Button> 
                     </TableCell>
@@ -95,7 +96,7 @@ export default function GpReport(props) {
                     </TableCell>
                     <TableCell align="left">{row.year}</TableCell>
                     <TableCell align="left">
-                      <Button href={row.document} target="_blank">
+                      <Button href={externalApi()+row.document} target="_blank">
                         Document
                       </Button>
                     </TableCell>

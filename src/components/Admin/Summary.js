@@ -21,7 +21,7 @@ export default function Summary() {
             <Grid item xs={8} md={8}>
               <ListItem alignItems="flex-start">
                 <ListItemText
-                  primary="Total DKR"
+                  primary="Coming soon"
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -31,7 +31,7 @@ export default function Summary() {
                         sx={{ mt: 1 }}
                         fontWeight="bold"
                       >
-                        30
+                        -
                       </Typography>
                     </React.Fragment>
                   }

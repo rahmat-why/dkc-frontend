@@ -1,27 +1,25 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { Sidebar, ProgramDkrAdmin } from "../../components"
 
 import { 
   Box, 
   Toolbar
 } from "@mui/material"
-
-const dataProgramDkr = [
-  {
-    program_id: "PRGxx",
-    program_name: "Namexx",
-    month: "03",
-    year: "2022"
-  },
-  {
-    program_id: "PRGxx",
-    program_name: "Namexx",
-    month: "03",
-    year: "2022"
-  }
-]
+import { externalApi } from "./../../utils/utils.js"
 
 export default function SkDkr() {
+  const [dataProgramDkr, setDataProgramDkr] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/program-dkr/DKR0.7388286687978849')
+      .then(response => {
+        setDataProgramDkr(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
       <Box sx={{ display: 'flex' }}>

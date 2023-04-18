@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import { 
   Table, 
   TableBody, 
@@ -15,25 +16,26 @@ import {
   MenuItem
 } from '@mui/material';
 import ModalCreate from "./Agenda/ModalCreate"
+import MenuTooltip from "./Agenda/MenuTooltip"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function ProgramDkr(props) {
   const { dataProgramDkr } = props
 
-  const [name, setName] = useState('');
-  const [month, setMonth] = useState('');
-  const [year, setYear] = useState('');
+  const [formData, setFormData] = useState({
+    program_name: '',
+    month: '',
+    year: ''
+  });
   const [errors, setErrors] = useState({});
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from(new Array(5), (val, index) => currentYear + index);
+  const years = Array.from(new Array(3), (val, index) => currentYear + index);
   const months = [1,2,3,4,5,6,7,8,9,10,11,12];
 
-  const handleChangeMonth = (event) => {
-    setMonth(event.target.value);
-  };
-
-  const handleYearChange = (event) => {
-    setYear(event.target.value);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -41,13 +43,31 @@ export default function ProgramDkr(props) {
 
     // Validation
     const errors = {};
-    if (!name) errors.name = 'Name is required';
-    if (!month) errors.month = 'Month is required';
-    if (!year) errors.year = 'Year is required';
+    if (!formData.program_name) errors.program_name = 'Program name is required';
+    if (!formData.month) errors.month = 'Month is required';
+    if (!formData.year) errors.year = 'Year is required';
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
+    }
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      axios.post(externalApi()+'/api/program-dkr/DKR0.7388286687978849', formData, config())
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+    
+      window.location.reload()
+    }
+  }
+
+  const handleDelete = async (program_id) => {
+    if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
+      axios.delete(externalApi()+'/api/program-dkr/'+program_id, config())
+      .then(response => window.alert("Data berhasil dihapus!"))
+      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+
+      window.location.reload()
     }
   }
 
@@ -71,20 +91,24 @@ export default function ProgramDkr(props) {
                 <TextField 
                   label="Name*" 
                   variant="outlined"
+                  name="program_name"
                   fullWidth
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  error={!!errors.name}
-                  helperText={errors.name ? errors.name : ''}
+                  value={formData.program_name}
+                  onChange={handleInputChange}
+                  error={!!errors.program_name}
+                  helperText={errors.program_name ? errors.program_name : ''}
                 />
                 
                 <TextField
                   id="month"
                   label="Month*"
                   variant="outlined"
+                  name="month"
                   select
-                  value={month}
-                  onChange={handleChangeMonth}
+                  value={formData.month}
+                  onChange={handleInputChange}
+                  error={!!errors.month}
+                  helperText={errors.month ? errors.month : ''}
                   fullWidth
                   sx={{ mt: 3 }}
                 >
@@ -98,10 +122,13 @@ export default function ProgramDkr(props) {
                 <TextField
                   id="year"
                   label="Year*"
+                  name="year"
                   variant="outlined"
                   select
-                  value={year}
-                  onChange={handleYearChange}
+                  value={formData.year}
+                  onChange={handleInputChange}
+                  error={!!errors.year}
+                  helperText={errors.year ? errors.year : ''}
                   fullWidth
                   sx={{ mt: 3 }}
                 >
@@ -120,6 +147,7 @@ export default function ProgramDkr(props) {
                     <TableCell align="center">No</TableCell>
                     <TableCell align="center">Kegiatan</TableCell>
                     <TableCell align="center">Bulan</TableCell>
+                    <TableCell align="center">#</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -133,6 +161,11 @@ export default function ProgramDkr(props) {
                       </TableCell>
                       <TableCell align="center">{row.program_name}</TableCell>
                       <TableCell align="center">{row.month}-{row.year}</TableCell>
+                      <TableCell align="center">
+                        <MenuTooltip style={{ marginLeft: 'auto' }}>
+                          <MenuItem onClick={() => handleDelete(row.program_id)}>Delete</MenuItem>
+                        </MenuTooltip>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

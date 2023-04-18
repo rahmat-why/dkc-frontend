@@ -18,7 +18,7 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
-import { externalApi } from "./../../utils/utils.js"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function ProfileOfficer(props) {
   const { dataProfileOfficer, dataStage, dataScope } = props
@@ -68,21 +68,24 @@ export default function ProfileOfficer(props) {
     formData.append('city', city);
     formData.append('instagram', instagram);
     formData.append('facebook', facebook);
+    formData.append('image', image);
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
-        axios.post(externalApi()+'/api/officers', formData)
+        axios.post(externalApi()+'/api/officers', formData, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
       } catch (error) {
         console.error(error);
       }
+
+      window.location.reload()
     }
   }
 
   const handleDelete = async (officer_id) => {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
-      axios.delete(externalApi()+'/api/officers/'+officer_id)
+      axios.delete(externalApi()+'/api/officers/'+officer_id, config())
       .then(response => window.alert("Data berhasil dihapus!"))
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
 
@@ -274,7 +277,7 @@ export default function ProfileOfficer(props) {
                     <TableCell align="left">
                       <CardMedia
                         sx={{ height: 140, width: 100 }}
-                        image={row.image}
+                        image={externalApi()+row.image}
                         title={row.name}
                       />
                     </TableCell>
@@ -282,16 +285,15 @@ export default function ProfileOfficer(props) {
                       {row.name}
                     </TableCell>
                     <TableCell align="left">{row.nta}</TableCell>
-                    <TableCell align="left">{row.stage_id}</TableCell>
-                    <TableCell align="left">{row.scope_id}</TableCell>
+                    <TableCell align="left">{row.stage.name}</TableCell>
+                    <TableCell align="left">{row.scope.name}</TableCell>
                     <TableCell align="left">{row.education}</TableCell>
                     <TableCell align="left">{row.city}</TableCell>
                     <TableCell align="left">{row.instagram}</TableCell>
                     <TableCell align="left">{row.facebook}</TableCell>
                     <TableCell align="left">
                       <MenuTooltip style={{ marginLeft: 'auto' }}>
-                        <MenuItem>Update</MenuItem>
-                        <MenuItem onClick={() => handleDelete(row.officer)}>Delete</MenuItem>
+                        <MenuItem onClick={() => handleDelete(row.officer_id)}>Delete</MenuItem>
                       </MenuTooltip>
                     </TableCell>
                   </TableRow>

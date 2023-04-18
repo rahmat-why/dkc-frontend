@@ -1,21 +1,51 @@
 import React, {useState} from 'react'
+import axios from 'axios';
 import { Card, CardContent, Grid, CardMedia, TextField, List, Box } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function StructureDkr(props) {
-  const [document, setDocument] = useState('');
+  const { dataStructureDkr } = props
+  const [image, setImage] = useState('');
   const [errors, setErrors] = useState({});
+
+  const handleFileChange = (event) => {
+    setImage(event.target.files[0]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation
     const errors = {};
-    if (!document) errors.document = 'Document is required';
+    if (!image) errors.image = 'image is required';
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', image);
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      try {
+        axios.post(externalApi()+'/api/structures-dkr/DKR0.7388286687978849', formData, config())
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      } catch (error) {
+        console.error(error);
+      }
+
+      window.location.reload()
+    }
+  }
+
+  const imageStructureDkr = () => {
+    if(!dataStructureDkr) {
+      return <Box>Belum diupload!</Box>
+    }else{
+      return <Box><CardMedia component="img"alt="Strukture DKR" image={externalApi()+dataStructureDkr.image} title="Strukture DKR"/></Box>
     }
   }
   
@@ -28,14 +58,13 @@ export default function StructureDkr(props) {
               <Grid></Grid>
               <ModalCreate handleSubmit={handleSubmit} title="Upload Structure DKR" type="UPLOAD">
                 <TextField
-                  label="Document*"
+                  label="Image*"
                   type="file"
                   variant="outlined"
                   fullWidth
-                  value={document}
-                  onChange={(e) => setDocument(e.target.value)}
-                  error={!!errors.document}
-                  helperText={errors.document ? errors.document : ''}
+                  onChange={handleFileChange}
+                  error={!!errors.image}
+                  helperText={errors.image ? errors.image : ''}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -43,12 +72,7 @@ export default function StructureDkr(props) {
               </ModalCreate>
             </Box>
             <Grid item align="center">
-              <CardMedia 
-                component="img"
-                alt="Strukture DKR"
-                image="/Structure.png"
-                title="Strukture DKR"
-              />
+              {imageStructureDkr()}
             </Grid>
           </Box>
         </List>

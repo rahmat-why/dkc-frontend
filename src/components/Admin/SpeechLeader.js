@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import { Card, CardContent, Typography, Grid, CardMedia, List, Box, TextField } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
-import { externalApi } from "./../../utils/utils.js"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function SpeechLeader(props) {
 
@@ -42,7 +42,7 @@ export default function SpeechLeader(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
-        axios.post(externalApi()+'/api/speechs', formData)
+        axios.post(externalApi()+'/api/speechs', formData, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
       } catch (error) {
@@ -51,6 +51,12 @@ export default function SpeechLeader(props) {
 
       window.location.reload()
     }
+  }
+
+  const handleUpdate = async () => {
+    setDescription(dataSpeechLeader.description);
+    setName(dataSpeechLeader.name);
+    setNta(dataSpeechLeader.nta);
   }
 
   return (
@@ -69,52 +75,54 @@ export default function SpeechLeader(props) {
               >
                 SAMBUTAN KETUA DKC PERIODE 2020-2025
               </Typography>
-              <ModalCreate handleSubmit={handleSubmit} title="Update Sambutan Ketua DKC" type="UPDATE">
-                <TextField
-                  label="Nama Ketua DKC*"
-                  variant="outlined"
-                  fullWidth
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  error={!!errors.name}
-                  helperText={errors.name ? errors.name : ''}
-                />
-                <TextField
-                  label="NTA*"
-                  variant="outlined"
-                  fullWidth
-                  value={nta}
-                  onChange={(e) => setNta(e.target.value)}
-                  error={!!errors.nta}
-                  helperText={errors.nta ? errors.nta : ''}
-                  sx={{ mt: 3 }}
-                />
-                <TextField
-                  label="Sambutan*"
-                  variant="outlined"
-                  fullWidth
-                  value={description}
-                  multiline
-                  rows={4}
-                  onChange={(e) => setDescription(e.target.value)}
-                  error={!!errors.description}
-                  helperText={errors.description ? errors.description : ''}
-                  sx={{ mt: 3 }}
-                />
-                <TextField
-                  label="Image* (silahkan upload ulang)"
-                  type="file"
-                  variant="outlined"
-                  fullWidth
-                  onChange={handleFileChange}
-                  error={!!errors.image}
-                  helperText={errors.image ? errors.image : ''}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  sx={{ mt: 3 }}
-                />
-              </ModalCreate>
+              <Box onClick={() => handleUpdate()}>
+                <ModalCreate handleSubmit={handleSubmit} title="Update Sambutan Ketua DKC" type="UPDATE">
+                  <TextField
+                    label="Nama Ketua DKC*"
+                    variant="outlined"
+                    fullWidth
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name : ''}
+                  />
+                  <TextField
+                    label="NTA*"
+                    variant="outlined"
+                    fullWidth
+                    value={nta}
+                    onChange={(e) => setNta(e.target.value)}
+                    error={!!errors.nta}
+                    helperText={errors.nta ? errors.nta : ''}
+                    sx={{ mt: 3 }}
+                  />
+                  <TextField
+                    label="Sambutan*"
+                    variant="outlined"
+                    fullWidth
+                    value={description}
+                    multiline
+                    rows={4}
+                    onChange={(e) => setDescription(e.target.value)}
+                    error={!!errors.description}
+                    helperText={errors.description ? errors.description : ''}
+                    sx={{ mt: 3 }}
+                  />
+                  <TextField
+                    label="Image* (silahkan upload ulang)"
+                    type="file"
+                    variant="outlined"
+                    fullWidth
+                    onChange={handleFileChange}
+                    error={!!errors.image}
+                    helperText={errors.image ? errors.image : ''}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    sx={{ mt: 3 }}
+                  />
+                </ModalCreate>
+              </Box>
             </Box>
             <Grid container spacing={2} sx={{ mt: 1 }}>
               <Grid item xs={12} md={9} align="left">

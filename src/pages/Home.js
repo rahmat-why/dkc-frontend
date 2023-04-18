@@ -6,13 +6,26 @@ import { Container, Grid } from "@mui/material"
 import { Layer, PotensiTd, Agenda, Marketplace, Navbar, Footer } from "../components"
 import { externalApi } from "./../utils/utils.js"
 
-const dataPotensi = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 500 },
-];
-
 function Home() {
+  const [dataPotensi, setDataPotensi] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/data-potensi/segment')
+      .then(response => {
+        var arr = [];
+        for (let j = 0; j < response.data.length; j++) {
+          var obj = {
+            name: response.data[j].name,
+            value: parseInt(response.data[j].value)
+          }
+          arr.push(obj)
+        }
+        setDataPotensi(arr)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+  
   const [dataAgenda, setAgenda] = useState([]);
   useEffect(() => {
     axios.get(externalApi()+'/api/agendas')

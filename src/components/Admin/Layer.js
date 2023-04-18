@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import { Card, CardContent, Typography, List, CardMedia, Box, TextField, Button } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
-import { externalApi } from "./../../utils/utils.js"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function Layer(props) {
   const { dataLayer } = props
@@ -31,18 +31,20 @@ export default function Layer(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
-        axios.post(externalApi()+'/api/banners', formData)
+        axios.post(externalApi()+'/api/banners', formData, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
       } catch (error) {
         window.alert("Terjadi kesalahan! data gagal ditambah!");
       }
+
+      window.location.reload()
     }
   }
 
   const handleDelete = async (banner_id) => {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
-      axios.delete(externalApi()+'/api/banners/'+banner_id)
+      axios.delete(externalApi()+'/api/banners/'+banner_id, config())
       .then(response => window.alert("Data berhasil dihapus!"))
       .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
 

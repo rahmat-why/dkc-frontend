@@ -6,7 +6,7 @@ import MenuTooltip from "./Agenda/MenuTooltip"
 import { 
   CloudUpload as CloudUploadIcon
 } from '@mui/icons-material';
-import { externalApi } from "./../../utils/utils.js"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function Visi(props) {
   const [errors, setErrors] = useState({});
@@ -31,7 +31,7 @@ export default function Visi(props) {
     }
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      axios.post(externalApi()+'/api/goals', formData)
+      axios.post(externalApi()+'/api/goals', formData, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
     
@@ -46,7 +46,7 @@ export default function Visi(props) {
 
   const handleDelete = async (goal_id) => {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
-      axios.delete(externalApi()+'/api/goals/'+goal_id)
+      axios.delete(externalApi()+'/api/goals/'+goal_id, config())
       .then(response => window.alert("Data berhasil dihapus!"))
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
 
@@ -93,7 +93,6 @@ export default function Visi(props) {
                       {visi.description}
                     </Typography>
                     <MenuTooltip style={{ marginLeft: 'auto' }}>
-                      <MenuItem>Update</MenuItem>
                       <MenuItem onClick={() => handleDelete(visi.goal_id)}>Delete</MenuItem>
                     </MenuTooltip>
                   </Box>

@@ -5,6 +5,7 @@ import {
   Facebook as FacebookIcon, 
   Instagram as InstagramIcon 
 } from '@mui/icons-material';
+import { externalApi } from '../utils/utils';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -74,12 +75,12 @@ export default function ProfileOfficer(props) {
           </Box>
           <TabPanel value={value} index={0}>
             {dataOfficer1.map((row) => (
-              <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid key={row.officer_id} container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} md={3} align="right">
                   <CardMedia 
                     component="img"
                     alt="Sambutan DKC Kab.Bogor"
-                    image={row.image}
+                    image={externalApi()+row.image}
                     title="Sambutan DKC Kab.Bogor"
                   />
                 </Grid>
@@ -118,12 +119,12 @@ export default function ProfileOfficer(props) {
           </TabPanel>
           <TabPanel value={value} index={1}>
             {dataOfficer2.map((row) => (
-              <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid key={row.officer_id} container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} md={3} align="right">
                   <CardMedia 
                     component="img"
                     alt="Sambutan DKC Kab.Bogor"
-                    image={row.image}
+                    image={externalApi()+row.image}
                     title="Sambutan DKC Kab.Bogor"
                   />
                 </Grid>
@@ -162,12 +163,12 @@ export default function ProfileOfficer(props) {
           </TabPanel>
           <TabPanel value={value} index={2}>
             {dataOfficer3.map((row) => (
-              <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid key={row.officer_id} container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} md={3} align="right">
                   <CardMedia 
                     component="img"
                     alt="Sambutan DKC Kab.Bogor"
-                    image={row.image}
+                    image={externalApi()+row.image}
                     title="Sambutan DKC Kab.Bogor"
                   />
                 </Grid>
@@ -206,12 +207,12 @@ export default function ProfileOfficer(props) {
           </TabPanel>
           <TabPanel value={value} index={3}>
             {dataOfficer4.map((row) => (
-              <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid key={row.officer_id} container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} md={3} align="right">
                   <CardMedia 
                     component="img"
                     alt="Sambutan DKC Kab.Bogor"
-                    image={row.image}
+                    image={externalApi()+row.image}
                     title="Sambutan DKC Kab.Bogor"
                   />
                 </Grid>
@@ -250,12 +251,12 @@ export default function ProfileOfficer(props) {
           </TabPanel>
           <TabPanel value={value} index={4}>
             {dataOfficer5.map((row) => (
-              <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid key={row.officer_id} container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} md={3} align="right">
                   <CardMedia 
                     component="img"
                     alt="Sambutan DKC Kab.Bogor"
-                    image={row.image}
+                    image={externalApi()+row.image}
                     title="Sambutan DKC Kab.Bogor"
                   />
                 </Grid>

@@ -17,7 +17,7 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
-import { externalApi } from "./../../utils/utils.js"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function AreaCoordinator(props) {
   const { dataAreaCoordinator, areas } = props
@@ -52,12 +52,14 @@ export default function AreaCoordinator(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
-        axios.post(externalApi()+'/api/area-coordinators', formData)
+        axios.post(externalApi()+'/api/area-coordinators', formData, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
       } catch (error) {
         console.error(error);
       }
+
+      window.location.reload()
     }
   }
 
@@ -67,11 +69,11 @@ export default function AreaCoordinator(props) {
 
   const handleDelete = async (coordinator_id) => {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
-      axios.delete(externalApi()+'/api/area-coordinators/'+coordinator_id)
+      axios.delete(externalApi()+'/api/area-coordinators/'+coordinator_id, config())
       .then(response => window.alert("Data berhasil dihapus!"))
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
 
-      // window.location.reload()
+      window.location.reload()
     }
   }
 
@@ -162,7 +164,7 @@ export default function AreaCoordinator(props) {
                     <TableCell align="left">
                       <CardMedia
                         sx={{ height: 140, width: 100 }}
-                        image={row.image}
+                        image={externalApi()+row.image}
                         title={row.name}
                       />
                     </TableCell>
@@ -170,7 +172,7 @@ export default function AreaCoordinator(props) {
                       {row.name}
                     </TableCell>
                     <TableCell align="left">{row.nta}</TableCell>
-                    <TableCell align="left">{row.area_name}</TableCell>
+                    <TableCell align="left">{row.area.name}</TableCell>
                     <TableCell align="left">
                       <MenuTooltip>
                         <MenuItem onClick={() => handleDelete(row.coordinator_id)}>Delete</MenuItem>

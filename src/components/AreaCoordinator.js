@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, CardContent, Typography, Grid, CardMedia, Container } from "@mui/material"
+import { externalApi } from '../utils/utils';
 
 export default function SpeechLeader(props) {
   const { dataAreaCoordinator } = props
@@ -18,12 +19,12 @@ export default function SpeechLeader(props) {
         </Typography>
         <Container maxWidth="lg">
           {dataAreaCoordinator.map((coordinator, index) => (
-            <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid key={coordinator.coordinator_id} container spacing={2} sx={{ mt: 1 }}>
               <Grid item xs={12} md={3} align="right">
                 <CardMedia 
                   component="img"
                   alt="Sambutan DKC Kab.Bogor"
-                  image={coordinator.image}
+                  image={externalApi()+coordinator.image}
                   title="Sambutan DKC Kab.Bogor"
                 />
               </Grid>

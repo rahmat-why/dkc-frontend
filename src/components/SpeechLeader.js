@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, CardContent, Typography, Grid, CardMedia, Container } from "@mui/material"
+import { externalApi } from '../utils/utils';
 
 export default function SpeechLeader(props) {
   const { dataSpeechLeader } = props
@@ -22,7 +23,7 @@ export default function SpeechLeader(props) {
               <CardMedia 
                 component="img"
                 alt="Sambutan DKC Kab.Bogor"
-                image={dataSpeechLeader.image}
+                image={externalApi()+dataSpeechLeader.image}
                 title="Sambutan DKC Kab.Bogor"
               />
             </Grid>

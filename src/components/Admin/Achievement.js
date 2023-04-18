@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Card, CardContent, Typography, List, ListItem, ListItemText, Box, Grid, CardMedia, MenuItem, TextField } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
-import { externalApi } from "./../../utils/utils.js"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function Achievement(props) {
   const [errors, setErrors] = useState({});
@@ -29,7 +29,7 @@ export default function Achievement(props) {
     }
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      axios.post(externalApi()+'/api/achievements', formData)
+      axios.post(externalApi()+'/api/achievements', formData, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
     
@@ -44,7 +44,7 @@ export default function Achievement(props) {
 
   const handleDelete = async (goal_id) => {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
-      axios.delete(externalApi()+'/api/achievements/'+goal_id)
+      axios.delete(externalApi()+'/api/achievements/'+goal_id, config())
       .then(response => window.alert("Data berhasil dihapus!"))
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
 

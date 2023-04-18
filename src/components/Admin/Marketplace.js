@@ -18,7 +18,7 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
-import { externalApi } from "./../../utils/utils.js"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function Marketplace(props) {
   const { dataProduct } = props
@@ -54,7 +54,7 @@ export default function Marketplace(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
-        axios.post(externalApi()+'/api/products', formData)
+        axios.post(externalApi()+'/api/products', formData, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
       } catch (error) {
@@ -67,7 +67,7 @@ export default function Marketplace(props) {
 
   const handleDelete = async (product_id) => {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
-      axios.delete(externalApi()+'/api/products/'+product_id)
+      axios.delete(externalApi()+'/api/products/'+product_id, config())
       .then(response => window.alert("Data berhasil dihapus!"))
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
 

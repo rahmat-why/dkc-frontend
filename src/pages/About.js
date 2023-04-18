@@ -6,17 +6,6 @@ import { Container, Grid } from "@mui/material"
 import { Visi, Misi, Achievement, PotensiSegment, Navbar, Footer } from "../components"
 import { externalApi } from "./../utils/utils.js"
 
-const dataPotensiSegment = [
-  {
-    segment: "Namexx",
-    total_member: "100"
-  },
-  {
-    segment: "Namexx",
-    total_member: "100"
-  }
-]
-
 export default function About() {
   const [dataVisi, setVisi] = useState([]);
   useEffect(() => {
@@ -51,6 +40,17 @@ export default function About() {
       });
   }, []);
 
+  const [dataPotensi, setDataPotensi] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/data-potensi/segment')
+      .then(response => {
+        setDataPotensi(response.data)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -66,7 +66,7 @@ export default function About() {
             <Achievement dataAchievement={dataAchievement} />
           </Grid>
           <Grid item md={12} xs={12}>
-            <PotensiSegment dataPotensiSegment={dataPotensiSegment} />
+            <PotensiSegment dataPotensi={dataPotensi} />
           </Grid>
         </Grid>
       </Container>

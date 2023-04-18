@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, CardContent, Typography, CardMedia, CardActions, Button, Box, Grid, Container } from "@mui/material"
+import { externalApi } from "../utils/utils";
 
 export default function Marketplace(props) {
   const { dataProduct } = props
@@ -22,11 +23,11 @@ export default function Marketplace(props) {
 
           <Grid container spacing={2}>
             {dataProduct.map((product, index) => (
-              <Grid item md={4} xs={12}>
+              <Grid item md={4} xs={12} key={product.product_id} >
                 <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2 }}>
                   <CardMedia
                     sx={{ height: 140 }}
-                    image={product.image}
+                    image={externalApi()+product.image}
                     title={product.image}
                   />
                   <CardContent>
@@ -41,7 +42,7 @@ export default function Marketplace(props) {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button sx={{ backgroundColor: '#4040A1' }} variant="contained" size="small" fullWidth>Checkout</Button>
+                    <Button href={product.link} target="_blank" sx={{ backgroundColor: '#4040A1' }} variant="contained" size="small" fullWidth>Checkout</Button>
                   </CardActions>
                 </Box>
               </Grid>

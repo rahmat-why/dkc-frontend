@@ -4,7 +4,7 @@ import { Card, CardContent, Typography, List, ListItem, ListItemText, Divider, B
 import { formatDate } from '../../utils/utils';
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
-import { externalApi } from "./../../utils/utils.js"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function Agenda(props) {
   const { dataAgenda } = props
@@ -30,7 +30,7 @@ export default function Agenda(props) {
     }
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      axios.post(externalApi()+'/api/agendas', formData)
+      axios.post(externalApi()+'/api/agendas', formData, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
     
@@ -45,7 +45,7 @@ export default function Agenda(props) {
 
   const handleDelete = async (agenda_id) => {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
-      axios.delete(externalApi()+'/api/agendas/'+agenda_id)
+      axios.delete(externalApi()+'/api/agendas/'+agenda_id, config())
       .then(response => window.alert("Data berhasil dihapus!"))
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
 

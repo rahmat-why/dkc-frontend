@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios';
 import { 
   Table, 
@@ -17,7 +17,7 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
-import { externalApi } from "./../../utils/utils.js"
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function ScoutDocument(props) {
   const { dataScoutDocument } = props
@@ -50,24 +50,24 @@ export default function ScoutDocument(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
-        axios.post(externalApi()+'/api/scout-documents', formData)
+        axios.post(externalApi()+'/api/scout-documents', formData, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
       } catch (error) {
         window.alert("Terjadi kesalahan! data gagal ditambah!");
       }
-    }
 
-    window.location.reload()
+      window.location.reload()
+    }
   }
 
   const handleDelete = async (document_id) => {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
-      axios.delete(externalApi()+'/api/scout-documents/'+document_id)
+      axios.delete(externalApi()+'/api/scout-documents/'+document_id, config())
       .then(response => window.alert("Data berhasil dihapus!"))
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
 
-      // window.location.reload()
+      window.location.reload()
     }
   }
 
@@ -130,7 +130,7 @@ export default function ScoutDocument(props) {
                       {row.name}
                     </TableCell>
                     <TableCell align="left">
-                      <Button href={row.document} target="_blank">
+                      <Button href={externalApi()+row.document} target="_blank">
                         Document
                       </Button>
                     </TableCell>

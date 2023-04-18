@@ -5,6 +5,7 @@ import { Box, MobileStepper, Button } from '@mui/material';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import SwipeableViews from 'react-swipeable-views-react-18-fix';
 import { autoPlay } from 'react-swipeable-views-utils';
+import { externalApi } from "../utils/utils";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -45,7 +46,7 @@ function Banner(props) {
                   overflow: 'hidden',
                   width: '100%',
                 }}
-                src={layer.image}
+                src={externalApi()+layer.image}
                 alt={layer.label}
               />
             ) : null}
