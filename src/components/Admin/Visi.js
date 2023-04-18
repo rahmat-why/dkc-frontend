@@ -1,14 +1,20 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import { Card, CardContent, Typography, Grid, CardMedia, Box, List, TextField, MenuItem, Button, IconButton } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
 import { 
   CloudUpload as CloudUploadIcon
 } from '@mui/icons-material';
+import { externalApi } from "./../../utils/utils.js"
 
 export default function Visi(props) {
-  const [description, setDescription] = useState('');
   const [errors, setErrors] = useState({});
+
+  const [formData, setFormData] = useState({
+    description: '',
+    type: 'VISI'
+  });
   
   const { dataVisi } = props
 
@@ -17,11 +23,34 @@ export default function Visi(props) {
 
     // Validation
     const errors = {};
-    if (!description) errors.description = 'Description is required';
+    if (!formData.description) errors.description = 'Description is required';
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
+    }
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      axios.post(externalApi()+'/api/goals', formData)
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+    
+      window.location.reload()
+    }
+  }
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleDelete = async (goal_id) => {
+    if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
+      axios.delete(externalApi()+'/api/goals/'+goal_id)
+      .then(response => window.alert("Data berhasil dihapus!"))
+      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+
+      window.location.reload()
     }
   }
 
@@ -44,11 +73,12 @@ export default function Visi(props) {
                 <TextField
                   label="Visi*"
                   variant="outlined"
+                  name="description"
                   fullWidth
-                  value={description}
                   multiline
                   rows={4}
-                  onChange={(e) => setDescription(e.target.value)}
+                  value={formData.description}
+                  onChange={handleInputChange}
                   error={!!errors.description}
                   helperText={errors.description ? errors.description : ''}
                 />
@@ -64,7 +94,7 @@ export default function Visi(props) {
                     </Typography>
                     <MenuTooltip style={{ marginLeft: 'auto' }}>
                       <MenuItem>Update</MenuItem>
-                      <MenuItem>Delete</MenuItem>
+                      <MenuItem onClick={() => handleDelete(visi.goal_id)}>Delete</MenuItem>
                     </MenuTooltip>
                   </Box>
                 ))}

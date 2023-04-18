@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { Sidebar, VisiAdmin, MisiAdmin, AchievementAdmin } from "../../components"
 
 import { 
@@ -6,47 +7,42 @@ import {
   Toolbar,
   Grid
 } from "@mui/material"
-
-const dataVisi = [
-  {
-    goal_id: "GOALxx",
-    description: "Descxx",
-    type: "VISI"
-  },
-  {
-    goal_id: "GOALxx",
-    description: "Descxx",
-    type: "VISI"
-  }
-]
-
-const dataMisi = [
-  {
-    goal_id: "GOALxx",
-    description: "Descxx",
-    type: "MISI"
-  },
-  {
-    goal_id: "GOALxx",
-    description: "Descxx",
-    type: "MISI"
-  }
-]
-
-const dataAchievement = [
-  {
-    achievement_id: "ACHxx",
-    title: "Titlexx",
-    description: "Descxx"
-  },
-  {
-    achievement_id: "ACHxx",
-    title: "Titlexx",
-    description: "Descxx"
-  }
-]
+import { externalApi } from "./../../utils/utils.js"
 
 export default function Home() {
+  const [dataVisi, setVisi] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/goals/visi')
+      .then(response => {
+        setVisi(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+  
+  const [dataMisi, setMisi] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/goals/misi')
+      .then(response => {
+        setMisi(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+  
+  const [dataAchievement, setAchievement] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/achievements')
+      .then(response => {
+        setAchievement(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
       <Box sx={{ display: 'flex' }}>
