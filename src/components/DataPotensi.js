@@ -27,7 +27,7 @@ export default function DataPotensi(props) {
     console.log([school_id, dkr_id])
     axios.get(externalApi()+'/api/data-potensi/'+school_id+'/'+dkr_id)
       .then(response => {
-        setDataPotensi(response.data.data);
+        setDataPotensi(response.data);
       })
       .catch(error => {
         console.log(error);
@@ -71,7 +71,7 @@ export default function DataPotensi(props) {
                     <TableCell align="center">
                       {/* View */}
                       <Box onClick={() => viewDataPotensi(row.school_id)}>
-                        <ModalView title="Data Potensi SMA">
+                        <ModalView title="Data Potensi">
                           <Table aria-label="simple table">
                             <TableHead>
                               <TableRow>

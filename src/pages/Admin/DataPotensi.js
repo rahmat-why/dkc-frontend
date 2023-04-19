@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { Sidebar, DataPotensiAdmin } from "../../components"
 
 import { 
@@ -7,20 +8,20 @@ import {
   Grid
 } from "@mui/material"
 
-const dataSchool = [
-  {
-    school_id: "PRGxx",
-    school_name: "Namexx",
-    gudep_number: "03"
-  },
-  {
-    school_id: "PRGxx",
-    school_name: "Namexx",
-    gudep_number: "03"
-  }
-]
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function Dkr() {
+  const [dataSchool, setSchool] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/schools/DKR0.7388286687978849')
+      .then(response => {
+        setSchool(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
       <Box sx={{ display: 'flex' }}>

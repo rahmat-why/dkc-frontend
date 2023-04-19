@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import { 
   Table, 
   TableBody, 
@@ -11,142 +12,106 @@ import {
   Typography,
   List,
   Box,
-  TextField
+  TextField,
+  MenuItem
 } from '@mui/material';
   
 import ModalCreate from "./Agenda/ModalCreate"
+import MenuTooltip from "./Agenda/MenuTooltip"
+
+import { externalApi, config } from "./../../utils/utils.js"
 
 export default function DataPotensi(props) {
   const  { dataSchool } = props
 
-  const [gudep_number, setGudepNumber] = useState('');
-  const [name, setName] = useState('');
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const [formData, setFormData] = useState({
+    gudep_number: '',
+    school_name: ''
+  });
+
+  const [formDataPotensi, setFormDataPotensi] = useState({
+    school_id: '',
+    data: ''
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmitSchool = async (e) => {
+    e.preventDefault()
 
     // Validation
     const errors = {};
-    if (!gudep_number) errors.gudep_number = 'No. Gudep is required';
-    if (!name) errors.name = 'Name is required';
+    if (!formData.gudep_number) errors.gudep_number = 'No. Gudep is required';
+    if (!formData.school_name) errors.school_name = 'Name is required';
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
     }
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      axios.post(externalApi()+'/api/schools/DKR0.7388286687978849', formData, config())
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+    
+      window.location.reload()
+    }
   }
 
-  const dataPotensi = [
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
-    },
-    {
-      data_id: "DPxx",
-      school_name: "Namexx",
-      gudep_number: "Numberxx",
-      stage_name: "Stagexx",
-      total_member: "100",
-      dkr_id: "DKRxx",
-      year: "2022"
+  const handleDelete = async (school_id) => {
+    if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
+      axios.delete(externalApi()+'/api/schools/'+school_id, config())
+      .then(response => window.alert("Data berhasil dihapus!"))
+      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+
+      window.location.reload()
     }
-  ]
+  }
+
+  const handleSubmitDataPotensi = async (e) => {
+    e.preventDefault()
+
+    if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
+      axios.post(externalApi()+'/api/data-potensi/DKR0.7388286687978849', formDataPotensi, config())
+        .then(response => window.alert("Data berhasil ditambah!"))
+        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+    
+      // window.location.reload()
+    }
+  }
+
+  const [school_id, setSchoolId] = useState('');
+  const [dataPotensi, setDataPotensi] = useState([]);
+
+  const viewDataPotensi = (school_id) => {
+    setSchoolId(school_id)
+    axios.get(externalApi()+'/api/data-potensi/'+school_id+'/DKR0.7388286687978849')
+      .then(response => {
+        setDataPotensi(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  function handleChangeDataPotensi(index, value) {
+    console.log([index, value])
+
+    const newDataPotensi = dataPotensi.map((obj, ind) => {
+      if (ind === index) {
+        return { ...obj, total_member: value }; // create a copy of the object with updated key-value pair
+      } else {
+        return obj; // return the original object for other indices
+      }
+    });
+    setDataPotensi(newDataPotensi); // update the state with the new array
+    setFormDataPotensi({school_id: school_id, data: dataPotensi})
+  }
 
   return (
     <Card sx={{ mt: 3, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
@@ -164,28 +129,30 @@ export default function DataPotensi(props) {
               >
                 DATA POTENSI
               </Typography>
-              <ModalCreate handleSubmit={handleSubmit} title="Tambah Sanggar Bakti" type="ADD">
-              <TextField 
-                label="No. Gudep*" 
-                variant="outlined"
-                fullWidth
-                value={gudep_number}
-                onChange={(e) => setGudepNumber(e.target.value)}
-                error={!!errors.gudep_number}
-                helperText={errors.gudep_number ? errors.gudep_number : ''}
-              />
+              <ModalCreate handleSubmit={handleSubmitSchool} title="Tambah Sanggar Bakti" type="ADD">
+                <TextField 
+                  label="No. Gudep*" 
+                  variant="outlined"
+                  name="gudep_number"
+                  fullWidth
+                  value={formData.gudep_number}
+                  onChange={handleInputChange}
+                  error={!!errors.gudep_number}
+                  helperText={errors.gudep_number ? errors.gudep_number : ''}
+                />
 
-              <TextField 
-                label="Sanggar Bakti*" 
-                variant="outlined"
-                fullWidth
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                error={!!errors.name}
-                helperText={errors.name ? errors.name : ''}
-                sx={{ mt: 3 }}
-              />
-            </ModalCreate>
+                <TextField 
+                  label="Sanggar Bakti*" 
+                  variant="outlined"
+                  name="school_name"
+                  fullWidth
+                  value={formData.school_name}
+                  onChange={handleInputChange}
+                  error={!!errors.school_name}
+                  helperText={errors.school_name ? errors.school_name : ''}
+                  sx={{ mt: 3 }}
+                />
+              </ModalCreate>
             </Box>
             <TableContainer>
               <Table>
@@ -194,6 +161,7 @@ export default function DataPotensi(props) {
                     <TableCell align="center">No. Gudep</TableCell>
                     <TableCell align="center">Sanggar Bakti</TableCell>
                     <TableCell align="center">Total Anggota</TableCell>
+                    <TableCell>#</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -208,36 +176,44 @@ export default function DataPotensi(props) {
                       <TableCell align="center">{row.school_name}</TableCell>
                       <TableCell align="center">
                         {/* View */}
-                        <ModalCreate handleSubmit={handleSubmit} title="Update Data Potensi" type="UPDATE">
-                          <Table aria-label="simple table">
-                            <TableHead>
-                              <TableRow>
-                                <TableCell align="left">Tingkat</TableCell>
-                                <TableCell align="left">Total Anggota</TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {dataPotensi.map((row) => (
-                                <TableRow
-                                  key={row.data_id}
-                                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                  <TableCell component="th" scope="row">
-                                    {row.stage_name}
-                                  </TableCell>
-                                  <TableCell align="left">
-                                    <TextField 
-                                      label="Total Anggota*" 
-                                      variant="outlined"
-                                      fullWidth
-                                      value={row.total_member}
-                                    />
-                                  </TableCell>
+                        <Box onClick={() => viewDataPotensi(row.school_id)}>
+                          <ModalCreate handleSubmit={handleSubmitDataPotensi} title="Update Data Potensi" type="UPDATE">
+                            <Table aria-label="simple table">
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell align="left">Tingkat</TableCell>
+                                  <TableCell align="left">Total Anggota</TableCell>
                                 </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </ModalCreate>
+                              </TableHead>
+                              <TableBody>
+                                {dataPotensi.map((row, index) => (
+                                  <TableRow
+                                    key={row.data_id}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                  >
+                                    <TableCell component="th" scope="row">
+                                      {row.stage_name}
+                                    </TableCell>
+                                    <TableCell align="left">
+                                      <TextField 
+                                        label="Total Anggota*" 
+                                        variant="outlined"
+                                        fullWidth
+                                        value={dataPotensi[index].total_member}
+                                        onChange={(e) => handleChangeDataPotensi(index, e.target.value)}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </ModalCreate>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <MenuTooltip style={{ marginLeft: 'auto' }}>
+                          <MenuItem onClick={() => handleDelete(row.school_id)}>Delete</MenuItem>
+                        </MenuTooltip>
                       </TableCell>
                     </TableRow>
                   ))}
