@@ -11,7 +11,7 @@ export default function DetailDkr() {
   let { dkr_id } = useParams();
 
   const [dataDetailDkr, setDataDetailDkr] = useState([]);
-  useEffect(() => {
+  useEffect((dkr_id) => {
     axios.get(externalApi()+'/api/dkr/'+dkr_id)
       .then(response => {
         setDataDetailDkr(response.data.data[0]);
@@ -22,7 +22,13 @@ export default function DetailDkr() {
   }, []);
 
   const [dataStructureDkr, setStructureDkr] = useState([]);
-  useEffect(() => {
+  const [dataSkDkr, setSkDkr] = useState([]);
+  const [dataProgramDkr, setProgramDkr] = useState([]);
+  const [dataSchool, setSchool] = useState([]);
+  const [dataGpReport1, setGpReport1] = useState([]);
+  const [dataGpReport2, setGpReport2] = useState([]);
+
+  useEffect((dkr_id) => {
     axios.get(externalApi()+'/api/structures-dkr/'+dkr_id)
       .then(response => {
         setStructureDkr(response.data.data[0]);
@@ -30,55 +36,40 @@ export default function DetailDkr() {
       .catch(error => {
         console.log(error);
       });
-  }, []);
-  
-  const [dataSkDkr, setSkDkr] = useState([]);
-  useEffect(() => {
-    axios.get(externalApi()+'/api/sk-dkr/'+dkr_id)
+
+      axios.get(externalApi()+'/api/sk-dkr/'+dkr_id)
       .then(response => {
         setSkDkr(response.data.data[0]);
       })
       .catch(error => {
         console.log(error);
       });
-  }, []);
-  
-  const [dataProgramDkr, setProgramDkr] = useState([]);
-  useEffect(() => {
-    axios.get(externalApi()+'/api/program-dkr/'+dkr_id)
+
+      axios.get(externalApi()+'/api/program-dkr/'+dkr_id)
       .then(response => {
         setProgramDkr(response.data.data);
       })
       .catch(error => {
         console.log(error);
       });
-  }, []);
 
-  const [dataSchool, setSchool] = useState([]);
-  useEffect(() => {
-    axios.get(externalApi()+'/api/schools/'+dkr_id)
+      axios.get(externalApi()+'/api/schools/'+dkr_id)
       .then(response => {
         setSchool(response.data.data);
       })
       .catch(error => {
         console.log(error);
       });
-  }, []);
 
-  const [dataGpReport1, setGpReport1] = useState([]);
-  useEffect(() => {
-    axios.get(externalApi()+'/api/gp-reports/1/'+dkr_id)
+      axios.get(externalApi()+'/api/gp-reports/1/'+dkr_id)
       .then(response => {
         setGpReport1(response.data.data);
       })
       .catch(error => {
         console.log(error);
       });
-  }, []);
 
-  const [dataGpReport2, setGpReport2] = useState([]);
-  useEffect(() => {
-    axios.get(externalApi()+'/api/gp-reports/2/'+dkr_id)
+      axios.get(externalApi()+'/api/gp-reports/2/'+dkr_id)
       .then(response => {
         setGpReport2(response.data.data);
       })
