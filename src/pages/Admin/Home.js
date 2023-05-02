@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { Sidebar, AgendaAdmin, LayerAdmin, MarketplaceAdmin } from "../../components"
 import { externalApi } from "./../../utils/utils.js"
+import { RequireAuth } from "../../middlewares"
 
 import { 
   Box, 
@@ -9,7 +10,7 @@ import {
   Grid
 } from "@mui/material"
 
-export default function Home() {
+function Home() {
   const [dataAgenda, setAgenda] = useState([]);
   useEffect(() => {
     axios.get(externalApi()+'/api/agendas')
@@ -72,3 +73,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default RequireAuth(Home, "DKC");

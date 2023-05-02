@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Modal, Box, Typography, Divider, Button, IconButton } from "@mui/material"
-import { Close as CloseIcon } from '@mui/icons-material';
 
 import { 
+  Close as CloseIcon,
   Add as AddIcon,
   CloudUpload as CloudUploadIcon,
   Edit as EditIcon

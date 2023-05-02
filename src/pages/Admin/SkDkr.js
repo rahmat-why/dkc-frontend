@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { Sidebar, SkDkrAdmin } from "../../components"
+import { RequireAuth } from "../../middlewares"
 
 import { 
   Box, 
@@ -8,10 +9,11 @@ import {
 } from "@mui/material"
 import { externalApi } from "./../../utils/utils.js"
 
-export default function SkDkr() {
+function SkDkr() {
+  const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
   const [dataSkDkr, setSkDkr] = useState([]);
   useEffect(() => {
-    axios.get(externalApi()+'/api/sk-dkr/DKR0.7388286687978849')
+    axios.get(externalApi()+'/api/sk-dkr/'+dataLogin.data.dkr_id)
       .then(response => {
         setSkDkr(response.data.data[0]);
       })
@@ -37,3 +39,5 @@ export default function SkDkr() {
     </div>
   )
 }
+
+export default RequireAuth(SkDkr, "DKR");

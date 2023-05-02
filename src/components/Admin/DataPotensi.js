@@ -22,6 +22,7 @@ import MenuTooltip from "./Agenda/MenuTooltip"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function DataPotensi(props) {
+  const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
   const  { dataSchool } = props
 
   const [errors, setErrors] = useState({});
@@ -55,21 +56,23 @@ export default function DataPotensi(props) {
     }
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      axios.post(externalApi()+'/api/schools/DKR0.7388286687978849', formData, config())
-        .then(response => window.alert("Data berhasil ditambah!"))
+      axios.post(externalApi()+'/api/schools/'+dataLogin.data.dkr_id, formData, config())
+        .then(response => {
+          window.alert("Data berhasil ditambah!")
+          window.location.reload()
+        })
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-    
-      window.location.reload()
     }
   }
 
   const handleDelete = async (school_id) => {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
       axios.delete(externalApi()+'/api/schools/'+school_id, config())
-      .then(response => window.alert("Data berhasil dihapus!"))
+      .then(response => {
+        window.alert("Data berhasil dihapus!")
+        window.location.reload()
+      })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
-
-      window.location.reload()
     }
   }
 
@@ -77,7 +80,7 @@ export default function DataPotensi(props) {
     e.preventDefault()
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      axios.post(externalApi()+'/api/data-potensi/DKR0.7388286687978849', formDataPotensi, config())
+      axios.post(externalApi()+'/api/data-potensi/'+dataLogin.data.dkr_id, formDataPotensi, config())
         .then(response => window.alert("Data berhasil ditambah!"))
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
     

@@ -20,6 +20,7 @@ import MenuTooltip from "./Agenda/MenuTooltip"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function ProgramDkr(props) {
+  const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
   const { dataProgramDkr } = props
 
   const [formData, setFormData] = useState({
@@ -53,21 +54,23 @@ export default function ProgramDkr(props) {
     }
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      axios.post(externalApi()+'/api/program-dkr/DKR0.7388286687978849', formData, config())
-        .then(response => window.alert("Data berhasil ditambah!"))
+      axios.post(externalApi()+'/api/program-dkr/'+dataLogin.data.dkr_id, formData, config())
+        .then(response => {
+          window.alert("Data berhasil ditambah!")
+          window.location.reload()
+        })
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-    
-      window.location.reload()
     }
   }
 
   const handleDelete = async (program_id) => {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
       axios.delete(externalApi()+'/api/program-dkr/'+program_id, config())
-      .then(response => window.alert("Data berhasil dihapus!"))
+      .then(response => {
+        window.alert("Data berhasil dihapus!")
+        window.location.reload()
+      })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
-
-      window.location.reload()
     }
   }
 

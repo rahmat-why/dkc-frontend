@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { 
   Drawer, 
@@ -25,7 +25,7 @@ import {
   ExitToApp as ExitToAppIcon
 } from '@mui/icons-material';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const pages = [
   {
@@ -98,12 +98,22 @@ const pages = [
 
 const drawerWidth = 250;
 
-// const auth = () => {
-//   var login = "DKC"
-//   return login
-// }
+const navMenu = (page) => {
+  const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
+  if(dataLogin.type === page.auth) {
+    return <Link key={page.url} className="link" to={page.url}><ListItem disablePadding><ListItemButton><ListItemIcon sx={{ color: '#4040A1' }}>{page.icon}</ListItemIcon><ListItemText primary={page.name} sx={{ color: '#4040A1', ml: -2 }} /></ListItemButton></ListItem></Link>
+  }
+}
 
 export default function Sidebar(props) {
+  const history = useHistory();
+  
+  const handleLogout = (e) => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('dataLogin');
+    history.push('/login')
+  }
+
   const { page } = props
   return (
     <div>
@@ -157,18 +167,9 @@ export default function Sidebar(props) {
 
           <List>
             {pages.map((page, index) => (
-              <Link className="link" to={page.url}>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon sx={{ color: '#4040A1' }}>
-                      {page.icon}
-                    </ListItemIcon>
-                    <ListItemText primary={page.name} sx={{ color: '#4040A1', ml: -2 }} />
-                  </ListItemButton>
-                </ListItem>
-              </Link>
+              navMenu(page)
             ))}
-            <Link className="link" to="/logout">
+            <Link className="link" onClick={handleLogout}>
               <ListItem disablePadding sx={{ mt: 10 }}>
                 <ListItemButton sx={{ 
                   backgroundColor: '#4040A1', 

@@ -32,23 +32,25 @@ export default function Layer(props) {
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
         axios.post(externalApi()+'/api/banners', formData, config())
-        .then(response => window.alert("Data berhasil ditambah!"))
+        .then(response => {
+          window.alert("Data berhasil ditambah!")
+          window.location.reload()
+        })
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
       } catch (error) {
         window.alert("Terjadi kesalahan! data gagal ditambah!");
       }
-
-      window.location.reload()
     }
   }
 
   const handleDelete = async (banner_id) => {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/banners/'+banner_id, config())
-      .then(response => window.alert("Data berhasil dihapus!"))
+      .then(response => {
+        window.alert("Data berhasil dihapus!")
+        window.location.reload()
+      })
       .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-
-      window.location.reload()
     }
   }
 

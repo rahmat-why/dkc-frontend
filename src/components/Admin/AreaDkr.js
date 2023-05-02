@@ -53,10 +53,11 @@ export default function AreaDkr(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       axios.post(externalApi()+'/api/dkr', formData, config())
-        .then(response => window.alert("Data berhasil ditambah!"))
+        .then(response => {
+          window.alert("Data berhasil ditambah!")
+          window.location.reload()
+        })
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-    
-      window.location.reload()
     }
   }
 
@@ -90,10 +91,11 @@ export default function AreaDkr(props) {
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
       axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
-        .then(response => window.alert("Data berhasil ditambah!"))
+        .then(response => {
+          window.alert("Data berhasil ditambah!")
+          window.location.reload()
+        })
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-    
-      window.location.reload()
     }
   }
 

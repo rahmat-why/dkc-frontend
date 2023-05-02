@@ -8,12 +8,14 @@ import {
   Grid
 } from "@mui/material"
 
-import { externalApi, config } from "./../../utils/utils.js"
+import { externalApi } from "./../../utils/utils.js"
+import { RequireAuth } from "../../middlewares"
 
-export default function Dkr() {
+function DataPotensi() {
+  const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
   const [dataSchool, setSchool] = useState([]);
   useEffect(() => {
-    axios.get(externalApi()+'/api/schools/DKR0.7388286687978849')
+    axios.get(externalApi()+'/api/schools/'+dataLogin.data.dkr_id)
       .then(response => {
         setSchool(response.data.data);
       })
@@ -43,3 +45,5 @@ export default function Dkr() {
     </div>
   )
 }
+
+export default RequireAuth(DataPotensi, "DKR");

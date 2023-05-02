@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import { Sidebar, Summary, PotensiTd } from "../../components"
 import { externalApi } from '../../utils/utils';
+import { RequireAuth } from "../../middlewares"
 
 import { 
   Box, 
@@ -11,7 +12,7 @@ import {
   Grid
 } from "@mui/material"
 
-export default function Dashboard() {
+function Dashboard() {
   const [dataPotensi, setDataPotensi] = useState([]);
   useEffect(() => {
     axios.get(externalApi()+'/api/data-potensi/segment')
@@ -54,3 +55,5 @@ export default function Dashboard() {
     </div>
   )
 }
+
+export default RequireAuth(Dashboard, "DKC");

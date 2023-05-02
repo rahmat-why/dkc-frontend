@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { Sidebar, ScoutDocumentAdmin } from "../../components"
 import { externalApi } from "./../../utils/utils.js"
+import { RequireAuth } from "../../middlewares"
 
 import { 
   Box, 
@@ -9,7 +10,7 @@ import {
   Grid
 } from "@mui/material"
 
-export default function Guide() {
+function Guide() {
   const [dataScoutDocument, setScoutDocument] = useState([]);
   useEffect(() => {
     axios.get(externalApi()+'/api/scout-documents')
@@ -42,3 +43,5 @@ export default function Guide() {
     </div>
   )
 }
+
+export default RequireAuth(Guide, "DKC");

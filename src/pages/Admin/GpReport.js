@@ -7,11 +7,13 @@ import {
   Toolbar
 } from "@mui/material"
 import { externalApi } from "./../../utils/utils.js"
+import { RequireAuth } from "../../middlewares"
 
-export default function SkDkr() {
+function SkDkr() {
+  const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
   const [dataGpReport1, setDataGpReport1] = useState([]);
   useEffect(() => {
-    axios.get(externalApi()+'/api/gp-reports/1/DKR0.7388286687978849')
+    axios.get(externalApi()+'/api/gp-reports/1/'+dataLogin.data.dkr_id)
       .then(response => {
         setDataGpReport1(response.data.data);
       })
@@ -22,7 +24,7 @@ export default function SkDkr() {
   
   const [dataGpReport2, setDataGpReport2] = useState([]);
   useEffect(() => {
-    axios.get(externalApi()+'/api/gp-reports/2/DKR0.7388286687978849')
+    axios.get(externalApi()+'/api/gp-reports/2/'+dataLogin.data.dkr_id)
       .then(response => {
         setDataGpReport2(response.data.data);
       })
@@ -48,3 +50,5 @@ export default function SkDkr() {
     </div>
   )
 }
+
+export default RequireAuth(SkDkr, "DKR");

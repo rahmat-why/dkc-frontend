@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { Sidebar, AreaDkrAdmin } from "../../components"
 import { externalApi } from "./../../utils/utils.js"
+import { RequireAuth } from "../../middlewares"
 
 import { 
   Box, 
@@ -32,7 +33,7 @@ const areas = [
   }
 ]
 
-export default function Dkr() {
+function Dkr() {
   const [dataAreaDkr, setAreaDkr] = useState([]);
   useEffect(() => {
     axios.get(externalApi()+'/api/dkr')
@@ -65,3 +66,5 @@ export default function Dkr() {
     </div>
   )
 }
+
+export default RequireAuth(Dkr, "DKC");

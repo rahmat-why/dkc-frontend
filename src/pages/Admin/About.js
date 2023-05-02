@@ -8,8 +8,9 @@ import {
   Grid
 } from "@mui/material"
 import { externalApi } from "./../../utils/utils.js"
+import { RequireAuth } from "../../middlewares"
 
-export default function Home() {
+function Home() {
   const [dataVisi, setVisi] = useState([]);
   useEffect(() => {
     axios.get(externalApi()+'/api/goals/visi')
@@ -72,3 +73,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default RequireAuth(Home, "DKC");

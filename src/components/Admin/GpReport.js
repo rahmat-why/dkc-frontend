@@ -20,6 +20,7 @@ import MenuTooltip from "./Agenda/MenuTooltip"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function GpReport(props) {
+  const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
   const { dataGpReport1, dataGpReport2 } = props
 
   const [type, setType] = useState('');
@@ -59,24 +60,26 @@ export default function GpReport(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
-        axios.post(externalApi()+'/api/gp-reports/DKR0.7388286687978849', formData, config())
-        .then(response => window.alert("Data berhasil ditambah!"))
+        axios.post(externalApi()+'/api/gp-reports/'+dataLogin.data.dkr_id, formData, config())
+        .then(response => {
+          window.alert("Data berhasil ditambah!")
+          window.location.reload()
+        })
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
       } catch (error) {
         window.alert("Terjadi kesalahan! data gagal ditambah!");
       }
-
-      window.location.reload()
     }
   }
 
   const handleDelete = async (report_id) => {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/gp-reports/'+report_id, config())
-      .then(response => window.alert("Data berhasil dihapus!"))
+      .then(response => {
+        window.alert("Data berhasil dihapus!")
+        window.location.reload()
+      })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
-
-      window.location.reload()
     }
   }
 

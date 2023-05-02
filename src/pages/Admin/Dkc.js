@@ -8,6 +8,7 @@ import {
   Grid
 } from "@mui/material"
 import { externalApi } from "./../../utils/utils.js"
+import { RequireAuth } from "../../middlewares"
 
 const dataStage = [
   {
@@ -86,7 +87,7 @@ const areas = [
   }
 ]
 
-export default function Dkc() {
+function Dkc() {
   const [dataSpeechLeader, setSpeechLeader] = useState([]);
   useEffect(() => {
     axios.get(externalApi()+'/api/speechs')
@@ -164,3 +165,5 @@ export default function Dkc() {
     </div>
   )
 }
+
+export default RequireAuth(Dkc, "DKC");

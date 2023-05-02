@@ -33,10 +33,11 @@ export default function ProgramDkc(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       axios.post(externalApi()+'/api/programs-dkc', formData, config())
-        .then(response => window.alert("Data berhasil ditambah!"))
+        .then(response => {
+          window.alert("Data berhasil ditambah!")
+          window.location.reload()
+        })
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-    
-      window.location.reload()
     }
   }
   
@@ -48,10 +49,11 @@ export default function ProgramDkc(props) {
   const handleDelete = async (program_id) => {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
       axios.delete(externalApi()+'/api/programs-dkc/'+program_id, config())
-      .then(response => window.alert("Data berhasil dihapus!"))
+      .then(response => {
+        window.alert("Data berhasil dihapus!")
+        window.location.reload()
+      })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
-
-      window.location.reload()
     }
   }
 

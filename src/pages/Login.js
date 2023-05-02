@@ -1,6 +1,82 @@
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { Grid, Paper, Typography, TextField, Button, Box } from '@mui/material';
+import { externalApi, config } from "./../utils/utils.js"
+import { useHistory } from 'react-router-dom';
 
 const SignInSide = () => {
+  const history = useHistory();
+
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
+
+  const handleSubmit = async (e) => {
+    setLoading(true);
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!formData.username) errors.username = 'username harus diisi!';
+    if (!formData.password) errors.password ='password! harus diisi!';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    axios.post(externalApi()+'/api/login', formData, config())
+      .then(response => {
+        history.push('/admin/dashboard')
+        localStorage.setItem('token', response.data.data.token);
+
+        const token = localStorage.getItem('token');
+        if(token) {
+          axios.get(externalApi()+'/api/check-login', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }).then(response => {
+            console.log("1")
+            localStorage.setItem('dataLogin', JSON.stringify(response.data.data));
+          })
+          .catch(error => {
+            console.log("2")
+            history.push('/login');
+          });
+        }else{
+          console.log("3")
+          history.push('/login');
+        }
+      })
+      .catch(error => window.alert(error.response.data.message))
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  useEffect(() => {
+    // Check if the user is logged in
+    const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
+    if(dataLogin) {
+      if(dataLogin.type === "DKC") {
+        history.push('/admin/dashboard');
+      }else if(dataLogin.type === "DKR") {
+        history.push('/admin/structure-dkr');
+      }
+    }
+    
+  }, []);
+
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
       <Grid
@@ -25,18 +101,20 @@ const SignInSide = () => {
           <Box component="form" sx={{ mt: 1 }}>
             <TextField
               margin="normal"
-              required
               fullWidth
               id="username"
               label="Username"
               name="username"
               autoComplete="username"
               size="small"
+              value={formData.username} 
+              onChange={handleInputChange}
+              error={!!errors.username}
+              helperText={errors.username ? errors.username : ''}
               autoFocus
             />
             <TextField
               margin="normal"
-              required
               fullWidth
               name="password"
               label="Password"
@@ -44,14 +122,19 @@ const SignInSide = () => {
               id="password"
               autoComplete="current-password"
               size="small"
+              value={formData.password} 
+              onChange={handleInputChange}
+              error={!!errors.password}
+              helperText={errors.password ? errors.password : ''}
             />
             <Button
-              type="submit"
+              onClick={handleSubmit}
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2, backgroundColor: '#4040A1' }}
+              disabled={loading}
             >
-              Login
+              {loading ? 'Loading...' : 'Login'}
             </Button>
           </Box>
         </Box>

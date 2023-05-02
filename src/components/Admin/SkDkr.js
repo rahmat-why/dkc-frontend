@@ -8,6 +8,7 @@ import {
 import { externalApi, config } from '../../utils/utils';
 
 export default function SkDkr(props) {
+  const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
   const [document, setDocument] = useState('');
   const [errors, setErrors] = useState({});
 
@@ -34,14 +35,15 @@ export default function SkDkr(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
-        axios.post(externalApi()+'/api/sk-dkr/DKR0.7388286687978849', formData, config())
-        .then(response => window.alert("Data berhasil ditambah!"))
+        axios.post(externalApi()+'/api/sk-dkr/'+dataLogin.data.dkr_id, formData, config())
+        .then(response => {
+          window.alert("Data berhasil ditambah!")
+          window.location.reload()
+        })
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
       } catch (error) {
         console.error(error);
       }
-
-      // window.location.reload()
     }
   }
 

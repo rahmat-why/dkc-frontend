@@ -73,23 +73,25 @@ export default function ProfileOfficer(props) {
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
         axios.post(externalApi()+'/api/officers', formData, config())
-        .then(response => window.alert("Data berhasil ditambah!"))
+        .then(response => {
+          window.alert("Data berhasil ditambah!")
+          window.location.reload()
+        })
         .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
       } catch (error) {
         console.error(error);
       }
-
-      window.location.reload()
     }
   }
 
   const handleDelete = async (officer_id) => {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/officers/'+officer_id, config())
-      .then(response => window.alert("Data berhasil dihapus!"))
+      .then(response => {
+        window.alert("Data berhasil dihapus!")
+        window.location.reload()
+      })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
-
-      window.location.reload()
     }
   }
 
