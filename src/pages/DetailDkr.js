@@ -9,17 +9,7 @@ import { externalApi } from "./../utils/utils.js"
 
 export default function DetailDkr() {
   let { dkr_id } = useParams();
-
-  const [dataDetailDkr, setDataDetailDkr] = useState([]);
-  useEffect((dkr_id) => {
-    axios.get(externalApi()+'/api/dkr/'+dkr_id)
-      .then(response => {
-        setDataDetailDkr(response.data.data[0]);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
+  console.log(dkr_id)
 
   const [dataStructureDkr, setStructureDkr] = useState([]);
   const [dataSkDkr, setSkDkr] = useState([]);
@@ -28,7 +18,7 @@ export default function DetailDkr() {
   const [dataGpReport1, setGpReport1] = useState([]);
   const [dataGpReport2, setGpReport2] = useState([]);
 
-  useEffect((dkr_id) => {
+  useEffect(() => {
     axios.get(externalApi()+'/api/structures-dkr/'+dkr_id)
       .then(response => {
         setStructureDkr(response.data.data[0]);
@@ -84,7 +74,7 @@ export default function DetailDkr() {
       <Container maxWidth="xl">
         <Grid container spacing={2}>
           <Grid item md={12} xs={12}>
-            <StructureDkr dataDetailDkr={dataDetailDkr} dataStructureDkr={dataStructureDkr} />
+            <StructureDkr dataStructureDkr={dataStructureDkr} />
           </Grid>
 
           <Grid item md={12} xs={12}>

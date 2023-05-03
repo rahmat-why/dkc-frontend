@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Grid, CardMedia, Container, Box } from "
 import { externalApi } from "./../utils/utils.js"
 
 export default function StructureDkr(props) {
-  const { dataDetailDkr, dataStructureDkr } = props
+  const { dataStructureDkr } = props
 
   const imageStructureDkr = () => {
     if(!dataStructureDkr) {
@@ -25,7 +25,7 @@ export default function StructureDkr(props) {
             fontWeight="bold"
             sx={{ marginTop: '20px' }}
           >
-            STRUKTUR ORGANISASI DKR {dataDetailDkr.name}
+            STRUKTUR ORGANISASI DKR
           </Typography>
 
           <Grid item align="center">

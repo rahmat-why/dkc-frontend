@@ -13,15 +13,28 @@ import {
   List,
   Box,
   TextField,
-  MenuItem
+  MenuItem,
+  IconButton,
+  Button
 } from '@mui/material';
   
 import ModalCreate from "./Agenda/ModalCreate"
+import ModalPotensi from "./Agenda/ModalPotensi"
 import MenuTooltip from "./Agenda/MenuTooltip"
+
+import { 
+  CloudUpload as CloudUploadIcon
+} from '@mui/icons-material';
 
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function DataPotensi(props) {
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
   const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
   const  { dataSchool } = props
 
@@ -81,25 +94,27 @@ export default function DataPotensi(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       axios.post(externalApi()+'/api/data-potensi/'+dataLogin.data.dkr_id, formDataPotensi, config())
-        .then(response => window.alert("Data berhasil ditambah!"))
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-    
-      // window.location.reload()
+        .then(response => {
+          window.alert("Data potensi berhasil diupdate!")
+          window.location.reload()
+        })
+        .catch(error => window.alert("Terjadi kesalahan! data gagal diupdate!"));
     }
   }
 
   const [school_id, setSchoolId] = useState('');
   const [dataPotensi, setDataPotensi] = useState([]);
 
-  const viewDataPotensi = (school_id) => {
+  const viewDataPotensi = async(school_id) => {
     setSchoolId(school_id)
-    axios.get(externalApi()+'/api/data-potensi/'+school_id+'/DKR0.7388286687978849')
+    await axios.get(externalApi()+'/api/data-potensi/'+school_id+'/'+dataLogin.data.dkr_id)
       .then(response => {
         setDataPotensi(response.data);
       })
       .catch(error => {
         console.log(error);
       });
+    setOpen(true)
   }
 
   function handleChangeDataPotensi(index, value) {
@@ -112,9 +127,12 @@ export default function DataPotensi(props) {
         return obj; // return the original object for other indices
       }
     });
-    setDataPotensi(newDataPotensi); // update the state with the new array
-    setFormDataPotensi({school_id: school_id, data: dataPotensi})
+
+    setDataPotensi(newDataPotensi);
+    setFormDataPotensi({school_id: school_id, data: newDataPotensi})
   }
+
+  console.log(dataPotensi)
 
   return (
     <Card sx={{ mt: 3, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
@@ -179,39 +197,43 @@ export default function DataPotensi(props) {
                       <TableCell align="center">{row.school_name}</TableCell>
                       <TableCell align="center">
                         {/* View */}
-                        <Box onClick={() => viewDataPotensi(row.school_id)}>
-                          <ModalCreate handleSubmit={handleSubmitDataPotensi} title="Update Data Potensi" type="UPDATE">
-                            <Table aria-label="simple table">
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell align="left">Tingkat</TableCell>
-                                  <TableCell align="left">Total Anggota</TableCell>
+                        <Button sx={{ height: '35px', backgroundColor: '#4040A1' }} variant="contained" onClick={() => viewDataPotensi(row.school_id)}>
+                          <IconButton>
+                            <CloudUploadIcon fontSize='small' sx={{ color: "#fff" }} />
+                          </IconButton>
+                          Upload
+                        </Button>
+                        <ModalPotensi handleClose={handleClose} open={open} handleSubmit={handleSubmitDataPotensi} title="Update Data Potensi" type="UPDATE">
+                          <Table aria-label="simple table">
+                            <TableHead>
+                              <TableRow>
+                                <TableCell align="left">Tingkat</TableCell>
+                                <TableCell align="left">Total Anggota</TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {dataPotensi.map((row, index) => (
+                                <TableRow
+                                  key={row.data_id}
+                                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                  <TableCell component="th" scope="row">
+                                    {row.stage_name}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    <TextField 
+                                      label="Total Anggota*" 
+                                      variant="outlined"
+                                      fullWidth
+                                      defaultValue={dataPotensi[index].total_member}
+                                      onChange={(e) => handleChangeDataPotensi(index, e.target.value)}
+                                    />
+                                  </TableCell>
                                 </TableRow>
-                              </TableHead>
-                              <TableBody>
-                                {dataPotensi.map((row, index) => (
-                                  <TableRow
-                                    key={row.data_id}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                  >
-                                    <TableCell component="th" scope="row">
-                                      {row.stage_name}
-                                    </TableCell>
-                                    <TableCell align="left">
-                                      <TextField 
-                                        label="Total Anggota*" 
-                                        variant="outlined"
-                                        fullWidth
-                                        value={dataPotensi[index].total_member}
-                                        onChange={(e) => handleChangeDataPotensi(index, e.target.value)}
-                                      />
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          </ModalCreate>
-                        </Box>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </ModalPotensi>
                       </TableCell>
                       <TableCell>
                         <MenuTooltip style={{ marginLeft: 'auto' }}>
