@@ -1,7 +1,7 @@
 import React from 'react';
 import { PieChart as MUIPieChart, Pie, Legend, Tooltip, Cell } from 'recharts';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
+const COLORS = ['#331a00', '#4d2600', '#663300', '#804000', '#994d00', '#cc6600', '#e67300'];
 
 const PieChart = (props) => {
   const { dataPotensi } = props

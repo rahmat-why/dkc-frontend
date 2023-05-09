@@ -31,7 +31,6 @@ const SignInSide = () => {
 
     axios.post(externalApi()+'/api/login', formData, config())
       .then(response => {
-        history.push('/admin/dashboard')
         localStorage.setItem('token', response.data.data.token);
 
         const token = localStorage.getItem('token');
@@ -43,10 +42,14 @@ const SignInSide = () => {
           }).then(response => {
             console.log("1")
             localStorage.setItem('dataLogin', JSON.stringify(response.data.data));
+            history.push('/admin/dashboard')
           })
           .catch(error => {
             console.log("2")
             history.push('/login');
+          })
+          .finally(() => {
+            setLoading(false);
           });
         }else{
           console.log("3")
@@ -55,7 +58,7 @@ const SignInSide = () => {
       })
       .catch(error => window.alert(error.response.data.message))
       .finally(() => {
-        setLoading(false);
+
       });
   }
 

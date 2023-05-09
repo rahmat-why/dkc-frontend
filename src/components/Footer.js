@@ -29,9 +29,6 @@ function Footer() {
               title="Logo DKC"
               sx={{ width: 192, height: 192 }}
             />
-            <Typography variant="body2" sx={{ mt: 2 }}>
-              Bergerak Harmoni, Penegak dan Pandega Kembangkan Potensi
-            </Typography>
           </Grid>
           <Grid item xs={12} md={6} align="center">
             <List sx={{ width: '100%', maxWidth: 360 }}>

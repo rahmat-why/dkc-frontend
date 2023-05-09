@@ -76,54 +76,53 @@ export default function SpeechLeader(props) {
               >
                 SAMBUTAN KETUA DKC PERIODE 2020-2025
               </Typography>
-              <Box onClick={() => handleUpdate()}>
-                <ModalCreate handleSubmit={handleSubmit} title="Update Sambutan Ketua DKC" type="UPDATE">
-                  <TextField
-                    label="Nama Ketua DKC*"
-                    variant="outlined"
-                    fullWidth
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    error={!!errors.name}
-                    helperText={errors.name ? errors.name : ''}
-                  />
-                  <TextField
-                    label="NTA*"
-                    variant="outlined"
-                    fullWidth
-                    value={nta}
-                    onChange={(e) => setNta(e.target.value)}
-                    error={!!errors.nta}
-                    helperText={errors.nta ? errors.nta : ''}
-                    sx={{ mt: 3 }}
-                  />
-                  <TextField
-                    label="Sambutan*"
-                    variant="outlined"
-                    fullWidth
-                    value={description}
-                    multiline
-                    rows={4}
-                    onChange={(e) => setDescription(e.target.value)}
-                    error={!!errors.description}
-                    helperText={errors.description ? errors.description : ''}
-                    sx={{ mt: 3 }}
-                  />
-                  <TextField
-                    label="Image* (silahkan upload ulang)"
-                    type="file"
-                    variant="outlined"
-                    fullWidth
-                    onChange={handleFileChange}
-                    error={!!errors.image}
-                    helperText={errors.image ? errors.image : ''}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    sx={{ mt: 3 }}
-                  />
-                </ModalCreate>
-              </Box>
+              
+              <ModalCreate handleSubmit={handleSubmit} handleUpdate={handleUpdate} title="Update Sambutan Ketua DKC" type="UPDATE">
+                <TextField
+                  label="Nama Ketua DKC*"
+                  variant="outlined"
+                  fullWidth
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  error={!!errors.name}
+                  helperText={errors.name ? errors.name : ''}
+                />
+                <TextField
+                  label="NTA*"
+                  variant="outlined"
+                  fullWidth
+                  value={nta}
+                  onChange={(e) => setNta(e.target.value)}
+                  error={!!errors.nta}
+                  helperText={errors.nta ? errors.nta : ''}
+                  sx={{ mt: 3 }}
+                />
+                <TextField
+                  label="Sambutan*"
+                  variant="outlined"
+                  fullWidth
+                  value={description}
+                  multiline
+                  rows={4}
+                  onChange={(e) => setDescription(e.target.value)}
+                  error={!!errors.description}
+                  helperText={errors.description ? errors.description : ''}
+                  sx={{ mt: 3 }}
+                />
+                <TextField
+                  label="Image* (silahkan upload ulang)"
+                  type="file"
+                  variant="outlined"
+                  fullWidth
+                  onChange={handleFileChange}
+                  error={!!errors.image}
+                  helperText={errors.image ? errors.image : ''}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  sx={{ mt: 3 }}
+                />
+              </ModalCreate>
             </Box>
             <Grid container spacing={2} sx={{ mt: 1 }}>
               <Grid item xs={12} md={9} align="left">

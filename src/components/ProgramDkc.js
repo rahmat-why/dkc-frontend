@@ -61,7 +61,7 @@ export default function VerticalTabs(props) {
       </CardContent>
 
       <Box
-        sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224 }}
+        sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 424 }}
       >
         <Tabs
           orientation="vertical"
@@ -77,7 +77,7 @@ export default function VerticalTabs(props) {
         </Tabs>
         <TabPanel value={value} index={0}>
           {dataProgram2023.map((row) => (
-            <Box>
+            <Box key={row.program_id}>
               <Typography variant="body1">
                 {row.program_name}
               </Typography>
@@ -88,7 +88,7 @@ export default function VerticalTabs(props) {
 
         <TabPanel value={value} index={1}>
           {dataProgram2024.map((row) => (
-            <Box>
+            <Box key={row.program_id}>
               <Typography variant="body1">
                 {row.program_name}
               </Typography>
@@ -99,7 +99,7 @@ export default function VerticalTabs(props) {
 
         <TabPanel value={value} index={2}>
           {dataProgram2025.map((row) => (
-            <Box>
+            <Box key={row.program_id}>
               <Typography variant="body1">
                 {row.program_name}
               </Typography>

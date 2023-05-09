@@ -22,10 +22,11 @@ const style = {
   maxHeight: "90%"
 };
 
-export default function ModalCreate({ children, title, handleSubmit, type }) {
+export default function ModalCreate({ children, title, handleSubmit, type, handleUpdate }) {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
+    handleUpdate();
   };
 
   const handleClose = () => {
@@ -44,9 +45,11 @@ export default function ModalCreate({ children, title, handleSubmit, type }) {
 
   return (
     <div>
-      <Button sx={{ height: '35px', mt: 2, backgroundColor: '#4040A1' }} variant="contained" onClick={handleClickOpen}>
-        {textButton(type)}
-      </Button>
+      <Box>
+        <Button sx={{ height: '35px', mt: 2, backgroundColor: '#4040A1' }} variant="contained" onClick={handleClickOpen}>
+          {textButton(type)}
+        </Button>
+      </Box>
 
       <Modal
         open={open}
