@@ -58,7 +58,7 @@ const SignInSide = () => {
       })
       .catch(error => window.alert(error.response.data.message))
       .finally(() => {
-
+        setLoading(false);
       });
   }
 

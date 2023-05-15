@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography, CardMedia, List, ListItem, ListItemAvatar, ListItemText, Avatar, Divider } from '@mui/material';
+import { Button, Box, Container, Grid, Typography, CardMedia, List, ListItem, ListItemAvatar, ListItemText, Avatar, Divider } from '@mui/material';
 import { 
   Instagram as InstagramIcon, 
   YouTube as YoutubeIcon, 
@@ -15,9 +15,15 @@ function Footer() {
     <Box sx={{ bgcolor: '#f5f5f5', py: 3, mt: 2 }}>
       <Container maxWidth="lg">
         <Box display="flex" justifyContent="center">
-          <InstagramIcon style={{ color: '#4040A1', width: 32, height: 32 }} sx={{ p: 1 }} />
-          <YoutubeIcon style={{ color: '#4040A1', width: 32, height: 32 }} sx={{ p: 1 }} />
-          <FacebookIcon style={{ color: '#4040A1', width: 32, height: 32 }} sx={{ p: 1 }} />
+          <Button href="https://www.instagram.com/dkc_kabupatenbogor" target="_blank">
+            <InstagramIcon style={{ color: '#4040A1', width: 32, height: 32 }} sx={{ p: 1 }} />
+          </Button>
+          <Button href="https://www.youtube.com/@dkckabupatenbogor3106" target="_blank">
+            <YoutubeIcon style={{ color: '#4040A1', width: 32, height: 32 }} sx={{ p: 1 }} />
+          </Button>
+          <Button href="https://m.facebook.com/profile.php?id=100009767019698" target="_blank">
+            <FacebookIcon style={{ color: '#4040A1', width: 32, height: 32 }} sx={{ p: 1 }} />
+          </Button>
         </Box>
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -38,15 +44,7 @@ function Footer() {
                     <PhoneIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary="021xx" />
-              </ListItem>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
-                    <LocationOnIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="email@gmail" />
+                <ListItemText primary="(021) 87902554" />
               </ListItem>
               <ListItem>
                 <ListItemAvatar>
@@ -54,7 +52,15 @@ function Footer() {
                     <EmailIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary="Kab. Bogor" />
+                <ListItemText primary="dkc.kabbogor@gmail.com" />
+              </ListItem>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <LocationOnIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="Graha Pandu Jl. Segar III Komplek Pemkab Bogor Kel. Tengah" />
               </ListItem>
             </List>
           </Grid>
