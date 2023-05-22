@@ -23,14 +23,16 @@ import { externalApi, config } from "./../../utils/utils.js"
 export default function ProfileOfficer(props) {
   const { dataProfileOfficer, dataStage, dataScope } = props
 
+  const dataPosition = ["KETUA", "WAKIL KETUA", "SEKRETARIS", "ANGGOTA"]
+
   const [name, setName] = useState('');
   const [nta, setNta] = useState('');
   const [stage_id, setStageId] = useState('');
   const [scope_id, setScopeId] = useState('');
+  const [position, setPosition] = useState('');
   const [education, setEducation] = useState('');
   const [city, setCity] = useState('');
   const [instagram, setInstagram] = useState('');
-  const [facebook, setFacebook] = useState('');
   const [image, setImage] = useState('');
   
   const [errors, setErrors] = useState({});
@@ -47,11 +49,11 @@ export default function ProfileOfficer(props) {
     if (!name) errors.name = 'Nama harus diisi';
     if (!nta) errors.nta = 'NTA harus diisi';
     if (!stage_id) errors.stage_id = 'Tingkat harus diisi';
-    if (!scope_id) errors.scope_id = 'Posisi harus diisi';
+    if (!scope_id) errors.scope_id = 'Divisi harus diisi';
+    if (!position) errors.position_id = 'Jabatan harus diisi';
     if (!education) errors.education = 'Pendidikan harus diisi';
     if (!city) errors.city = 'Kota/Kab harus diisi';
     if (!instagram) errors.instagram = 'Akun instagram harus diisi';
-    if (!facebook) errors.facebook = 'Akun facebook harus diisi';
     if (!image) errors.image = 'Foto harus diisi';
 
     if (Object.keys(errors).length > 0) {
@@ -64,10 +66,10 @@ export default function ProfileOfficer(props) {
     formData.append('nta', nta);
     formData.append('stage_id', stage_id);
     formData.append('scope_id', scope_id);
+    formData.append('position', position);
     formData.append('education', education);
     formData.append('city', city);
     formData.append('instagram', instagram);
-    formData.append('facebook', facebook);
     formData.append('image', image);
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
@@ -162,7 +164,7 @@ export default function ProfileOfficer(props) {
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="scope_id"
-                      label="Posisi*"
+                      label="Divisi*"
                       variant="outlined"
                       name="scope_id"
                       select
@@ -179,6 +181,24 @@ export default function ProfileOfficer(props) {
                     </TextField>
                   </Grid>
                 </Grid>
+
+                <TextField
+                  id="position"
+                  label="Jabatan*"
+                  variant="outlined"
+                  name="position"
+                  select
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                  fullWidth
+                  sx={{ mt: 3 }}
+                >
+                  {dataPosition.map((position) => (
+                    <MenuItem key={position} value={position}>
+                      {position}
+                    </MenuItem>
+                  ))}
+                </TextField>
                 
                 <TextField
                   label="Pendidikan*"
@@ -206,40 +226,21 @@ export default function ProfileOfficer(props) {
                   sx={{ mt: 3 }}
                 />
 
-                <Grid container spacing={2}>
-                  <Grid item md={6} xs={12}>
-                    <TextField
-                      label="Akun Instagram*"
-                      variant="outlined"
-                      name="instagram"
-                      fullWidth
-                      value={instagram}
-                      onChange={(e) => setInstagram(e.target.value)}
-                      error={!!errors.instagram}
-                      helperText={errors.instagram ? errors.instagram : ''}
-                      sx={{ mt: 3 }}
-                      InputProps={{
-                        placeholder: 'Awali dengan https://',
-                      }}
-                    />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                    <TextField
-                      label="Akun Facebook*"
-                      variant="outlined"
-                      name="facebook"
-                      fullWidth
-                      value={facebook}
-                      onChange={(e) => setFacebook(e.target.value)}
-                      error={!!errors.facebook}
-                      helperText={errors.facebook ? errors.facebook : ''}
-                      sx={{ mt: 3 }}
-                      InputProps={{
-                        placeholder: 'Awali dengan https://',
-                      }}
-                    />
-                  </Grid>
-                </Grid>
+                <TextField
+                  label="Akun Instagram*"
+                  variant="outlined"
+                  name="instagram"
+                  fullWidth
+                  value={instagram}
+                  onChange={(e) => setInstagram(e.target.value)}
+                  error={!!errors.instagram}
+                  helperText={errors.instagram ? errors.instagram : ''}
+                  sx={{ mt: 3 }}
+                  InputProps={{
+                    placeholder: 'Awali dengan https://',
+                  }}
+                />
+                  
                 <TextField
                   label="Image*"
                   type="file"
@@ -262,11 +263,11 @@ export default function ProfileOfficer(props) {
                   <TableCell align="left">Nama</TableCell>
                   <TableCell align="left">NTA</TableCell>
                   <TableCell align="left">Tingkat</TableCell>
-                  <TableCell align="left">Posisi</TableCell>
+                  <TableCell align="left">Divisi</TableCell>
+                  <TableCell align="left">Jabatan</TableCell>
                   <TableCell align="left">Pendidikan</TableCell>
                   <TableCell align="left">Kota/Kab</TableCell>
                   <TableCell align="left">Instagram</TableCell>
-                  <TableCell align="left">Facebook</TableCell>
                   <TableCell align="left">#</TableCell>
                 </TableRow>
               </TableHead>
@@ -289,10 +290,10 @@ export default function ProfileOfficer(props) {
                     <TableCell align="left">{row.nta}</TableCell>
                     <TableCell align="left">{row.stage.name}</TableCell>
                     <TableCell align="left">{row.scope.name}</TableCell>
+                    <TableCell align="left">{row.position}</TableCell>
                     <TableCell align="left">{row.education}</TableCell>
                     <TableCell align="left">{row.city}</TableCell>
                     <TableCell align="left">{row.instagram}</TableCell>
-                    <TableCell align="left">{row.facebook}</TableCell>
                     <TableCell align="left">
                       <MenuTooltip style={{ marginLeft: 'auto' }}>
                         <MenuItem onClick={() => handleDelete(row.officer_id)}>Delete</MenuItem>

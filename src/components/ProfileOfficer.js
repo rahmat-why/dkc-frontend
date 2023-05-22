@@ -2,7 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, Tab, Typography, Box, Card, CardContent, Grid, CardMedia, List, ListItem, ListItemAvatar, ListItemText, Avatar } from '@mui/material';
 import { 
-  Facebook as FacebookIcon, 
   Instagram as InstagramIcon 
 } from '@mui/icons-material';
 import { externalApi } from '../utils/utils';
@@ -86,13 +85,13 @@ export default function ProfileOfficer(props) {
                 </Grid>
                 <Grid item xs={12} md={9} align="left">
                   <Typography variant="body1" fontWeight="bold">
-                    {row.name}
+                    {row.name} - {row.position}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
                     {row.nta}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }}>
-                    {row.stage_id} | {row.education} | {row.city}
+                    {row.stage.stage_name} | {row.education} | {row.city}
                   </Typography>
                   
                   <List sx={{ width: '100%', maxWidth: 360 }}>
@@ -103,14 +102,6 @@ export default function ProfileOfficer(props) {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText primary={row.instagram} />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <FacebookIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={row.facebook} />
                     </ListItem>
                   </List>
                 </Grid>  
@@ -148,14 +139,6 @@ export default function ProfileOfficer(props) {
                       </ListItemAvatar>
                       <ListItemText primary={row.instagram} />
                     </ListItem>
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <FacebookIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={row.facebook} />
-                    </ListItem>
                   </List>
                 </Grid>  
               </Grid>
@@ -191,14 +174,6 @@ export default function ProfileOfficer(props) {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText primary={row.instagram} />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <FacebookIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={row.facebook} />
                     </ListItem>
                   </List>
                 </Grid>  
@@ -236,14 +211,6 @@ export default function ProfileOfficer(props) {
                       </ListItemAvatar>
                       <ListItemText primary={row.instagram} />
                     </ListItem>
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <FacebookIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={row.facebook} />
-                    </ListItem>
                   </List>
                 </Grid>  
               </Grid>
@@ -279,14 +246,6 @@ export default function ProfileOfficer(props) {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText primary={row.instagram} />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <FacebookIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={row.facebook} />
                     </ListItem>
                   </List>
                 </Grid>  
