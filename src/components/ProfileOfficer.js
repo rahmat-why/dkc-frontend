@@ -91,7 +91,7 @@ export default function ProfileOfficer(props) {
                     {row.nta}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }}>
-                    {row.stage.stage_name} | {row.education} | {row.city}
+                    {row.stage.name} | {row.education} | {row.city}
                   </Typography>
                   
                   <List sx={{ width: '100%', maxWidth: 360 }}>
