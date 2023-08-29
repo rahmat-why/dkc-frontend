@@ -88,10 +88,8 @@ const SignInSide = () => {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: 'url(https://source.unsplash.com/random)',
           backgroundRepeat: 'no-repeat',
-          backgroundColor: (t) =>
-            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+          backgroundColor: "#4040A1",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

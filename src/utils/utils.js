@@ -10,7 +10,7 @@ export const formatDate = (date) => {
 }
 
 export const externalApi = () => {
-    return "https://api.dkckabbogor.com"
+    return "http://api.dkckabbogor.com"
 }
 
 export const config = () => {
