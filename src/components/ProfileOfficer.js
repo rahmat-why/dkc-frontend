@@ -88,7 +88,7 @@ export default function ProfileOfficer(props) {
                     {row.name} - {row.position}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
-                    {row.nta}
+                    {row.name} - {row.position}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }}>
                     {row.stage.name} | {row.education} | {row.city}
@@ -101,7 +101,9 @@ export default function ProfileOfficer(props) {
                           <InstagramIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary={row.instagram} />
+                      <a href={row.instagram} target="_blank">
+                        <ListItemText primary={row.instagram} />
+                      </a>
                     </ListItem>
                   </List>
                 </Grid>  
@@ -124,10 +126,10 @@ export default function ProfileOfficer(props) {
                     {row.name}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
-                    {row.nta}
+                    {row.name} - {row.position}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }}>
-                    {row.stage_id} | {row.education} | {row.city}
+                    {row.stage.name} | {row.education} | {row.city}
                   </Typography>
                   
                   <List sx={{ width: '100%', maxWidth: 360 }}>
@@ -137,7 +139,9 @@ export default function ProfileOfficer(props) {
                           <InstagramIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary={row.instagram} />
+                      <a href={row.instagram} target="_blank" rel="noopener noreferrer">
+                        <ListItemText primary={row.instagram} />
+                      </a>
                     </ListItem>
                   </List>
                 </Grid>  
@@ -160,10 +164,10 @@ export default function ProfileOfficer(props) {
                     {row.name}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
-                    {row.nta}
+                    {row.name} - {row.position}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }}>
-                    {row.stage_id} | {row.education} | {row.city}
+                    {row.stage.name} | {row.education} | {row.city}
                   </Typography>
                   
                   <List sx={{ width: '100%', maxWidth: 360 }}>
@@ -173,7 +177,9 @@ export default function ProfileOfficer(props) {
                           <InstagramIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary={row.instagram} />
+                      <a href={row.instagram} target="_blank">
+                        <ListItemText primary={row.instagram} />
+                      </a>
                     </ListItem>
                   </List>
                 </Grid>  
@@ -196,10 +202,10 @@ export default function ProfileOfficer(props) {
                     {row.name}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
-                    {row.nta}
+                    {row.name} - {row.position}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }}>
-                    {row.stage_id} | {row.education} | {row.city}
+                    {row.stage.name} | {row.education} | {row.city}
                   </Typography>
                   
                   <List sx={{ width: '100%', maxWidth: 360 }}>
@@ -209,7 +215,9 @@ export default function ProfileOfficer(props) {
                           <InstagramIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary={row.instagram} />
+                      <a href={row.instagram} target="_blank">
+                        <ListItemText primary={row.instagram} />
+                      </a>
                     </ListItem>
                   </List>
                 </Grid>  
@@ -232,10 +240,10 @@ export default function ProfileOfficer(props) {
                     {row.name}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }} fontWeight="light">
-                    {row.nta}
+                    {row.name} - {row.position}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 2 }}>
-                    {row.stage_id} | {row.education} | {row.city}
+                    {row.stage.name} | {row.education} | {row.city}
                   </Typography>
                   
                   <List sx={{ width: '100%', maxWidth: 360 }}>
@@ -245,7 +253,9 @@ export default function ProfileOfficer(props) {
                           <InstagramIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary={row.instagram} />
+                      <a href={row.instagram} target="_blank">
+                        <ListItemText primary={row.instagram} />
+                      </a>
                     </ListItem>
                   </List>
                 </Grid>  

@@ -32,7 +32,7 @@ export default function Agenda(props) {
                         color="text.secondary"
                         sx={{ mt: 1 }}
                       >
-                        {formatDate(agenda.schedule_date)}
+                        {formatDate(agenda.scheduleAt)}
                       </Typography>
                     </React.Fragment>
                   }
