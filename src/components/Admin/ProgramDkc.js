@@ -15,8 +15,11 @@ export default function ProgramDkc(props) {
     year: ''
   });
 
+  const fixedYears = [2020, 2021];
   const currentYear = new Date().getFullYear();
-  const years = Array.from(new Array(3), (val, index) => currentYear + index);
+  const rangeOfYears = Array.from(new Array(3), (val, index) => currentYear + index);
+
+  const years = [...fixedYears, ...rangeOfYears];
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -26,7 +26,9 @@ export default function ModalCreate({ children, title, handleSubmit, type, handl
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
-    handleUpdate();
+    if(handleUpdate) {
+      handleUpdate();
+    }
   };
 
   const handleClose = () => {

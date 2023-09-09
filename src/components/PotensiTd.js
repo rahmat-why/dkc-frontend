@@ -15,10 +15,12 @@ export default function PotensiTd(props) {
           fontWeight="bold"
           sx={{ marginTop: '20px' }}
         >
-          POTENSI TD
+          DATA POTENSI T/D
         </Typography>
 
-        <PieChart dataPotensi={dataPotensi} />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <PieChart dataPotensi={dataPotensi} />
+        </div>
       </CardContent>
     </Card>
   );

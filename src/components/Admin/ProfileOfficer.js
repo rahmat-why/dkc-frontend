@@ -23,7 +23,7 @@ import { externalApi, config } from "./../../utils/utils.js"
 export default function ProfileOfficer(props) {
   const { dataProfileOfficer, dataStage, dataScope } = props
 
-  const dataPosition = ["KETUA", "WAKIL KETUA", "SEKRETARIS", "ANGGOTA"]
+  const dataPosition = ["KETUA", "WAKIL KETUA", "SEKRETARIS", "SEKRETARIS II", "BENDAHARA", "ANGGOTA"]
 
   const [name, setName] = useState('');
   const [nta, setNta] = useState('');
