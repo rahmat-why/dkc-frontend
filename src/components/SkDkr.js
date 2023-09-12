@@ -6,10 +6,10 @@ export default function SkDkr(props) {
   const { dataSkDkr } = props
   
   const documentSkDkr = () => {
-    if(!dataSkDkr) {
+    if(dataSkDkr.document_sk_dkr == null) {
       return <Box>Belum diupload!</Box>
     }else{
-      return <Button href={externalApi()+dataSkDkr.document} target="_blank">Unduh disini</Button>
+      return <Button href={externalApi()+dataSkDkr.document_sk_dkr} target="_blank">Unduh disini</Button>
     }
   }
 

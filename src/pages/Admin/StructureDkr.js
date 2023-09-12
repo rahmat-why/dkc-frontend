@@ -36,7 +36,7 @@ function StructureDkr() {
   useEffect(() => {
     axios.get(externalApi()+'/api/structures-dkr/'+dataLogin.data.dkr_id)
       .then(response => {
-        setStructureDkr(response.data.data[0]);
+        setStructureDkr(response.data.data);
       })
       .catch(error => {
         console.log(error);

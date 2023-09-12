@@ -22,7 +22,8 @@ import {
   Person as PersonIcon,
   Group as GroupIcon,
   Folder as FolderIcon,
-  ExitToApp as ExitToAppIcon
+  ExitToApp as ExitToAppIcon,
+  LightMode as LightModeIcon
 } from '@mui/icons-material';
 
 import { Link, useHistory } from 'react-router-dom';
@@ -56,6 +57,12 @@ const pages = [
     name: "DKR",
     url: "/admin/dkr",
     icon: <GroupIcon />,
+    auth: "DKC"
+  },
+  {
+    name: "SAKA",
+    url: "/admin/saka",
+    icon: <LightModeIcon />,
     auth: "DKC"
   },
   {

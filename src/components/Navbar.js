@@ -5,7 +5,8 @@ import {
   AccountCircle as AccountCircleIcon,
   SupervisedUserCircle as SupervisedUserCircleIcon, 
   Bookmark as BookmarkIcon, 
-  ContactPage as ContactPageIcon
+  ContactPage as ContactPageIcon,
+  LightMode as LightModeIcon
 } from '@mui/icons-material';
 import { NavbarDesktop, NavbarMobile } from './NavbarComponent';
 
@@ -26,6 +27,10 @@ const pages = [
     name: "DKR",
     url: "/dkr",
     icon: <SupervisedUserCircleIcon fontSize="small" />
+  },{
+    name: "SAKA",
+    url: "/saka",
+    icon: <LightModeIcon fontSize="small" />
   },{
     name: "Pedoman",
     url: "/guide",

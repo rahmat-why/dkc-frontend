@@ -117,12 +117,28 @@ export default function DataPotensi(props) {
     setOpen(true)
   }
 
-  function handleChangeDataPotensi(index, value) {
+  function handleChangeMensMember(index, value) {
     console.log([index, value])
 
     const newDataPotensi = dataPotensi.map((obj, ind) => {
       if (ind === index) {
-        return { ...obj, total_member: value }; // create a copy of the object with updated key-value pair
+        return { ...obj, mens_member: value }; // create a copy of the object with updated key-value pair
+      } else {
+        return obj; // return the original object for other indices
+      }
+    });
+
+    setDataPotensi(newDataPotensi);
+    setFormDataPotensi({school_id: school_id, data: newDataPotensi})
+    console.log(formDataPotensi)
+  }
+
+  function handleChangeWomensMember(index, value) {
+    console.log([index, value])
+
+    const newDataPotensi = dataPotensi.map((obj, ind) => {
+      if (ind === index) {
+        return { ...obj, womens_member: value }; // create a copy of the object with updated key-value pair
       } else {
         return obj; // return the original object for other indices
       }
@@ -208,7 +224,8 @@ export default function DataPotensi(props) {
                             <TableHead>
                               <TableRow>
                                 <TableCell align="left">Tingkat</TableCell>
-                                <TableCell align="left">Total Anggota</TableCell>
+                                <TableCell align="left">Total Anggota (PA)</TableCell>
+                                <TableCell align="left">Total Anggota (PI)</TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -222,11 +239,20 @@ export default function DataPotensi(props) {
                                   </TableCell>
                                   <TableCell align="left">
                                     <TextField 
-                                      label="Total Anggota*" 
+                                      label="Putra*" 
                                       variant="outlined"
                                       fullWidth
-                                      defaultValue={dataPotensi[index].total_member}
-                                      onChange={(e) => handleChangeDataPotensi(index, e.target.value)}
+                                      defaultValue={dataPotensi[index].mens_member}
+                                      onChange={(e) => handleChangeMensMember(index, e.target.value)}
+                                    />
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    <TextField 
+                                      label="Putri*" 
+                                      variant="outlined"
+                                      fullWidth
+                                      defaultValue={dataPotensi[index].womens_member}
+                                      onChange={(e) => handleChangeWomensMember(index, e.target.value)}
                                     />
                                   </TableCell>
                                 </TableRow>

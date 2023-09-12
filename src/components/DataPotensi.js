@@ -76,7 +76,8 @@ export default function DataPotensi(props) {
                             <TableHead>
                               <TableRow>
                                 <TableCell align="left">Tingkat</TableCell>
-                                <TableCell align="left">Total Anggota</TableCell>
+                                <TableCell align="center">Total Anggota (PA)</TableCell>
+                                <TableCell align="center">Total Anggota (PI)</TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -88,7 +89,8 @@ export default function DataPotensi(props) {
                                   <TableCell component="th" scope="row">
                                     {row.stage_name}
                                   </TableCell>
-                                  <TableCell align="left">{row.total_member}</TableCell>
+                                  <TableCell align="left">{row.mens_member}</TableCell>
+                                  <TableCell align="left">{row.womens_member}</TableCell>
                                 </TableRow>
                               ))}
                             </TableBody>

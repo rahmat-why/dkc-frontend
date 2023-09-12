@@ -21,7 +21,7 @@ export default function DetailDkr() {
   useEffect(() => {
     axios.get(externalApi()+'/api/structures-dkr/'+dkr_id)
       .then(response => {
-        setStructureDkr(response.data.data[0]);
+        setStructureDkr(response.data.data);
       })
       .catch(error => {
         console.log(error);
@@ -29,7 +29,7 @@ export default function DetailDkr() {
 
       axios.get(externalApi()+'/api/sk-dkr/'+dkr_id)
       .then(response => {
-        setSkDkr(response.data.data[0]);
+        setSkDkr(response.data.data);
       })
       .catch(error => {
         console.log(error);

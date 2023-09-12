@@ -23,18 +23,21 @@ export default function GpReport(props) {
   const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
   const { dataGpReport1, dataGpReport2 } = props
 
+  const fixedYears = [2020, 2021];
+  const currentYear = new Date().getFullYear();
+  const rangeOfYears = Array.from(new Array(3), (val, index) => currentYear + index);
+
   const [type, setType] = useState('');
   const [name, setName] = useState('');
   const [errors, setErrors] = useState({});
-  const [year, setYear] = useState('');
+  const [year, setYear] = useState(currentYear);
   const [document, setDocument] = useState('');
 
   const handleFileChange = (event) => {
     setDocument(event.target.files[0]);
   };
 
-  const currentYear = new Date().getFullYear();
-  const years = Array.from(new Array(3), (val, index) => currentYear + index);
+  const years = [...fixedYears, ...rangeOfYears];
 
   const handleSubmit = async (e) => {
     e.preventDefault();

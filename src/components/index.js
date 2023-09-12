@@ -18,6 +18,8 @@ import StructureDkr from "./StructureDkr"
 import GpReport from "./GpReport"
 import SkDkr from "./SkDkr"
 import ProgramDkr from "./ProgramDkr"
+import SkSaka from "./SkSaka"
+import ReportSaka from "./ReportSaka"
 import DataPotensi from "./DataPotensi"
 import Sidebar from "./Admin/Sidebar"
 import Summary from "./Admin/Summary"
@@ -35,6 +37,8 @@ import ScoutDocumentAdmin from "./Admin/ScoutDocument"
 import MarketplaceAdmin from "./Admin/Marketplace"
 import StructureDkrAdmin from "./Admin/StructureDkr"
 import SkDkrAdmin from "./Admin/SkDkr"
+import SkSakaAdmin from "./Admin/SkSaka"
+import ReportSakaAdmin from "./Admin/ReportSaka"
 import GpReportAdmin from "./Admin/GpReport"
 import ProgramDkrAdmin from "./Admin/ProgramDkr"
 import DataPotensiAdmin from "./Admin/DataPotensi"
@@ -60,6 +64,8 @@ export {
     GpReport,
     SkDkr,
     ProgramDkr,
+    SkSaka,
+    ReportSaka,
     DataPotensi,
     Sidebar,
     Summary,
@@ -77,6 +83,8 @@ export {
     MarketplaceAdmin,
     StructureDkrAdmin,
     SkDkrAdmin,
+    SkSakaAdmin,
+    ReportSakaAdmin,
     GpReportAdmin,
     ProgramDkrAdmin,
     DataPotensiAdmin

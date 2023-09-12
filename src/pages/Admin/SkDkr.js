@@ -15,7 +15,7 @@ function SkDkr() {
   useEffect(() => {
     axios.get(externalApi()+'/api/sk-dkr/'+dataLogin.data.dkr_id)
       .then(response => {
-        setSkDkr(response.data.data[0]);
+        setSkDkr(response.data.data);
       })
       .catch(error => {
         console.log(error);

@@ -48,7 +48,7 @@ export default function SkDkr(props) {
   }
 
   const documentSkDkr = () => {
-    if(!dataSkDkr) {
+    if(dataSkDkr.document_sk_dkr == null) {
       return <Box>Belum diupload!</Box>
     }else{
       return <Typography
@@ -57,8 +57,8 @@ export default function SkDkr(props) {
                 color="text.secondary"
                 sx={{ mt: 1 }}
               >
-                <Button href={externalApi()+dataSkDkr.document} target="_blank">
-                  Unduh Document
+                <Button href={externalApi()+dataSkDkr.document_sk_dkr} target="_blank">
+                  Unduh Document!
                 </Button>
 
                 <IconButton>

@@ -6,10 +6,10 @@ export default function StructureDkr(props) {
   const { dataStructureDkr } = props
 
   const imageStructureDkr = () => {
-    if(!dataStructureDkr) {
+    if(dataStructureDkr.image_structure_dkr == null) {
       return <Box>Belum diupload!</Box>
     }else{
-      return <Box><CardMedia component="img"alt="Strukture DKR"image={externalApi()+dataStructureDkr.image}title="Strukture DKR"/></Box>
+      return <Box><CardMedia component="img"alt="Strukture DKR"image={externalApi()+dataStructureDkr.image_structure_dkr}title="Strukture DKR"/></Box>
     }
   }
 

@@ -7,12 +7,14 @@ import {
   Dkc, 
   Dkr, 
   DetailDkr, 
+  Saka,
   Login, 
   DashboardAdmin,
   HomeAdmin,
   AboutAdmin,
   DkcAdmin,
   DkrAdmin,
+  SakaAdmin,
   GuideAdmin,
   StructureDkrAdmin,
   SkDkrAdmin,
@@ -44,6 +46,9 @@ function App() {
           <Route path="/dkr/:dkr_id" exact>
             <DetailDkr />
           </Route>
+          <Route path="/saka" exact>
+            <Saka />
+          </Route>
           <Route path="/login" exact>
             <Login />
           </Route>
@@ -63,6 +68,9 @@ function App() {
           </Route>
           <Route path="/admin/dkr" exact>
             <DkrAdmin />
+          </Route>
+          <Route path="/admin/saka" exact>
+            <SakaAdmin />
           </Route>
           <Route path="/admin/guide" exact>
             <GuideAdmin />
