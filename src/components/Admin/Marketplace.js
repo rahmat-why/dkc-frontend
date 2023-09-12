@@ -18,11 +18,13 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function Marketplace(props) {
   const { dataProduct } = props
 
+  const [product_id, setProductId] = useState('');
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
   const [image, setImage] = useState('');
@@ -77,6 +79,42 @@ export default function Marketplace(props) {
     }
   }
 
+  const [open, setOpen] = useState(false);
+  const handleUpdate = async (product) => {
+    setOpen(true);
+    setName(product.name)
+    setLink(product.link)
+    setProductId(product.product_id)
+  }
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!name) errors.name = 'name is required';
+    if (!link) errors.link = 'link at is required';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    console.log(product_id)
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
+      //   .then(response => {
+      //     window.alert("Data berhasil ditambah!")
+      //     window.location.reload()
+      //   })
+      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+    }
+  }
   return (
     <Card sx={{ mt: 3, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
       <CardContent>
@@ -163,11 +201,36 @@ export default function Marketplace(props) {
                     </TableCell>
                     <TableCell align="left">
                       <MenuTooltip>
+                        <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
                         <MenuItem onClick={() => handleDelete(row.product_id)}>Delete</MenuItem>
                       </MenuTooltip>
                     </TableCell>
                   </TableRow>
                 ))}
+                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Product" handleClose={handleClose}>
+                  <TextField
+                    label="Nama Produk*"
+                    variant="outlined"
+                    fullWidth
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name : ''}
+                  />
+                  <TextField
+                    label="Link Redirect*"
+                    variant="outlined"
+                    fullWidth
+                    value={link}
+                    onChange={(e) => setLink(e.target.value)}
+                    error={!!errors.link}
+                    helperText={errors.link ? errors.link : ''}
+                    sx={{ mt: 3 }}
+                    InputProps={{
+                      placeholder: 'Awali dengan https://',
+                    }}
+                  />
+                </ModalUpdate>
               </TableBody>
             </Table>
           </Box>

@@ -21,3 +21,8 @@ export const config = () => {
 
     return config
 }
+
+export const formatDateRaw = (date) => {
+    const formattedDate = moment(date).format('Y-M-D');
+    return formattedDate
+}

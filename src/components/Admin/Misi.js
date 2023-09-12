@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Card, CardContent, Typography, Grid, CardMedia, Box, List, TextField, MenuItem, Button, IconButton } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
 import { 
   CloudUpload as CloudUploadIcon
 } from '@mui/icons-material';
@@ -56,6 +57,42 @@ export default function Misi(props) {
     }
   }
 
+  const [misi_id, setMisiId] = useState('');
+  const [open, setOpen] = useState(false);
+  const handleUpdate = async (misi) => {
+    setOpen(true);
+    setFormData({ description: misi.description, type: 'MISI' })
+    setMisiId(misi.goal_id)
+  }
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!formData.description) errors.description = 'description is required';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    console.log(misi_id)
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
+      //   .then(response => {
+      //     window.alert("Data berhasil ditambah!")
+      //     window.location.reload()
+      //   })
+      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+    }
+  }
+
   return (
     <Card sx={{ mt: 3, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
       <CardContent>
@@ -95,10 +132,25 @@ export default function Misi(props) {
                       {misi.description}
                     </Typography>
                     <MenuTooltip style={{ marginLeft: 'auto' }}>
+                      <MenuItem onClick={() => handleUpdate(misi)}>Update</MenuItem>
                       <MenuItem onClick={() => handleDelete(misi.goal_id)}>Delete</MenuItem>
                     </MenuTooltip>
                   </Box>
                 ))}
+                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Misi" handleClose={handleClose}>
+                  <TextField
+                    label="Misi*"
+                    variant="outlined"
+                    name="description"
+                    fullWidth
+                    multiline
+                    rows={4}
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    error={!!errors.description}
+                    helperText={errors.description ? errors.description : ''}
+                  />
+                </ModalUpdate>
               </Grid>  
               <Grid item xs={12} md={3} align="left">
                 <CardMedia 

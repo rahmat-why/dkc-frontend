@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import { Card, CardContent, Typography, List, ListItem, ListItemText, Divider, Box, TextField, MenuItem } from "@mui/material"
-import { formatDate } from '../../utils/utils';
+import { formatDate, formatDateRaw } from '../../utils/utils';
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function Agenda(props) {
@@ -55,6 +56,43 @@ export default function Agenda(props) {
     }
   }
 
+  const [agenda_id, setAgendaId] = useState('');
+  const [open, setOpen] = useState(false);
+  const handleUpdate = async (agenda) => {
+    setOpen(true);
+    setFormData({ title: agenda.title, scheduleAt: formatDateRaw(agenda.scheduleAt) })
+    setAgendaId(agenda.agenda_id)
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!formData.title) errors.name = 'title is required';
+    if (!formData.scheduleAt) errors.scheduleAt = 'schedule at is required';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    console.log(agenda_id)
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
+      //   .then(response => {
+      //     window.alert("Data berhasil ditambah!")
+      //     window.location.reload()
+      //   })
+      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+    }
+  }
+  
   return (
     <Card sx={{ mt: 3, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
       <CardContent>
@@ -121,10 +159,39 @@ export default function Agenda(props) {
                   }
                 />
                 <MenuTooltip style={{ marginLeft: 'auto' }}>
+                  <MenuItem onClick={() => handleUpdate(agenda)}>Update</MenuItem>
                   <MenuItem onClick={() => handleDelete(agenda.agenda_id)}>Delete</MenuItem>
                 </MenuTooltip>
               </ListItem>
             ))}
+            <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Agenda" handleClose={handleClose}>
+              <TextField 
+                name="title"
+                label="Title*" 
+                variant="outlined"
+                fullWidth
+                value={formData.title}
+                onChange={handleInputChange}
+                error={!!errors.title}
+                helperText={errors.title ? errors.title : ''}
+              />
+
+              <TextField
+                name="scheduleAt"
+                label="Schedule date*"
+                type="date"
+                variant="outlined"
+                fullWidth
+                value={formData.scheduleAt}
+                onChange={handleInputChange}
+                error={!!errors.scheduleAt}
+                helperText={errors.scheduleAt ? errors.scheduleAt : ''}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ mt: 3 }}
+              />
+            </ModalUpdate>
           </Box>
         </List>
       </CardContent>
