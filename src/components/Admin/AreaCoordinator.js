@@ -17,11 +17,13 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function AreaCoordinator(props) {
   const { dataAreaCoordinator, areas } = props
 
+  const [coordinator_id, setCoordinatorId] = useState('');
   const [name, setName] = useState('');
   const [nta, setNta] = useState('');
   const [area_id, setAreaId] = useState('');
@@ -76,6 +78,45 @@ export default function AreaCoordinator(props) {
         window.location.reload()
       })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+    }
+  }
+
+  const [open, setOpen] = useState(false);
+  const handleUpdate = async (row) => {
+    setOpen(true);
+    setCoordinatorId(row.coordinator_id)
+    setName(row.name)
+    setNta(row.nta)
+    setAreaId(row.area_id)
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!name) errors.name = 'Nama harus diisi';
+    if (!nta) errors.nta = 'NTA harus diisi';
+    if (!area_id) errors.area_id = 'Area harus diisi';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    console.log(coordinator_id)
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
+      //   .then(response => {
+      //     window.alert("Data berhasil ditambah!")
+      //     window.location.reload()
+      //   })
+      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
     }
   }
 
@@ -177,11 +218,50 @@ export default function AreaCoordinator(props) {
                     <TableCell align="left">{row.area.name}</TableCell>
                     <TableCell align="left">
                       <MenuTooltip>
+                        <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
                         <MenuItem onClick={() => handleDelete(row.coordinator_id)}>Delete</MenuItem>
                       </MenuTooltip>
                     </TableCell>
                   </TableRow>
                 ))}
+                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Koordinator Wilayah" handleClose={handleClose}>
+                  <TextField
+                    label="Nama*"
+                    variant="outlined"
+                    fullWidth
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name : ''}
+                  />
+                  <TextField
+                    label="NTA*"
+                    variant="outlined"
+                    fullWidth
+                    value={nta}
+                    onChange={(e) => setNta(e.target.value)}
+                    error={!!errors.nta}
+                    helperText={errors.nta ? errors.nta : ''}
+                    sx={{ mt: 3 }}
+                  />
+                  <TextField
+                    label="Area*"
+                    variant="outlined"
+                    fullWidth
+                    select
+                    value={area_id}
+                    onChange={(e) => setAreaId(e.target.value)}
+                    error={!!errors.area_id}
+                    helperText={errors.area_id ? errors.area_id : ''}
+                    sx={{ mt: 3 }}
+                  >
+                    {areas.map((area) => (
+                      <MenuItem key={area.id} value={area.area_id}>
+                        {area.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </ModalUpdate>
               </TableBody>
             </Table>
           </Box>

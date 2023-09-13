@@ -18,6 +18,7 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function ProfileOfficer(props) {
@@ -25,6 +26,7 @@ export default function ProfileOfficer(props) {
 
   const dataPosition = ["KETUA", "WAKIL KETUA", "SEKRETARIS", "SEKRETARIS II", "BENDAHARA", "ANGGOTA"]
 
+  const [officer_id, setOfficerId] = useState('');
   const [name, setName] = useState('');
   const [nta, setNta] = useState('');
   const [stage_id, setStageId] = useState('');
@@ -94,6 +96,55 @@ export default function ProfileOfficer(props) {
         window.location.reload()
       })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+    }
+  }
+
+  const [open, setOpen] = useState(false);
+  const handleUpdate = async (officer) => {
+    setOpen(true);
+    setOfficerId(officer.officer_id)
+    setName(officer.name)
+    setNta(officer.nta)
+    setStageId(officer.stage_id)
+    setScopeId(officer.scope_id)
+    setPosition(officer.position)
+    setEducation(officer.education)
+    setCity(officer.city)
+    setInstagram(officer.instagram)
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!name) errors.name = 'Nama harus diisi';
+    if (!nta) errors.nta = 'NTA harus diisi';
+    if (!stage_id) errors.stage_id = 'Tingkat harus diisi';
+    if (!scope_id) errors.scope_id = 'Divisi harus diisi';
+    if (!position) errors.position_id = 'Jabatan harus diisi';
+    if (!education) errors.education = 'Pendidikan harus diisi';
+    if (!city) errors.city = 'Kota/Kab harus diisi';
+    if (!instagram) errors.instagram = 'Akun instagram harus diisi';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    console.log(officer_id)
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
+      //   .then(response => {
+      //     window.alert("Data berhasil ditambah!")
+      //     window.location.reload()
+      //   })
+      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
     }
   }
 
@@ -296,11 +347,140 @@ export default function ProfileOfficer(props) {
                     <TableCell align="left">{row.instagram}</TableCell>
                     <TableCell align="left">
                       <MenuTooltip style={{ marginLeft: 'auto' }}>
+                        <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
                         <MenuItem onClick={() => handleDelete(row.officer_id)}>Delete</MenuItem>
                       </MenuTooltip>
                     </TableCell>
                   </TableRow>
                 ))}
+                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Agenda" handleClose={handleClose}>
+                  <Grid container spacing={2}>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        label="Nama*"
+                        variant="outlined"
+                        name="name"
+                        fullWidth
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        error={!!errors.name}
+                        helperText={errors.name ? errors.name : ''}
+                      />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        label="NTA*"
+                        variant="outlined"
+                        name="nta"
+                        fullWidth
+                        value={nta}
+                        onChange={(e) => setNta(e.target.value)}
+                        error={!!errors.nta}
+                        helperText={errors.nta ? errors.nta : ''}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid container spacing={2}>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        id="stage_id"
+                        label="Tingkat*"
+                        variant="outlined"
+                        name="stage_id"
+                        select
+                        value={stage_id}
+                        onChange={(e) => setStageId(e.target.value)}
+                        fullWidth
+                        sx={{ mt: 3 }}
+                      >
+                        {dataStage.map((stage) => (
+                          <MenuItem key={stage.stage_id} value={stage.stage_id}>
+                            {stage.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        id="scope_id"
+                        label="Divisi*"
+                        variant="outlined"
+                        name="scope_id"
+                        select
+                        value={scope_id}
+                        onChange={(e) => setScopeId(e.target.value)}
+                        fullWidth
+                        sx={{ mt: 3 }}
+                      >
+                        {dataScope.map((scope) => (
+                          <MenuItem key={scope.scope_id} value={scope.scope_id}>
+                            {scope.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                  </Grid>
+
+                  <TextField
+                    id="position"
+                    label="Jabatan*"
+                    variant="outlined"
+                    name="position"
+                    select
+                    value={position}
+                    onChange={(e) => setPosition(e.target.value)}
+                    fullWidth
+                    sx={{ mt: 3 }}
+                  >
+                    {dataPosition.map((position) => (
+                      <MenuItem key={position} value={position}>
+                        {position}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  
+                  <TextField
+                    label="Pendidikan*"
+                    variant="outlined"
+                    name="education"
+                    fullWidth
+                    value={education}
+                    onChange={(e) => setEducation(e.target.value)}
+                    error={!!errors.education}
+                    helperText={errors.education ? errors.education : ''}
+                    sx={{ mt: 3 }}
+                    InputProps={{
+                      placeholder: 'Isi dengan nama institusi',
+                    }}
+                  />
+                  <TextField
+                    label="Kota/Kab*"
+                    variant="outlined"
+                    name="city"
+                    fullWidth
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    error={!!errors.city}
+                    helperText={errors.city ? errors.city : ''}
+                    sx={{ mt: 3 }}
+                  />
+
+                  <TextField
+                    label="Akun Instagram*"
+                    variant="outlined"
+                    name="instagram"
+                    fullWidth
+                    value={instagram}
+                    onChange={(e) => setInstagram(e.target.value)}
+                    error={!!errors.instagram}
+                    helperText={errors.instagram ? errors.instagram : ''}
+                    sx={{ mt: 3 }}
+                    InputProps={{
+                      placeholder: 'Awali dengan https://',
+                    }}
+                  />
+                </ModalUpdate>
               </TableBody>
             </Table>
           </Box>

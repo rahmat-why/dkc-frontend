@@ -17,11 +17,13 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function ScoutDocument(props) {
   const { dataScoutDocument } = props
 
+  const [document_id, setDocumentId] = useState('');
   const [name, setName] = useState('');
   const [document, setDocument] = useState('');
 
@@ -70,6 +72,41 @@ export default function ScoutDocument(props) {
         window.location.reload()
       })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+    }
+  }
+
+  const [open, setOpen] = useState(false);
+  const handleUpdate = async (row) => {
+    setOpen(true);
+    setDocumentId(row.document_id)
+    setName(row.name)
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!name) errors.name = 'Nama pedoman harus diisi';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    console.log(document_id)
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
+      //   .then(response => {
+      //     window.alert("Data berhasil ditambah!")
+      //     window.location.reload()
+      //   })
+      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
     }
   }
 
@@ -138,11 +175,23 @@ export default function ScoutDocument(props) {
                     </TableCell>
                     <TableCell>
                       <MenuTooltip>
+                        <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
                         <MenuItem onClick={() => handleDelete(row.document_id)}>Delete</MenuItem>
                       </MenuTooltip>
                     </TableCell>
                   </TableRow>
                 ))}
+                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Pedoman Gerakan Pramuka" handleClose={handleClose}>
+                  <TextField
+                    label="Nama Pedoman*"
+                    variant="outlined"
+                    fullWidth
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name : ''}
+                  />
+                </ModalUpdate>
               </TableBody>
             </Table>
           </Box>

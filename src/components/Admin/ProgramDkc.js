@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Card, CardContent, Typography, List, ListItem, ListItemText, Divider, Box, TextField, MenuItem } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function ProgramDkc(props) {
@@ -10,6 +11,7 @@ export default function ProgramDkc(props) {
   
   const [errors, setErrors] = useState({});
 
+  const [program_id, setProgramId] = useState('');
   const [formData, setFormData] = useState({
     program_name: '',
     year: ''
@@ -57,6 +59,42 @@ export default function ProgramDkc(props) {
         window.location.reload()
       })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+    }
+  }
+
+  const [open, setOpen] = useState(false);
+  const handleUpdate = async (program) => {
+    setOpen(true);
+    setProgramId(program.program_id)
+    setFormData({ program_name: program.program_name, year: program.year })
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!formData.program_name) errors.program_name = 'Nama program harus diisi';
+    if (!formData.year) errors.year = 'Tahun program harus diisi';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    console.log(program_id)
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
+      //   .then(response => {
+      //     window.alert("Data berhasil ditambah!")
+      //     window.location.reload()
+      //   })
+      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
     }
   }
 
@@ -128,10 +166,41 @@ export default function ProgramDkc(props) {
                   }
                 />
                 <MenuTooltip style={{ marginLeft: 'auto' }}>
+                  <MenuItem onClick={() => handleUpdate(program)}>Update</MenuItem>
                   <MenuItem onClick={() => handleDelete(program.program_id)}>Delete</MenuItem>
                 </MenuTooltip>
               </ListItem>
             ))}
+            <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Program DKC" handleClose={handleClose}>
+              <TextField 
+                label="Program name*" 
+                variant="outlined"
+                name="program_name"
+                fullWidth
+                value={formData.program_name}
+                onChange={handleInputChange}
+                error={!!errors.program_name}
+                helperText={errors.program_name ? errors.program_name : ''}
+              />
+
+              <TextField
+                id="year"
+                label="Year*"
+                variant="outlined"
+                name="year"
+                select
+                value={formData.year}
+                onChange={handleInputChange}
+                fullWidth
+                sx={{ mt: 3 }}
+              >
+                {years.map((year) => (
+                  <MenuItem key={year} value={year}>
+                    {year}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </ModalUpdate>
           </Box>
         </List>
       </CardContent>
