@@ -17,6 +17,8 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
+
 import { externalApi, config } from "./../../utils/utils.js"
 import { formatDate } from '../../utils/utils';
 
@@ -77,6 +79,42 @@ export default function ReportSaka(props) {
         window.location.reload()
       })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+    }
+  }
+
+  const [open, setOpen] = useState(false);
+  const handleUpdate = async (report) => {
+    setOpen(true);
+    setName(report.name)
+    setSakaId(report.saka_id)
+    setReportDate(report.report_date)
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!name) errors.name = 'Nama harus diisi!';
+    if (!sakaId) errors.sakaId = 'SAKA harus diisi!';
+    if (!reportDate) errors.reportDate = 'Tanggal laporan harus diisi!';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
+      //   .then(response => {
+      //     window.alert("Data berhasil ditambah!")
+      //     window.location.reload()
+      //   })
+      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
     }
   }
 
@@ -188,11 +226,57 @@ export default function ReportSaka(props) {
                     </TableCell>
                     <TableCell>
                       <MenuTooltip>
+                        <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
                         <MenuItem onClick={() => handleDelete(row.report_id)}>Delete</MenuItem>
                       </MenuTooltip>
                     </TableCell>
                   </TableRow>
                 ))}
+                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title={`Update Laporan SAKA`} handleClose={handleClose}>
+                  <TextField
+                    label="Nama Laporan*"
+                    variant="outlined"
+                    fullWidth
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name : ''}
+                  />
+                  
+                  <TextField
+                    label="Nama SAKA*"
+                    variant="outlined"
+                    fullWidth
+                    value={sakaId}
+                    select
+                    onChange={(e) => setSakaId(e.target.value)}
+                    error={!!errors.sakaId}
+                    helperText={errors.sakaId ? errors.sakaId : ''}
+                    sx={{ mt: 3 }}
+                  >
+                    {dataSkSaka.map((saka) => (
+                      <MenuItem key={saka.saka_id} value={saka.saka_id}>
+                        {saka.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
+                  <TextField
+                    name="reportDate"
+                    label="Tanggal Terbit*"
+                    type="date"
+                    variant="outlined"
+                    fullWidth
+                    value={reportDate}
+                    onChange={(e) => setReportDate(e.target.value)}
+                    error={!!errors.reportDate}
+                    helperText={errors.reportDate ? errors.reportDate : ''}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    sx={{ mt: 3 }}
+                  />
+                </ModalUpdate>
               </TableBody>
             </Table>
           </Box>
