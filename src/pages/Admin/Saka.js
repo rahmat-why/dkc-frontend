@@ -14,7 +14,7 @@ function Saka() {
   const [dataSkSaka, setSkSaka] = useState([]);
   const [dataReportSaka, setReportSaka] = useState([]);
   useEffect(() => {
-    axios.get('https://721560dc-910b-4ecd-adfd-701bdc60a99c.mock.pstmn.io/api/saka')
+    axios.get(externalApi()+'/api/saka')
       .then(response => {
         setSkSaka(response.data.data);
       })
@@ -24,7 +24,7 @@ function Saka() {
   }, []);
   
   useEffect(() => {
-    axios.get('https://721560dc-910b-4ecd-adfd-701bdc60a99c.mock.pstmn.io/api/report-saka')
+    axios.get(externalApi()+'/api/report-saka')
       .then(response => {
         setReportSaka(response.data.data);
       })

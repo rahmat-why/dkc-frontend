@@ -60,7 +60,7 @@ export default function SkSaka(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
-        axios.post(externalApi()+'/api/saka', formDataCreateSaka, config())
+        axios.post(externalApi()+'/api/sakas', formDataCreateSaka, config())
         .then(response => {
           window.alert("Data berhasil ditambah!")
           window.location.reload()
@@ -97,9 +97,10 @@ export default function SkSaka(props) {
   const viewDataPotensiSaka = async(saka_id) => {
     setSakaId(saka_id)
 
-    await axios.get('https://721560dc-910b-4ecd-adfd-701bdc60a99c.mock.pstmn.io/api/data-potensi-saka/SAKAxx')
+    await axios.get(externalApi()+'/api/data-potensi-saka/'+saka_id)
       .then(response => {
-        setDataPotensiSaka(response.data.data);
+        setDataPotensiSaka(response.data);
+        setFormDataPotensiSaka({saka_id: saka_id, data: response.data})
       })
       .catch(error => {
         console.log(error);
@@ -120,13 +121,14 @@ export default function SkSaka(props) {
 
     setDataPotensiSaka(newDataPotensi);
     setFormDataPotensiSaka({saka_id: saka_id, data: newDataPotensi})
+    console.log(formDataPotensiSaka)
   }
 
   const handleSubmitDataPotensiSaka = async (e) => {
     e.preventDefault()
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      axios.post('https://721560dc-910b-4ecd-adfd-701bdc60a99c.mock.pstmn.io/api/api/data-potensi-saka/SAKAxx', formDataPotensiSaka, config())
+      axios.post(externalApi()+'/api/data-potensi-saka', formDataPotensiSaka, config())
         .then(response => {
           window.alert("Data potensi berhasil diupdate!")
           window.location.reload()
@@ -151,7 +153,7 @@ export default function SkSaka(props) {
     formDataUpdataSkSaka.append('document_sk_saka', document_sk_saka);
 
     if (window.confirm("Apakah anda yakin ingin update SK SAKA?")) {
-      axios.post('https://721560dc-910b-4ecd-adfd-701bdc60a99c.mock.pstmn.io/api/api/data-potensi-saka/SAKAxx', formDataPotensiSaka, config())
+      axios.post(externalApi()+'/api/data-potensi-saka', formDataPotensiSaka, config())
         .then(response => {
           window.alert("Data potensi berhasil diupdate!")
           window.location.reload()
@@ -176,7 +178,7 @@ export default function SkSaka(props) {
     formDataUpdataSkPinsaka.append('document_sk_pinsaka', document_sk_pinsaka);
 
     if (window.confirm("Apakah anda yakin ingin update SK PINSAKA?")) {
-      axios.post('https://721560dc-910b-4ecd-adfd-701bdc60a99c.mock.pstmn.io/api/api/data-potensi-saka/SAKAxx', formDataPotensiSaka, config())
+      axios.put(externalApi()+'/api/data-potensi-saka', formDataPotensiSaka, config())
         .then(response => {
           window.alert("Data potensi berhasil diupdate!")
           window.location.reload()
@@ -285,14 +287,14 @@ export default function SkSaka(props) {
                                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                   <TableCell component="th" scope="row">
-                                    {row.saka_id}
+                                    {dataPotensiSaka[index].name}
                                   </TableCell>
                                   <TableCell align="left">
                                     <TextField 
                                       label="Total Anggota (PA)*" 
                                       variant="outlined"
                                       fullWidth
-                                      defaultValue={dataPotensiSaka[index].mens_member}
+                                      defaultValue={dataPotensiSaka[index].total_mens_member}
                                       onChange={(e) => handleChangeDataPotensiSaka(index, e.target.value)}
                                     />
                                   </TableCell>
@@ -301,7 +303,7 @@ export default function SkSaka(props) {
                                       label="Total Anggota (PI)*" 
                                       variant="outlined"
                                       fullWidth
-                                      defaultValue={dataPotensiSaka[index].womens_member}
+                                      defaultValue={dataPotensiSaka[index].total_womens_member}
                                       onChange={(e) => handleChangeDataPotensiSaka(index, e.target.value)}
                                     />
                                   </TableCell>
