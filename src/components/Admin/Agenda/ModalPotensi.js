@@ -19,7 +19,7 @@ const style = {
   maxHeight: "90%"
 };
 
-export default function ModalPotensi({ children, title, handleSubmit, open, handleClose }) {
+export default function ModalPotensi({ children, title, handleSubmit, open, handleClose, handleExport }) {
   return (
     <div>
       <Modal
@@ -44,10 +44,9 @@ export default function ModalPotensi({ children, title, handleSubmit, open, hand
           {children}
           
           <Typography variant="h6" component="h2" sx={{ mt: 4 }}>
-            <form onSubmit={handleSubmit}>
-              <Divider />
-              <Button sx={{ backgroundColor: '#4040A1', mt: 2 }} variant="contained" type="submit">Save</Button>
-            </form>
+            <Divider />
+            <Button onClick={handleSubmit} sx={{ backgroundColor: '#4040A1', mt: 2 }} variant="contained">Save</Button>
+            <Button onClick={handleExport} sx={{ backgroundColor: 'red', mt: 2, ml: 1 }} variant="contained">Export</Button>
           </Typography>
         </Box>
       </Modal>

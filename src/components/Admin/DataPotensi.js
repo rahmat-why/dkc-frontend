@@ -89,6 +89,19 @@ export default function DataPotensi(props) {
     }
   }
 
+  const handleExportDataPotensi = async (e) => {
+    e.preventDefault()
+
+    if (window.confirm("Apakah anda yakin ingin export data ini?")) {
+      axios.get(externalApi()+'/api/export-data-potensi/2023', {}, config())
+        .then(response => {
+          window.alert("Data potensi berhasil diexport!")
+          window.location.reload()
+        })
+        .catch(error => window.alert("Terjadi kesalahan! data gagal diexport!"));
+    }
+  }
+
   const handleSubmitDataPotensi = async (e) => {
     e.preventDefault()
 
@@ -130,12 +143,9 @@ export default function DataPotensi(props) {
 
     setDataPotensi(newDataPotensi);
     setFormDataPotensi({school_id: school_id, data: newDataPotensi})
-    console.log(formDataPotensi)
   }
 
   function handleChangeWomensMember(index, value) {
-    console.log([index, value])
-
     const newDataPotensi = dataPotensi.map((obj, ind) => {
       if (ind === index) {
         return { ...obj, womens_member: value }; // create a copy of the object with updated key-value pair
@@ -147,8 +157,6 @@ export default function DataPotensi(props) {
     setDataPotensi(newDataPotensi);
     setFormDataPotensi({school_id: school_id, data: newDataPotensi})
   }
-
-  console.log(dataPotensi)
 
   return (
     <Card sx={{ mt: 3, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
@@ -219,7 +227,7 @@ export default function DataPotensi(props) {
                           </IconButton>
                           Upload
                         </Button>
-                        <ModalPotensi handleClose={handleClose} open={open} handleSubmit={handleSubmitDataPotensi} title="Update Data Potensi" type="UPDATE">
+                        <ModalPotensi handleClose={handleClose} open={open} handleSubmit={handleSubmitDataPotensi} handleExport={handleExportDataPotensi} title="Update Data Potensi" type="UPDATE">
                           <Table aria-label="simple table">
                             <TableHead>
                               <TableRow>

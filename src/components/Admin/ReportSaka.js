@@ -52,12 +52,12 @@ export default function ReportSaka(props) {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('saka_id', sakaId);
-    formData.append('reportDate', reportDate);
+    formData.append('report_date', reportDate);
     formData.append('document', document)
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
-        axios.post('https://721560dc-910b-4ecd-adfd-701bdc60a99c.mock.pstmn.io/api/report-saka', formData, config())
+        axios.post(externalApi()+'/api/report-saka', formData, config())
         .then(response => {
           window.alert("Data berhasil ditambah!")
           window.location.reload()
@@ -69,9 +69,9 @@ export default function ReportSaka(props) {
     }
   }
 
-  const handleDelete = async (document_id) => {
+  const handleDelete = async (report_id) => {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
-      axios.delete('https://721560dc-910b-4ecd-adfd-701bdc60a99c.mock.pstmn.io/api/report-saka', config())
+      axios.delete(externalApi()+'/api/report-saka/'+report_id, config())
       .then(response => {
         window.alert("Data berhasil dihapus!")
         window.location.reload()
@@ -116,6 +116,7 @@ export default function ReportSaka(props) {
                   onChange={(e) => setSakaId(e.target.value)}
                   error={!!errors.sakaId}
                   helperText={errors.sakaId ? errors.sakaId : ''}
+                  sx={{ mt: 3 }}
                 >
                   {dataSkSaka.map((saka) => (
                     <MenuItem key={saka.saka_id} value={saka.saka_id}>
@@ -187,7 +188,7 @@ export default function ReportSaka(props) {
                     </TableCell>
                     <TableCell>
                       <MenuTooltip>
-                        <MenuItem onClick={() => handleDelete(row.document_id)}>Delete</MenuItem>
+                        <MenuItem onClick={() => handleDelete(row.report_id)}>Delete</MenuItem>
                       </MenuTooltip>
                     </TableCell>
                   </TableRow>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-import { Table, TableBody, TableCell, Container, TableHead, TableRow, Paper, Typography, Box } from "@mui/material"
+import { Table, TableBody, TableCell, Container, TableHead, TableRow, Paper, Typography, Box, Button } from "@mui/material"
 import { externalApi } from "../utils/utils.js"
 import ModalView from "./Admin/Agenda/ModalView"
 
@@ -9,9 +9,9 @@ export default function SkSaka(props) {
   const [dataPotensiSaka, setDataPotensiSaka] = useState([]);
 
   const viewDataPotensi = (saka_id) => {
-    axios.get('https://721560dc-910b-4ecd-adfd-701bdc60a99c.mock.pstmn.io/api/data-potensi-saka/SAKAxx')
+    axios.get(externalApi()+'/api/data-potensi-saka/'+saka_id)
       .then(response => {
-        setDataPotensiSaka(response.data.data);
+        setDataPotensiSaka(response.data);
       })
       .catch(error => {
         console.log(error);
@@ -36,7 +36,6 @@ export default function SkSaka(props) {
             <TableCell align="left">Nama SAKA</TableCell>
             <TableCell align="left">SK SAKA</TableCell>
             <TableCell align="left">SK PINSAKA</TableCell>
-            <TableCell align="left">Total Anggota</TableCell>
             <TableCell align="left">Rincian</TableCell>
           </TableRow>
         </TableHead>
@@ -50,22 +49,36 @@ export default function SkSaka(props) {
                 {row.name}
               </TableCell>
               <TableCell component="th" scope="row">
-                {row.document_sk_saka}
+                {row.document_sk_saka ? (
+                  <Button href={externalApi() + row.document_sk_saka} target="_blank">
+                    DOCUMENT
+                  </Button>
+                ) : (
+                  <div>
+                    BELUM DIUPLOAD
+                  </div>
+                )}
               </TableCell>
               <TableCell component="th" scope="row">
-                {row.document_sk_pinsaka}
+                {row.document_sk_pinsaka ? (
+                  <Button href={externalApi() + row.document_sk_pinsaka} target="_blank">
+                    DOCUMENT
+                  </Button>
+                ) : (
+                  <div>
+                    BELUM DIUPLOAD
+                  </div>
+                )}
               </TableCell>
-              <TableCell align="left">
-                0
-              </TableCell>
-              <TableCell align="left">
+              <TableCell component="th" scope="row">
                 <Box onClick={() => viewDataPotensi(row.saka_id)}>
                   <ModalView title="Data Potensi">
                     <Table aria-label="simple table">
                       <TableHead>
                         <TableRow>
                           <TableCell align="left">Kwaran</TableCell>
-                          <TableCell align="left">Total Anggota</TableCell>
+                          <TableCell align="left">Total Anggota (PA)</TableCell>
+                          <TableCell align="left">Total Anggota (PI)</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -75,9 +88,10 @@ export default function SkSaka(props) {
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                           >
                             <TableCell component="th" scope="row">
-                              {row.dkr_id}
+                              {row.name}
                             </TableCell>
-                            <TableCell align="left">{row.total_member}</TableCell>
+                            <TableCell align="left">{row.total_mens_member}</TableCell>
+                            <TableCell align="left">{row.total_womens_member}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>

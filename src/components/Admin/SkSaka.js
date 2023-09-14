@@ -55,12 +55,9 @@ export default function SkSaka(props) {
       return;
     }
 
-    const formDataCreateSaka = new FormData();
-    formDataCreateSaka.append('name', name);
-
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       try {
-        axios.post(externalApi()+'/api/sakas', formDataCreateSaka, config())
+        axios.post(externalApi()+'/api/saka', {name: name}, config())
         .then(response => {
           window.alert("Data berhasil ditambah!")
           window.location.reload()
@@ -100,20 +97,17 @@ export default function SkSaka(props) {
     await axios.get(externalApi()+'/api/data-potensi-saka/'+saka_id)
       .then(response => {
         setDataPotensiSaka(response.data);
-        setFormDataPotensiSaka({saka_id: saka_id, data: response.data})
       })
       .catch(error => {
         console.log(error);
       });
     setOpen(true)
   }
-  
-  function handleChangeDataPotensiSaka(index, value) {
-    console.log([index, value])
 
+  function handleChangeMensMember(index, value) {
     const newDataPotensi = dataPotensiSaka.map((obj, ind) => {
       if (ind === index) {
-        return { ...obj, total_member: value }; // create a copy of the object with updated key-value pair
+        return { ...obj, total_mens_member: value }; // create a copy of the object with updated key-value pair
       } else {
         return obj; // return the original object for other indices
       }
@@ -121,7 +115,19 @@ export default function SkSaka(props) {
 
     setDataPotensiSaka(newDataPotensi);
     setFormDataPotensiSaka({saka_id: saka_id, data: newDataPotensi})
-    console.log(formDataPotensiSaka)
+  }
+  
+  function handleChangeWomensMember(index, value) {
+    const newDataPotensi = dataPotensiSaka.map((obj, ind) => {
+      if (ind === index) {
+        return { ...obj, total_womens_member: value }; // create a copy of the object with updated key-value pair
+      } else {
+        return obj; // return the original object for other indices
+      }
+    });
+
+    setDataPotensiSaka(newDataPotensi);
+    setFormDataPotensiSaka({saka_id: saka_id, data: newDataPotensi})
   }
 
   const handleSubmitDataPotensiSaka = async (e) => {
@@ -134,6 +140,19 @@ export default function SkSaka(props) {
           window.location.reload()
         })
         .catch(error => window.alert("Terjadi kesalahan! data gagal diupdate!"));
+    }
+  }
+
+  const handleExportDataPotensiSaka = async (e) => {
+    e.preventDefault()
+
+    if (window.confirm("Apakah anda yakin ingin export data ini?")) {
+      axios.get(externalApi()+'/api/export-data-potensi-saka/2023', {}, config())
+        .then(response => {
+          window.alert("Data potensi berhasil diexport!")
+          window.location.reload()
+        })
+        .catch(error => window.alert("Terjadi kesalahan! data gagal diexport!"));
     }
   }
 
@@ -150,10 +169,10 @@ export default function SkSaka(props) {
     }
 
     const formDataUpdataSkSaka = new FormData();
-    formDataUpdataSkSaka.append('document_sk_saka', document_sk_saka);
+    formDataUpdataSkSaka.append('document', document_sk_saka);
 
     if (window.confirm("Apakah anda yakin ingin update SK SAKA?")) {
-      axios.post(externalApi()+'/api/data-potensi-saka', formDataPotensiSaka, config())
+      axios.post(externalApi()+'/api/saka/upload-sk-saka/'+saka_id, formDataUpdataSkSaka, config())
         .then(response => {
           window.alert("Data potensi berhasil diupdate!")
           window.location.reload()
@@ -175,10 +194,10 @@ export default function SkSaka(props) {
     }
 
     const formDataUpdataSkPinsaka = new FormData();
-    formDataUpdataSkPinsaka.append('document_sk_pinsaka', document_sk_pinsaka);
+    formDataUpdataSkPinsaka.append('document', document_sk_pinsaka);
 
     if (window.confirm("Apakah anda yakin ingin update SK PINSAKA?")) {
-      axios.put(externalApi()+'/api/data-potensi-saka', formDataPotensiSaka, config())
+      axios.post(externalApi()+'/api/saka/upload-sk-pinsaka/'+saka_id, formDataUpdataSkPinsaka, config())
         .then(response => {
           window.alert("Data potensi berhasil diupdate!")
           window.location.reload()
@@ -255,63 +274,75 @@ export default function SkSaka(props) {
                       {row.name}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      <Button href={externalApi()+row.document_sk_saka} target="_blank">
-                        DOCUMENT
-                      </Button>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Button href={externalApi()+row.document_sk_pinsaka} target="_blank">
-                        DOCUMENT
-                      </Button>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                        <Button sx={{ height: '35px', backgroundColor: '#4040A1' }} variant="contained" onClick={() => viewDataPotensiSaka(row.saka_id)}>
-                          <IconButton>
-                            <CloudUploadIcon fontSize='small' sx={{ color: "#fff" }} />
-                          </IconButton>
-                          Upload
+                      {row.document_sk_saka ? (
+                        <Button href={externalApi() + row.document_sk_saka} target="_blank">
+                          DOCUMENT
                         </Button>
-                        <ModalPotensi handleClose={handleClose} open={open} handleSubmit={handleSubmitDataPotensiSaka} title="Update Data Potensi SAKA" type="UPDATE">
-                          <Table aria-label="simple table">
-                            <TableHead>
-                              <TableRow>
-                                <TableCell align="left">Kwaran</TableCell>
-                                <TableCell align="left">Total Anggota (PA)</TableCell>
-                                <TableCell align="left">Total Anggota (PI)</TableCell>
+                      ) : (
+                        <div>
+                          BELUM DIUPLOAD
+                        </div>
+                      )}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {row.document_sk_pinsaka ? (
+                        <Button href={externalApi() + row.document_sk_pinsaka} target="_blank">
+                          DOCUMENT
+                        </Button>
+                      ) : (
+                        <div>
+                          BELUM DIUPLOAD
+                        </div>
+                      )}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      <Button sx={{ height: '35px', backgroundColor: '#4040A1' }} variant="contained" onClick={() => viewDataPotensiSaka(row.saka_id)}>
+                        <IconButton>
+                          <CloudUploadIcon fontSize='small' sx={{ color: "#fff" }} />
+                        </IconButton>
+                        Upload
+                      </Button>
+                      <ModalPotensi handleClose={handleClose} open={open} handleSubmit={handleSubmitDataPotensiSaka} title="Update Data Potensi SAKA" type="UPDATE" handleExport={handleExportDataPotensiSaka}>
+                        <Table aria-label="simple table">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell align="left">Kwaran</TableCell>
+                              <TableCell align="left">Total Anggota (PA)</TableCell>
+                              <TableCell align="left">Total Anggota (PI)</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {dataPotensiSaka.map((row, index) => (
+                              <TableRow
+                                key={row.data_id}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                              >
+                                <TableCell component="th" scope="row">
+                                  {dataPotensiSaka[index].name}
+                                </TableCell>
+                                <TableCell align="left">
+                                  <TextField 
+                                    label="Total Anggota (PA)*" 
+                                    variant="outlined"
+                                    fullWidth
+                                    defaultValue={dataPotensiSaka[index].total_mens_member}
+                                    onChange={(e) => handleChangeMensMember(index, e.target.value)}
+                                  />
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                  <TextField 
+                                    label="Total Anggota (PI)*" 
+                                    variant="outlined"
+                                    fullWidth
+                                    defaultValue={dataPotensiSaka[index].total_womens_member}
+                                    onChange={(e) => handleChangeWomensMember(index, e.target.value)}
+                                  />
+                                </TableCell>
                               </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {dataPotensiSaka.map((row, index) => (
-                                <TableRow
-                                  key={row.data_id}
-                                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                  <TableCell component="th" scope="row">
-                                    {dataPotensiSaka[index].name}
-                                  </TableCell>
-                                  <TableCell align="left">
-                                    <TextField 
-                                      label="Total Anggota (PA)*" 
-                                      variant="outlined"
-                                      fullWidth
-                                      defaultValue={dataPotensiSaka[index].total_mens_member}
-                                      onChange={(e) => handleChangeDataPotensiSaka(index, e.target.value)}
-                                    />
-                                  </TableCell>
-                                  <TableCell component="th" scope="row">
-                                    <TextField 
-                                      label="Total Anggota (PI)*" 
-                                      variant="outlined"
-                                      fullWidth
-                                      defaultValue={dataPotensiSaka[index].total_womens_member}
-                                      onChange={(e) => handleChangeDataPotensiSaka(index, e.target.value)}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </ModalPotensi>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </ModalPotensi>
                     </TableCell>
                     <TableCell>
                       <MenuTooltip>

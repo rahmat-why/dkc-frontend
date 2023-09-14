@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Table, TableBody, TableCell, Container, TableHead, TableRow, Paper, Typography, Button } from "@mui/material"
-import { externalApi } from "../utils/utils.js"
+import { externalApi, formatDate } from "../utils/utils.js"
 
 export default function ReportSaka(props) {
   const { dataReportSaka } = props
@@ -35,10 +35,12 @@ export default function ReportSaka(props) {
                 {row.name}
               </TableCell>
               <TableCell component="th" scope="row">
-                {row.report_date}
+                {formatDate(row.report_date)}
               </TableCell>
               <TableCell component="th" scope="row">
-                {row.document}
+                <Button href={externalApi()+row.document} target="_blank">
+                  Document
+                </Button>
               </TableCell>
             </TableRow>
           ))}
