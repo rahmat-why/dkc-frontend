@@ -205,7 +205,7 @@ export default function SkSaka(props) {
     const formDataUpdataSkSaka = new FormData();
     formDataUpdataSkSaka.append('document', document_sk_saka);
 
-    if (window.confirm("Apakah anda yakin ingin update SK SAKA?")) {
+    if (window.confirm("Apakah anda yakin ingin Upload SK SAKA?")) {
       axios.post(externalApi()+'/api/saka/upload-sk-saka/'+saka_id, formDataUpdataSkSaka, config())
         .then(response => {
           window.alert("Data potensi berhasil diupdate!")
@@ -230,7 +230,7 @@ export default function SkSaka(props) {
     const formDataUpdataSkPinsaka = new FormData();
     formDataUpdataSkPinsaka.append('document', document_sk_pinsaka);
 
-    if (window.confirm("Apakah anda yakin ingin update SK PINSAKA?")) {
+    if (window.confirm("Apakah anda yakin ingin Upload SK PINSAKA?")) {
       axios.post(externalApi()+'/api/saka/upload-sk-pinsaka/'+saka_id, formDataUpdataSkPinsaka, config())
         .then(response => {
           window.alert("Data potensi berhasil diupdate!")
@@ -259,6 +259,39 @@ export default function SkSaka(props) {
   const handleCloseSkPinsaka = () => {
     setOpenSkPinsaka(false);
   };
+
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const handleUpdate = async (saka) => {
+    setOpenUpdate(true);
+    setName(saka.name)
+    setSakaId(saka.saka_id)
+  }
+
+  const handleCloseUpdate = () => {
+    setOpenUpdate(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!name) errors.name = 'Nama harus diisi!';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
+      //   .then(response => {
+      //     window.alert("Data berhasil ditambah!")
+      //     window.location.reload()
+      //   })
+      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+    }
+  }
 
   return (
     <Card sx={{ mt: 3, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
@@ -380,42 +413,55 @@ export default function SkSaka(props) {
                     </TableCell>
                     <TableCell>
                       <MenuTooltip>
+                        <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
                         <MenuItem onClick={() => handleDelete(row.saka_id)}>Delete</MenuItem>
-                        <MenuItem onClick={() => handleOpenSkSaka(row.saka_id, row.name)}>Update SK SAKA</MenuItem>
-                        <MenuItem onClick={() => handleOpenSkPinsaka(row.saka_id, row.name)}>Update SK PINSAKA</MenuItem>
+                        <MenuItem onClick={() => handleOpenSkSaka(row.saka_id, row.name)}>Upload SK SAKA</MenuItem>
+                        <MenuItem onClick={() => handleOpenSkPinsaka(row.saka_id, row.name)}>Upload SK PINSAKA</MenuItem>
                       </MenuTooltip>
                     </TableCell>
-                    <ModalUpdate handleSubmit={handleSubmitUpdateSkSaka} open={openSkSaka} title={`Update SK SAKA ${name}`} handleClose={handleCloseSkSaka}>
-                      <TextField
-                        label="Document SK SAKA*"
-                        type="file"
-                        variant="outlined"
-                        fullWidth
-                        onChange={handleSkSakaChange}
-                        error={!!errors.document_sk_saka}
-                        helperText={errors.document_sk_saka ? errors.document_sk_saka : ''}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                    </ModalUpdate>
-
-                    <ModalUpdate handleSubmit={handleSubmitUpdateSkPinsaka} open={openSkPinsaka} title={`Update SK PINSAKA ${name}`} handleClose={handleCloseSkPinsaka}>
-                      <TextField
-                        label="Document SK PINSAKA*"
-                        type="file"
-                        variant="outlined"
-                        fullWidth
-                        onChange={handleSkPinsakaChange}
-                        error={!!errors.document_sk_pinsaka}
-                        helperText={errors.document_sk_pinsaka ? errors.document_sk_pinsaka : ''}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                    </ModalUpdate>
                   </TableRow>
                 ))}
+                <ModalUpdate handleSubmit={handleSubmitUpdateSkSaka} open={openSkSaka} title={`Upload SK SAKA ${name}`} handleClose={handleCloseSkSaka}>
+                  <TextField
+                    label="Document SK SAKA*"
+                    type="file"
+                    variant="outlined"
+                    fullWidth
+                    onChange={handleSkSakaChange}
+                    error={!!errors.document_sk_saka}
+                    helperText={errors.document_sk_saka ? errors.document_sk_saka : ''}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </ModalUpdate>
+
+                <ModalUpdate handleSubmit={handleSubmitUpdateSkPinsaka} open={openSkPinsaka} title={`Upload SK PINSAKA ${name}`} handleClose={handleCloseSkPinsaka}>
+                  <TextField
+                    label="Document SK PINSAKA*"
+                    type="file"
+                    variant="outlined"
+                    fullWidth
+                    onChange={handleSkPinsakaChange}
+                    error={!!errors.document_sk_pinsaka}
+                    helperText={errors.document_sk_pinsaka ? errors.document_sk_pinsaka : ''}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </ModalUpdate>
+
+                <ModalUpdate handleSubmit={handleSubmitUpdate} open={openUpdate} title="Update SAKA" handleClose={handleCloseUpdate}>
+                  <TextField
+                    label="Nama SAKA*"
+                    variant="outlined"
+                    fullWidth
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name : ''}
+                  />
+                </ModalUpdate>
               </TableBody>
             </Table>
           </Box>
