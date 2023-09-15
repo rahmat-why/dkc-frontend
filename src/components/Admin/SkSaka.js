@@ -144,17 +144,51 @@ export default function SkSaka(props) {
   }
 
   const handleExportDataPotensiSaka = async (e) => {
-    e.preventDefault()
-
+    e.preventDefault();
+  
     if (window.confirm("Apakah anda yakin ingin export data ini?")) {
-      axios.get(externalApi()+'/api/export-data-potensi-saka/2023', {}, config())
-        .then(response => {
-          window.alert("Data potensi berhasil diexport!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diexport!"));
+      try {
+        // Make a POST request to trigger the Excel export
+        const response = await axios.get(
+          externalApi() + '/api/export-data-potensi-saka/2023',
+          {},
+          config()
+        );
+  
+        if (response.status === 200) {
+          // Create a blob from the response data
+          const blob = new Blob([response.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+  
+          // Create an object URL from the blob
+          const url = window.URL.createObjectURL(blob);
+  
+          // Create a hidden anchor element for downloading the file
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = 'exported-file.xlsx'; // Specify the desired file name
+          document.body.appendChild(a);
+  
+          // Trigger the click event to start the download
+          a.click();
+  
+          // Clean up the object URL and anchor element
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+  
+          window.alert("Data potensi berhasil diexport!");
+        } else {
+          console.error('Error exporting data');
+          window.alert("Terjadi kesalahan! data gagal diexport!");
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        window.alert("Terjadi kesalahan! data gagal diexport!");
+      }
     }
-  }
+  };
 
   const handleSubmitUpdateSkSaka = async (e) => {
     e.preventDefault()
