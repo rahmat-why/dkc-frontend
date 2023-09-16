@@ -93,12 +93,53 @@ export default function DataPotensi(props) {
     e.preventDefault()
 
     if (window.confirm("Apakah anda yakin ingin export data ini?")) {
-      axios.get(externalApi()+'/api/export-data-potensi/2023', {}, config())
-        .then(response => {
-          window.alert("Data potensi berhasil diexport!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diexport!"));
+      try {
+        // Make a GET request to trigger the Excel export
+        const response = await axios.get(
+          externalApi() + '/api/export-data-potensi/2023',
+          {
+            responseType: 'blob', // Set the response type to 'blob' to handle binary data
+            ...config(), // Include your other request configuration here if needed
+          }
+        );
+      
+        if (response.status === 200) {
+          // Create a blob from the response data
+          const blob = new Blob([response.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+      
+          // Create an object URL from the blob
+          const url = window.URL.createObjectURL(blob);
+      
+          // Create a hidden anchor element for downloading the file
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          
+          // Generate a timestamp and use it in the file name
+          const currentTimestamp = Date.now();
+          const filename = currentTimestamp + '.xlsx';
+          
+          a.href = url;
+          a.download = filename; // Set the desired file name
+          document.body.appendChild(a);
+      
+          // Trigger the click event to start the download
+          a.click();
+      
+          // Clean up the object URL and anchor element
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+      
+          window.alert("Data potensi berhasil diexport!");
+        } else {
+          console.error('Error exporting data');
+          window.alert("Terjadi kesalahan! data gagal diexport!");
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        window.alert("Terjadi kesalahan! data gagal diexport!");
+      }      
     }
   }
 

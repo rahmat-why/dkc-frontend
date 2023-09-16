@@ -168,7 +168,9 @@ export default function SkSaka(props) {
           const a = document.createElement('a');
           a.style.display = 'none';
           a.href = url;
-          a.download = 'exported-file.xlsx'; // Specify the desired file name
+          
+          const current_timestamp = Date.now();
+          a.download = current_timestamp+'.xlsx'; // Specify the desired file name
           document.body.appendChild(a);
   
           // Trigger the click event to start the download
