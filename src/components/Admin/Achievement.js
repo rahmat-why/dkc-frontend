@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Card, CardContent, Typography, List, ListItem, ListItemText, Box, Grid, CardMedia, MenuItem, TextField } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function Achievement(props) {
@@ -14,6 +15,9 @@ export default function Achievement(props) {
   });
 
   const { dataAchievement } = props
+
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +48,7 @@ export default function Achievement(props) {
   };
 
   const handleDelete = async (goal_id) => {
-    if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
+    if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/achievements/'+goal_id, config())
       .then(response => {
         window.alert("Data berhasil dihapus!")
@@ -53,6 +57,50 @@ export default function Achievement(props) {
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
     }
   }
+
+  const [achievement_id, setAchievementId] = useState('');
+  const [open, setOpen] = useState(false);
+  const handleUpdate = async (achievement) => {
+    setOpen(true);
+    setTitle(achievement.title)
+    setDescription(achievement.description)
+    setAchievementId(achievement.achievement_id)
+  }
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!title) errors.title = 'title is required';
+    if (!description) errors.description = 'description at is required';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    const formData = {
+      title : title,
+      description : description
+    }
+
+    console.log(achievement_id)
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      axios.put(externalApi()+'/api/achievements/'+achievement_id, formData, config())
+        .then(response => {
+          window.alert("Data berhasil diperbarui!")
+          window.location.reload()
+        })
+        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
+    }
+  }
+
 
   return (
     <Card sx={{ mt: 2, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
@@ -134,12 +182,33 @@ export default function Achievement(props) {
                 </Grid>
                 <Box sx={{ mt: 3 }}>
                   <MenuTooltip>
-                    <MenuItem>Update</MenuItem>
+                    <MenuItem onClick={() => handleUpdate(achievement)}>Update</MenuItem>
                     <MenuItem onClick={() => handleDelete(achievement.achievement_id)}>Delete</MenuItem>
                   </MenuTooltip>
                 </Box>
               </Box>
             ))}
+              <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update achievement" handleClose={handleClose}>
+                  <TextField
+                    label="Judul*"
+                    variant="outlined"
+                    fullWidth
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name : ''}
+                  />
+                  <TextField
+                    label="Deskripsi*"
+                    variant="outlined"
+                    fullWidth
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    error={!!errors.link}
+                    helperText={errors.link ? errors.link : ''}
+                    sx={{ mt: 3 }}
+                  />
+              </ModalUpdate>
           </Box>
         </List>
       </CardContent>

@@ -104,15 +104,18 @@ export default function Marketplace(props) {
       return;
     }
 
-    console.log(product_id)
+    const formData = {
+      name : name,
+      link : link
+    }
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
-      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
-      //   .then(response => {
-      //     window.alert("Data berhasil ditambah!")
-      //     window.location.reload()
-      //   })
-      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      axios.put(externalApi()+'/api/products/'+product_id, formData, config())
+        .then(response => {
+          window.alert("Data berhasil diperbarui!")
+          window.location.reload()
+        })
+        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
     }
   }
   return (

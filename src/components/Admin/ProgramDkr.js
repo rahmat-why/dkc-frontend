@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function ProgramDkr(props) {
@@ -29,6 +30,8 @@ export default function ProgramDkr(props) {
     year: ''
   });
   const [errors, setErrors] = useState({});
+
+  const [program_id, setProgramId] = useState('');
 
   const currentYear = new Date().getFullYear();
   const years = Array.from(new Array(3), (val, index) => currentYear + index);
@@ -71,6 +74,43 @@ export default function ProgramDkr(props) {
         window.location.reload()
       })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+    }
+  }
+
+  const [open, setOpen] = useState(false);
+  const handleUpdate = async (program) => {
+    setOpen(true);
+    setProgramId(program.program_id)
+    setFormData({ program_name: program.program_name,month : program.month, year: program.year })
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!formData.program_name) errors.program_name = 'Nama program harus diisi';
+    if (!formData.month) errors.month = 'Bulan program harus diisi';
+    if (!formData.year) errors.year = 'Tahun program harus diisi';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    console.log(program_id)
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      axios.put(externalApi()+'/api/program-dkr/'+program_id, formData, config())
+        .then(response => {
+          window.alert("Data berhasil diperbarui!")
+          window.location.reload()
+        })
+        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
     }
   }
 
@@ -166,11 +206,64 @@ export default function ProgramDkr(props) {
                       <TableCell align="center">{row.month}-{row.year}</TableCell>
                       <TableCell align="center">
                         <MenuTooltip style={{ marginLeft: 'auto' }}>
+                          <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
                           <MenuItem onClick={() => handleDelete(row.program_id)}>Delete</MenuItem>
                         </MenuTooltip>
                       </TableCell>
                     </TableRow>
                   ))}
+                  <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Program DKR" handleClose={handleClose}>
+                    <TextField 
+                      label="Name*" 
+                      variant="outlined"
+                      name="program_name"
+                      fullWidth
+                      value={formData.program_name}
+                      onChange={handleInputChange}
+                      error={!!errors.program_name}
+                      helperText={errors.program_name ? errors.program_name : ''}
+                    />
+
+                    <TextField
+                      id="month"
+                      label="Month*"
+                      variant="outlined"
+                      name="month"
+                      select
+                      value={formData.month}
+                      onChange={handleInputChange}
+                      error={!!errors.month}
+                      helperText={errors.month ? errors.month : ''}
+                      fullWidth
+                      sx={{ mt: 3 }}
+                    >
+                      {months.map((month) => (
+                        <MenuItem key={month} value={month}>
+                          {month}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                      
+                    <TextField
+                      id="year"
+                      label="Year*"
+                      name="year"
+                      variant="outlined"
+                      select
+                      value={formData.year}
+                      onChange={handleInputChange}
+                      error={!!errors.year}
+                      helperText={errors.year ? errors.year : ''}
+                      fullWidth
+                      sx={{ mt: 3 }}
+                    >
+                      {years.map((year) => (
+                        <MenuItem key={year} value={year}>
+                          {year}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </ModalUpdate>
                 </TableBody>
               </Table>
             </TableContainer>

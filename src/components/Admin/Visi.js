@@ -84,12 +84,12 @@ export default function Visi(props) {
     console.log(visi_id)
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
-      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
-      //   .then(response => {
-      //     window.alert("Data berhasil ditambah!")
-      //     window.location.reload()
-      //   })
-      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      axios.put(externalApi()+'/api/goals/'+visi_id, formData, config())
+        .then(response => {
+          window.alert("Data berhasil diperbarui!")
+          window.location.reload()
+        })
+        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
     }
   }
 

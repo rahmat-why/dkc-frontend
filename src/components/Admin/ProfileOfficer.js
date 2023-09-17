@@ -136,15 +136,27 @@ export default function ProfileOfficer(props) {
       return;
     }
 
+    const formData = {
+      name : name,
+      nta : nta,
+      stage_id : stage_id,
+      scope_id : scope_id,
+      position : position,
+      education : education,
+      city : city,
+      instagram : instagram
+    }
+
     console.log(officer_id)
+    console.log(formData);
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
-      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
-      //   .then(response => {
-      //     window.alert("Data berhasil ditambah!")
-      //     window.location.reload()
-      //   })
-      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      axios.put(externalApi()+'/api/officers/'+officer_id, formData, config())
+        .then(response => {
+          window.alert("Data berhasil diperbarui!")
+          window.location.reload()
+        })
+        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
     }
   }
 
@@ -353,7 +365,7 @@ export default function ProfileOfficer(props) {
                     </TableCell>
                   </TableRow>
                 ))}
-                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Agenda" handleClose={handleClose}>
+                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Profil" handleClose={handleClose}>
                   <Grid container spacing={2}>
                     <Grid item md={6} xs={12}>
                       <TextField

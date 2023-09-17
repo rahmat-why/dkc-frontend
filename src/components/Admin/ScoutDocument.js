@@ -99,14 +99,17 @@ export default function ScoutDocument(props) {
     }
 
     console.log(document_id)
+    const formData  = {
+      name : name
+    }
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
-      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
-      //   .then(response => {
-      //     window.alert("Data berhasil ditambah!")
-      //     window.location.reload()
-      //   })
-      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      axios.put(externalApi()+'/api/scout-documents/'+document_id, formData, config())
+        .then(response => {
+          window.alert("Data berhasil diperbarui!")
+          window.location.reload()
+        })
+        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
     }
   }
 

@@ -17,6 +17,7 @@ import {
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
+import ModalUpdate from "./Agenda/ModalUpdate"
 import { externalApi, config } from "./../../utils/utils.js"
 
 export default function GpReport(props) {
@@ -26,6 +27,8 @@ export default function GpReport(props) {
   const fixedYears = [2020, 2021];
   const currentYear = new Date().getFullYear();
   const rangeOfYears = Array.from(new Array(3), (val, index) => currentYear + index);
+
+  const [report_id, setReportId] = useState('');
 
   const [type, setType] = useState('');
   const [name, setName] = useState('');
@@ -83,6 +86,48 @@ export default function GpReport(props) {
         window.location.reload()
       })
       .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+    }
+  }
+
+  const [open, setOpen] = useState(false);
+  const handleUpdate = async (GpReport) => {
+    setOpen(true);
+    setReportId(GpReport.report_id)
+    setName(GpReport.name)
+    setYear(GpReport.year)
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!name) errors.name = 'Nama Laporan GP harus diisi';
+    if (!year) errors.year = 'Tahun Laporan GP harus diisi';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    console.log(report_id)
+
+    const formData = {
+      name : name,
+      year : year
+    }
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      axios.put(externalApi()+'/api/gp-reports/'+report_id, formData, config())
+        .then(response => {
+          window.alert("Data berhasil diperbarui!")
+          window.location.reload()
+        })
+        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
     }
   }
 
@@ -175,11 +220,40 @@ export default function GpReport(props) {
                       </TableCell>
                       <TableCell align="left">
                         <MenuTooltip style={{ marginLeft: 'auto' }}>
+                          <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
                           <MenuItem onClick={() => handleDelete(row.report_id)}>Delete</MenuItem>
                         </MenuTooltip>
                       </TableCell>
                     </TableRow>
                   ))}
+                  <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Laporan GP" handleClose={handleClose}>
+                    <TextField 
+                      label="Nama Kegiatan*" 
+                      variant="outlined"
+                      fullWidth
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      error={!!errors.name}
+                      helperText={errors.name ? errors.name : ''}
+                    />
+
+                    <TextField
+                      id="year"
+                      label="Year*"
+                      variant="outlined"
+                      select
+                      value={year}
+                      onChange={(e) => setYear(e.target.value)}
+                      fullWidth
+                      sx={{ mt: 3 }}
+                    >
+                      {years.map((year) => (
+                        <MenuItem key={year} value={year}>
+                          {year}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </ModalUpdate>
                 </TableBody>
               </Table>
             </Box>
@@ -274,6 +348,7 @@ export default function GpReport(props) {
                       </TableCell>
                       <TableCell align="left">
                         <MenuTooltip style={{ marginLeft: 'auto' }}>
+                          <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
                           <MenuItem onClick={() => handleDelete(row.report_id)}>Delete</MenuItem>
                         </MenuTooltip>
                       </TableCell>

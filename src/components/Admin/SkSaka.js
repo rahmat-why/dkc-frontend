@@ -151,8 +151,10 @@ export default function SkSaka(props) {
         // Make a POST request to trigger the Excel export
         const response = await axios.get(
           externalApi() + '/api/export-data-potensi-saka/2023',
-          {},
-          config()
+          {
+            responseType: 'blob', // Set the response type to 'blob' to handle binary data
+            ...config(), // Include your other request configuration here if needed
+          }
         );
   
         if (response.status === 200) {
