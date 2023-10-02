@@ -20,7 +20,6 @@ export default function Guide() {
 
   return (
     <div>
-      {console.log(dataScoutDocument)}
       <Navbar />
       <Container maxWidth="xl">
         <Grid container spacing={2}>

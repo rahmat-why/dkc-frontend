@@ -176,7 +176,7 @@ export default function Sidebar(props) {
             {pages.map((page, index) => (
               navMenu(page)
             ))}
-            <Link className="link" onClick={handleLogout}>
+            <Link to="/login" className="link" onClick={handleLogout}>
               <ListItem disablePadding sx={{ mt: 10 }}>
                 <ListItemButton sx={{ 
                   backgroundColor: '#4040A1', 

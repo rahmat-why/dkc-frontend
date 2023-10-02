@@ -82,6 +82,39 @@ export default function Dkc() {
       .catch(error => {
         console.log(error);
       });
+  }, []);  
+
+  const [dataProgram2020, setDataProgram2020] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/programs-dkc/2020')
+      .then(response => {
+        setDataProgram2020(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  const [dataProgram2021, setDataProgram2021] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/programs-dkc/2021')
+      .then(response => {
+        setDataProgram2021(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  const [dataProgram2022, setDataProgram2022] = useState([]);
+  useEffect(() => {
+    axios.get(externalApi()+'/api/programs-dkc/2022')
+      .then(response => {
+        setDataProgram2022(response.data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }, []);
 
   const [dataProgram2023, setDataProgram2023] = useState([]);
@@ -136,6 +169,9 @@ export default function Dkc() {
           </Grid>
           <Grid item md={12} xs={12}>
             <ProgramDkc 
+              dataProgram2020={dataProgram2020}
+              dataProgram2021={dataProgram2021}
+              dataProgram2022={dataProgram2022}
               dataProgram2023={dataProgram2023}
               dataProgram2024={dataProgram2024}
               dataProgram2025={dataProgram2025}

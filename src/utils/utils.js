@@ -10,7 +10,8 @@ export const formatDate = (date) => {
 }
 
 export const externalApi = () => {
-    return "https://api.dkckabbogor.com"
+    // return "https://api.dkckabbogor.com"
+    return "http://localhost:3001"
 }
 
 export const config = () => {

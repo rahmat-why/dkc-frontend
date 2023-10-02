@@ -18,7 +18,7 @@ export default function Achievement(props) {
         </Typography>
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
           {dataAchievement.map((achievement, index) => (
-            <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2 }}>
+            <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2 }} key={achievement.achievement_id}>
               <Container maxWidth="lg">
                 <Grid container spacing={2}>
                   <Grid item md={2} xs={3} align="right">
@@ -37,20 +37,17 @@ export default function Achievement(props) {
                     <ListItem alignItems="flex-start">
                       <ListItemText
                         primary={achievement.title}
-                        secondary={
-                          <React.Fragment>
-                            <Typography
-                              component="div"
-                              variant="body2"
-                              color="text.secondary"
-                              sx={{ mt: 1 }}
-                            >
-                              {achievement.description}
-                            </Typography>
-                          </React.Fragment>
-                        }
+                        sx={{ textAlign: 'left', paddingRight: '16px' }}
                       />
                     </ListItem>
+                    <Typography
+                      component="div"
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mt: 1, mb: 1, textAlign: 'left', paddingLeft: '16px' }}
+                    >
+                      {achievement.description}
+                    </Typography>
                   </Grid>
                 </Grid>
               </Container>

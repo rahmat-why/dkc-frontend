@@ -51,16 +51,12 @@ export default function ScoutDocument(props) {
     formData.append('document', document)
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      try {
-        axios.post(externalApi()+'/api/scout-documents', formData, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-      } catch (error) {
-        window.alert("Terjadi kesalahan! data gagal ditambah!");
-      }
+      axios.post(externalApi()+'/api/scout-documents', formData, config())
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -68,10 +64,10 @@ export default function ScoutDocument(props) {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/scout-documents/'+document_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -98,18 +94,17 @@ export default function ScoutDocument(props) {
       return;
     }
 
-    console.log(document_id)
     const formData  = {
       name : name
     }
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
       axios.put(externalApi()+'/api/scout-documents/'+document_id, formData, config())
-        .then(response => {
-          window.alert("Data berhasil diperbarui!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -165,7 +160,7 @@ export default function ScoutDocument(props) {
               <TableBody>
                 {dataScoutDocument.map((row) => (
                   <TableRow
-                    key={row.name}
+                    key={row.document_id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
@@ -184,19 +179,20 @@ export default function ScoutDocument(props) {
                     </TableCell>
                   </TableRow>
                 ))}
-                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Pedoman Gerakan Pramuka" handleClose={handleClose}>
-                  <TextField
-                    label="Nama Pedoman*"
-                    variant="outlined"
-                    fullWidth
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    error={!!errors.name}
-                    helperText={errors.name ? errors.name : ''}
-                  />
-                </ModalUpdate>
               </TableBody>
             </Table>
+            
+            <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Pedoman Gerakan Pramuka" handleClose={handleClose}>
+              <TextField
+                label="Nama Pedoman*"
+                variant="outlined"
+                fullWidth
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                error={!!errors.name}
+                helperText={errors.name ? errors.name : ''}
+              />
+            </ModalUpdate>
           </Box>
         </List>
       </CardContent>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-import { Card, CardContent, Typography, List, ListItem, ListItemText, Divider, Box, TextField, MenuItem } from "@mui/material"
+import { Card, CardContent, Typography, List, ListItem, ListItemText, Box, TextField, MenuItem } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
 import ModalUpdate from "./Agenda/ModalUpdate"
@@ -38,11 +38,11 @@ export default function ProgramDkc(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       axios.post(externalApi()+'/api/programs-dkc', formData, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
   
@@ -55,10 +55,10 @@ export default function ProgramDkc(props) {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
       axios.delete(externalApi()+'/api/programs-dkc/'+program_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -90,11 +90,11 @@ export default function ProgramDkc(props) {
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
       axios.put(externalApi()+'/api/programs-dkc/'+program_id, formData, config())
-        .then(response => {
-          window.alert("Data berhasil diperbarui!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -150,20 +150,7 @@ export default function ProgramDkc(props) {
               <ListItem key={program.program_id} alignItems="flex-start" justify="space-between">
                 <ListItemText
                   primary={program.program_name}
-                  secondary={
-                    <React.Fragment>
-                      <Divider sx={{ mt: 1 }} />
-                      <Typography
-                        component="div"
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mt: 1 }}
-                      >
-                        {program.year}
-                      </Typography>
-                      
-                    </React.Fragment>
-                  }
+                  secondary={program.year}
                 />
                 <MenuTooltip style={{ marginLeft: 'auto' }}>
                   <MenuItem onClick={() => handleUpdate(program)}>Update</MenuItem>
@@ -171,38 +158,38 @@ export default function ProgramDkc(props) {
                 </MenuTooltip>
               </ListItem>
             ))}
-            <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Program DKC" handleClose={handleClose}>
-              <TextField 
-                label="Program name*" 
-                variant="outlined"
-                name="program_name"
-                fullWidth
-                value={formData.program_name}
-                onChange={handleInputChange}
-                error={!!errors.program_name}
-                helperText={errors.program_name ? errors.program_name : ''}
-              />
-
-              <TextField
-                id="year"
-                label="Year*"
-                variant="outlined"
-                name="year"
-                select
-                value={formData.year}
-                onChange={handleInputChange}
-                fullWidth
-                sx={{ mt: 3 }}
-              >
-                {years.map((year) => (
-                  <MenuItem key={year} value={year}>
-                    {year}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </ModalUpdate>
           </Box>
         </List>
+        <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Program DKC" handleClose={handleClose}>
+          <TextField 
+            label="Program name*" 
+            variant="outlined"
+            name="program_name"
+            fullWidth
+            value={formData.program_name}
+            onChange={handleInputChange}
+            error={!!errors.program_name}
+            helperText={errors.program_name ? errors.program_name : ''}
+          />
+
+          <TextField
+            id="year"
+            label="Year*"
+            variant="outlined"
+            name="year"
+            select
+            value={formData.year}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mt: 3 }}
+          >
+            {years.map((year) => (
+              <MenuItem key={year} value={year}>
+                {year}
+              </MenuItem>
+            ))}
+          </TextField>
+        </ModalUpdate>
       </CardContent>
     </Card>
   );

@@ -37,7 +37,7 @@ function Banner(props) {
         enableMouseEvents
       >
         {dataLayer.map((layer, index) => (
-          <div key={layer.label}>
+          <div key={layer.banner_id}>
             {Math.abs(activeStep - index) <= 2 ? (
               <Box
                 component="img"

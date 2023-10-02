@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, Box, Typography, Divider, Button, IconButton } from "@mui/material"
+import { Modal, Box, Typography, Divider, Button } from "@mui/material"
 import { Close as CloseIcon } from '@mui/icons-material';
 import { Settings as SettingsIcon } from '@mui/icons-material';
 
@@ -29,9 +29,8 @@ export default function ModalView({ children, title }) {
 
   return (
     <div>
-      <Button sx={{ height: '35px', backgroundColor: '#4040A1' }} size="small" variant="contained" onClick={handleClickOpen}>
+      <Button sx={{ height: '35px', backgroundColor: '#4040A1' }} size="small" variant="contained" onClick={handleClickOpen} endIcon={<SettingsIcon />}>
         View 
-        <IconButton><SettingsIcon fontSize='small' sx={{ color: "#fff" }} /></IconButton>
       </Button>
 
       <Modal

@@ -55,16 +55,12 @@ export default function Marketplace(props) {
     formData.append('link', link);
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      try {
-        axios.post(externalApi()+'/api/products', formData, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-      } catch (error) {
-        console.error(error);
-      }
+      axios.post(externalApi()+'/api/products', formData, config())
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -72,10 +68,10 @@ export default function Marketplace(props) {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/products/'+product_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -111,11 +107,11 @@ export default function Marketplace(props) {
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
       axios.put(externalApi()+'/api/products/'+product_id, formData, config())
-        .then(response => {
-          window.alert("Data berhasil diperbarui!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
   return (
@@ -210,32 +206,32 @@ export default function Marketplace(props) {
                     </TableCell>
                   </TableRow>
                 ))}
-                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Product" handleClose={handleClose}>
-                  <TextField
-                    label="Nama Produk*"
-                    variant="outlined"
-                    fullWidth
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    error={!!errors.name}
-                    helperText={errors.name ? errors.name : ''}
-                  />
-                  <TextField
-                    label="Link Redirect*"
-                    variant="outlined"
-                    fullWidth
-                    value={link}
-                    onChange={(e) => setLink(e.target.value)}
-                    error={!!errors.link}
-                    helperText={errors.link ? errors.link : ''}
-                    sx={{ mt: 3 }}
-                    InputProps={{
-                      placeholder: 'Awali dengan https://',
-                    }}
-                  />
-                </ModalUpdate>
               </TableBody>
             </Table>
+            <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Product" handleClose={handleClose}>
+              <TextField
+                label="Nama Produk*"
+                variant="outlined"
+                fullWidth
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                error={!!errors.name}
+                helperText={errors.name ? errors.name : ''}
+              />
+              <TextField
+                label="Link Redirect*"
+                variant="outlined"
+                fullWidth
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                error={!!errors.link}
+                helperText={errors.link ? errors.link : ''}
+                sx={{ mt: 3 }}
+                InputProps={{
+                  placeholder: 'Awali dengan https://',
+                }}
+              />
+            </ModalUpdate>
           </Box>
         </List>
       </CardContent>

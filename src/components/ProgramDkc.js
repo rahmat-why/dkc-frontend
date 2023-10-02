@@ -15,7 +15,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -42,8 +42,7 @@ export default function VerticalTabs(props) {
     setValue(newValue);
   };
   
-  const { dataProgram2023, dataProgram2024, dataProgram2025 } = props
-  console.log([dataProgram2023, dataProgram2024, dataProgram2025])
+  const { dataProgram2020, dataProgram2021, dataProgram2022, dataProgram2023, dataProgram2024, dataProgram2025 } = props
 
   return (
     <Card sx={{ mt: 3, borderRadius: 5, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}>
@@ -71,12 +70,15 @@ export default function VerticalTabs(props) {
           aria-label="Program DKC Kab. Bogor"
           sx={{ borderRight: 1, borderColor: 'divider' }}
         >
-          <Tab label="Tahun 2023" {...a11yProps(0)} />
-          <Tab label="Tahun 2024" {...a11yProps(1)} />
-          <Tab label="Tahun 2025" {...a11yProps(2)} />
+          <Tab label="Tahun 2020" {...a11yProps(0)} />
+          <Tab label="Tahun 2021" {...a11yProps(1)} />
+          <Tab label="Tahun 2022" {...a11yProps(2)} />
+          <Tab label="Tahun 2023" {...a11yProps(3)} />
+          <Tab label="Tahun 2024" {...a11yProps(4)} />
+          <Tab label="Tahun 2025" {...a11yProps(5)} />
         </Tabs>
         <TabPanel value={value} index={0}>
-          {dataProgram2023.map((row) => (
+          {dataProgram2020.map((row) => (
             <Box key={row.program_id}>
               <Typography variant="body1">
                 {row.program_name}
@@ -87,7 +89,7 @@ export default function VerticalTabs(props) {
         </TabPanel>
 
         <TabPanel value={value} index={1}>
-          {dataProgram2024.map((row) => (
+          {dataProgram2021.map((row) => (
             <Box key={row.program_id}>
               <Typography variant="body1">
                 {row.program_name}
@@ -98,6 +100,39 @@ export default function VerticalTabs(props) {
         </TabPanel>
 
         <TabPanel value={value} index={2}>
+          {dataProgram2022.map((row) => (
+            <Box key={row.program_id}>
+              <Typography variant="body1">
+                {row.program_name}
+              </Typography>
+              <Divider sx={{ mt: 2, mb: 2 }}/>
+            </Box>
+          ))}
+        </TabPanel>
+
+        <TabPanel value={value} index={3}>
+          {dataProgram2023.map((row) => (
+            <Box key={row.program_id}>
+              <Typography variant="body1">
+                {row.program_name}
+              </Typography>
+              <Divider sx={{ mt: 2, mb: 2 }}/>
+            </Box>
+          ))}
+        </TabPanel>
+
+        <TabPanel value={value} index={4}>
+          {dataProgram2024.map((row) => (
+            <Box key={row.program_id}>
+              <Typography variant="body1">
+                {row.program_name}
+              </Typography>
+              <Divider sx={{ mt: 2, mb: 2 }}/>
+            </Box>
+          ))}
+        </TabPanel>
+
+        <TabPanel value={value} index={5}>
           {dataProgram2025.map((row) => (
             <Box key={row.program_id}>
               <Typography variant="body1">

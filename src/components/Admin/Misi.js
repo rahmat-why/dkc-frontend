@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-import { Card, CardContent, Typography, Grid, CardMedia, Box, List, TextField, MenuItem, Button, IconButton } from "@mui/material"
+import { Card, CardContent, Typography, Grid, CardMedia, Box, List, TextField, MenuItem, Button } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
 import ModalUpdate from "./Agenda/ModalUpdate"
@@ -33,11 +33,11 @@ export default function Misi(props) {
     
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       axios.post(externalApi()+'/api/goals', formData, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -50,10 +50,10 @@ export default function Misi(props) {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
       axios.delete(externalApi()+'/api/goals/'+goal_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -85,11 +85,11 @@ export default function Misi(props) {
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
       axios.put(externalApi()+'/api/goals/'+misi_id, formData, config())
-        .then(response => {
-          window.alert("Data berhasil diperbarui!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -159,10 +159,7 @@ export default function Misi(props) {
                   image="/misi.jpg"
                   title="Misi DKC"
                 />
-                <Button sx={{ backgroundColor: '#4040A1', height: '35px' }} fullWidth variant="contained" className="bg-primary" disabled>
-                  <IconButton>
-                    <CloudUploadIcon sx={{ color: "#fff" }} />
-                  </IconButton>
+                <Button sx={{ backgroundColor: '#4040A1', height: '35px' }} fullWidth variant="contained" className="bg-primary" disabled endIcon={<CloudUploadIcon />}>
                   Upload
                 </Button>
               </Grid>

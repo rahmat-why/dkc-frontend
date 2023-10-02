@@ -19,7 +19,7 @@ class NavbarDesktop extends Component {
         {/* Menu */}
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
           {pages.map((page) => (
-            <Link className="link" to={page.url}>
+            <Link className="link" to={page.url} key={page.name}>
               <Button
                 key={page.name}
                 onClick={handleCloseNavMenu}

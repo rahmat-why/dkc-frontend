@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-import { Card, CardContent, Typography, List, ListItem, ListItemText, Divider, Box, TextField, MenuItem } from "@mui/material"
+import { Card, CardContent, Typography, List, ListItem, ListItemText, Box, TextField, MenuItem } from "@mui/material"
 import { formatDate, formatDateRaw } from '../../utils/utils';
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
@@ -32,11 +32,11 @@ export default function Agenda(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       axios.post(externalApi()+'/api/agendas', formData, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -49,10 +49,10 @@ export default function Agenda(props) {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
       axios.delete(externalApi()+'/api/agendas/'+agenda_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -81,15 +81,13 @@ export default function Agenda(props) {
       return;
     }
 
-    console.log(agenda_id)
-
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
       axios.put(externalApi()+'/api/agendas/'+agenda_id, formData, config())
-        .then(response => {
-          window.alert("Data berhasil diperbarui!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
   
@@ -143,20 +141,7 @@ export default function Agenda(props) {
               <ListItem alignItems="flex-start" justify="space-between" key={agenda.agenda_id}>
                 <ListItemText
                   primary={agenda.title}
-                  secondary={
-                    <React.Fragment>
-                      <Divider sx={{ mt: 1 }} />
-                      <Typography
-                        component="div"
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mt: 1 }}
-                      >
-                        {formatDate(agenda.scheduleAt)}
-                      </Typography>
-                      
-                    </React.Fragment>
-                  }
+                  secondary={formatDate(agenda.scheduleAt)}
                 />
                 <MenuTooltip style={{ marginLeft: 'auto' }}>
                   <MenuItem onClick={() => handleUpdate(agenda)}>Update</MenuItem>

@@ -13,8 +13,7 @@ import {
   Box, 
   TextField,
   Button,
-  MenuItem,
-  IconButton
+  MenuItem
 } from "@mui/material"
 import ModalCreate from "./Agenda/ModalCreate"
 import MenuTooltip from "./Agenda/MenuTooltip"
@@ -56,16 +55,12 @@ export default function SkSaka(props) {
     }
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      try {
-        axios.post(externalApi()+'/api/saka', {name: name}, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-      } catch (error) {
-        window.alert("Terjadi kesalahan! data gagal ditambah!");
-      }
+      axios.post(externalApi()+'/api/saka', {name: name}, config())
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -73,10 +68,10 @@ export default function SkSaka(props) {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/saka/'+saka_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -135,11 +130,11 @@ export default function SkSaka(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       axios.post(externalApi()+'/api/data-potensi-saka', formDataPotensiSaka, config())
-        .then(response => {
-          window.alert("Data potensi berhasil diupdate!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diupdate!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -211,11 +206,11 @@ export default function SkSaka(props) {
 
     if (window.confirm("Apakah anda yakin ingin Upload SK SAKA?")) {
       axios.post(externalApi()+'/api/saka/upload-sk-saka/'+saka_id, formDataUpdataSkSaka, config())
-        .then(response => {
-          window.alert("Data potensi berhasil diupdate!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diupdate!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -236,11 +231,11 @@ export default function SkSaka(props) {
 
     if (window.confirm("Apakah anda yakin ingin Upload SK PINSAKA?")) {
       axios.post(externalApi()+'/api/saka/upload-sk-pinsaka/'+saka_id, formDataUpdataSkPinsaka, config())
-        .then(response => {
-          window.alert("Data potensi berhasil diupdate!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diupdate!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -288,12 +283,12 @@ export default function SkSaka(props) {
     }
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
-      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
-      //   .then(response => {
-      //     window.alert("Data berhasil ditambah!")
-      //     window.location.reload()
-      //   })
-      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      axios.put(externalApi()+'/api/saka/'+saka_id, {name: name}, config())
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -367,10 +362,7 @@ export default function SkSaka(props) {
                       )}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      <Button sx={{ height: '35px', backgroundColor: '#4040A1' }} variant="contained" onClick={() => viewDataPotensiSaka(row.saka_id)}>
-                        <IconButton>
-                          <CloudUploadIcon fontSize='small' sx={{ color: "#fff" }} />
-                        </IconButton>
+                      <Button sx={{ height: '35px', backgroundColor: '#4040A1' }} variant="contained" onClick={() => viewDataPotensiSaka(row.saka_id)} endIcon={<CloudUploadIcon />}>
                         Upload
                       </Button>
                       <ModalPotensi handleClose={handleClose} open={open} handleSubmit={handleSubmitDataPotensiSaka} title="Update Data Potensi SAKA" type="UPDATE" handleExport={handleExportDataPotensiSaka}>
@@ -385,7 +377,7 @@ export default function SkSaka(props) {
                           <TableBody>
                             {dataPotensiSaka.map((row, index) => (
                               <TableRow
-                                key={row.data_id}
+                                key={row.dkr_id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                               >
                                 <TableCell component="th" scope="row">
@@ -425,49 +417,51 @@ export default function SkSaka(props) {
                     </TableCell>
                   </TableRow>
                 ))}
-                <ModalUpdate handleSubmit={handleSubmitUpdateSkSaka} open={openSkSaka} title={`Upload SK SAKA ${name}`} handleClose={handleCloseSkSaka}>
-                  <TextField
-                    label="Document SK SAKA*"
-                    type="file"
-                    variant="outlined"
-                    fullWidth
-                    onChange={handleSkSakaChange}
-                    error={!!errors.document_sk_saka}
-                    helperText={errors.document_sk_saka ? errors.document_sk_saka : ''}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </ModalUpdate>
-
-                <ModalUpdate handleSubmit={handleSubmitUpdateSkPinsaka} open={openSkPinsaka} title={`Upload SK PINSAKA ${name}`} handleClose={handleCloseSkPinsaka}>
-                  <TextField
-                    label="Document SK PINSAKA*"
-                    type="file"
-                    variant="outlined"
-                    fullWidth
-                    onChange={handleSkPinsakaChange}
-                    error={!!errors.document_sk_pinsaka}
-                    helperText={errors.document_sk_pinsaka ? errors.document_sk_pinsaka : ''}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </ModalUpdate>
-
-                <ModalUpdate handleSubmit={handleSubmitUpdate} open={openUpdate} title="Update SAKA" handleClose={handleCloseUpdate}>
-                  <TextField
-                    label="Nama SAKA*"
-                    variant="outlined"
-                    fullWidth
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    error={!!errors.name}
-                    helperText={errors.name ? errors.name : ''}
-                  />
-                </ModalUpdate>
               </TableBody>
             </Table>
+
+            <ModalUpdate handleSubmit={handleSubmitUpdateSkSaka} open={openSkSaka} title={`Upload SK SAKA ${name}`} handleClose={handleCloseSkSaka}>
+              <TextField
+                label="Document SK SAKA*"
+                type="file"
+                variant="outlined"
+                fullWidth
+                onChange={handleSkSakaChange}
+                error={!!errors.document_sk_saka}
+                helperText={errors.document_sk_saka ? errors.document_sk_saka : ''}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </ModalUpdate>
+
+            <ModalUpdate handleSubmit={handleSubmitUpdateSkPinsaka} open={openSkPinsaka} title={`Upload SK PINSAKA ${name}`} handleClose={handleCloseSkPinsaka}>
+              <TextField
+                label="Document SK PINSAKA*"
+                type="file"
+                variant="outlined"
+                fullWidth
+                onChange={handleSkPinsakaChange}
+                error={!!errors.document_sk_pinsaka}
+                helperText={errors.document_sk_pinsaka ? errors.document_sk_pinsaka : ''}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </ModalUpdate>
+
+            <ModalUpdate handleSubmit={handleSubmitUpdate} open={openUpdate} title="Update SAKA" handleClose={handleCloseUpdate}>
+              <TextField
+                label="Nama SAKA*"
+                variant="outlined"
+                fullWidth
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                error={!!errors.name}
+                helperText={errors.name ? errors.name : ''}
+              />
+            </ModalUpdate>
+
           </Box>
         </List>
       </CardContent>

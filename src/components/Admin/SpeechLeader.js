@@ -140,7 +140,7 @@ export default function SpeechLeader(props) {
                 <CardMedia 
                   component="img"
                   alt="Sambutan DKC Kab.Bogor"
-                  image={externalApi()+dataSpeechLeader.image}
+                  image={dataSpeechLeader.image ? externalApi() + dataSpeechLeader.image : '/Logo.png'}
                   title="Sambutan DKC Kab.Bogor"
                 />
               </Grid>

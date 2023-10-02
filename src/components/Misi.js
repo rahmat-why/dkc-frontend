@@ -20,11 +20,9 @@ export default function Misi(props) {
           <Grid item xs={12} md={9} align="left">
             <List>
               {dataMisi.map((misi, index) => (
-                <ListItem>
-                  <Typography variant="body1" gutterBottom>
-                    {misi.description}
-                  </Typography>
-                </ListItem>
+                <Typography variant="body1" gutterBottom key={misi.goal_id}>
+                  {misi.description}
+                </Typography>
               ))}
             </List>
           </Grid>
