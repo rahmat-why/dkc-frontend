@@ -13,7 +13,7 @@ class NavbarDesktop extends Component {
       <Toolbar sx={{ display: { xs: 'none', md: 'flex' } }}>
         {/* Icon */}
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          <Avatar sx={{ mr: 1, width: 72, height: 72 }} src="/Logo.png" alt="Logo DKC" />
+          <Avatar sx={{ mr: 1, width: 72, height: 72 }} src="/dkclogo.png" alt="Logo DKC" />
         </Box>
 
         {/* Menu */}

@@ -58,7 +58,7 @@ class NavbarMobile extends Component {
 
         {/* Icon */}
         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-        <Avatar sx={{ mr: 1, width: 64, height: 64 }} src="/Logo.png" alt="Logo DKC" />
+        <Avatar sx={{ mr: 1, width: 64, height: 64 }} src="/dkclogo.png" alt="Logo DKC" />
         </Box>
         
         {/* Logo */}
