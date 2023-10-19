@@ -25,6 +25,7 @@ import { formatDate } from '../../utils/utils';
 export default function ReportSaka(props) {
   const { dataReportSaka, dataSkSaka } = props
 
+  const [reportId, setReportId] = useState('');
   const [name, setName] = useState('');
   const [sakaId, setSakaId] = useState('');
   const [reportDate, setReportDate] = useState('');
@@ -58,16 +59,12 @@ export default function ReportSaka(props) {
     formData.append('document', document)
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      try {
-        axios.post(externalApi()+'/api/report-saka', formData, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-      } catch (error) {
-        window.alert("Terjadi kesalahan! data gagal ditambah!");
-      }
+      axios.post(externalApi()+'/api/report-saka', formData, config())
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -75,15 +72,16 @@ export default function ReportSaka(props) {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/report-saka/'+report_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
   const [open, setOpen] = useState(false);
   const handleUpdate = async (report) => {
+    setReportId(report.report_id)
     setOpen(true);
     setName(report.name)
     setSakaId(report.saka_id)
@@ -109,12 +107,18 @@ export default function ReportSaka(props) {
     }
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
-      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
-      //   .then(response => {
-      //     window.alert("Data berhasil ditambah!")
-      //     window.location.reload()
-      //   })
-      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      const formData = {
+        name: name,
+        saka_id: sakaId,
+        report_date: reportDate
+      };
+      
+      axios.put(externalApi()+'/api/report-saka/'+reportId, formData, config())
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -232,53 +236,53 @@ export default function ReportSaka(props) {
                     </TableCell>
                   </TableRow>
                 ))}
-                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title={`Update Laporan SAKA`} handleClose={handleClose}>
-                  <TextField
-                    label="Nama Laporan*"
-                    variant="outlined"
-                    fullWidth
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    error={!!errors.name}
-                    helperText={errors.name ? errors.name : ''}
-                  />
-                  
-                  <TextField
-                    label="Nama SAKA*"
-                    variant="outlined"
-                    fullWidth
-                    value={sakaId}
-                    select
-                    onChange={(e) => setSakaId(e.target.value)}
-                    error={!!errors.sakaId}
-                    helperText={errors.sakaId ? errors.sakaId : ''}
-                    sx={{ mt: 3 }}
-                  >
-                    {dataSkSaka.map((saka) => (
-                      <MenuItem key={saka.saka_id} value={saka.saka_id}>
-                        {saka.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-
-                  <TextField
-                    name="reportDate"
-                    label="Tanggal Terbit*"
-                    type="date"
-                    variant="outlined"
-                    fullWidth
-                    value={reportDate}
-                    onChange={(e) => setReportDate(e.target.value)}
-                    error={!!errors.reportDate}
-                    helperText={errors.reportDate ? errors.reportDate : ''}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    sx={{ mt: 3 }}
-                  />
-                </ModalUpdate>
               </TableBody>
             </Table>
+            <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title={`Update Laporan SAKA`} handleClose={handleClose}>
+              <TextField
+                label="Nama Laporan*"
+                variant="outlined"
+                fullWidth
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                error={!!errors.name}
+                helperText={errors.name ? errors.name : ''}
+              />
+              
+              <TextField
+                label="Nama SAKA*"
+                variant="outlined"
+                fullWidth
+                value={sakaId}
+                select
+                onChange={(e) => setSakaId(e.target.value)}
+                error={!!errors.sakaId}
+                helperText={errors.sakaId ? errors.sakaId : ''}
+                sx={{ mt: 3 }}
+              >
+                {dataSkSaka.map((saka) => (
+                  <MenuItem key={saka.saka_id} value={saka.saka_id}>
+                    {saka.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <TextField
+                name="reportDate"
+                label="Tanggal Terbit*"
+                type="date"
+                variant="outlined"
+                fullWidth
+                value={reportDate}
+                onChange={(e) => setReportDate(e.target.value)}
+                error={!!errors.reportDate}
+                helperText={errors.reportDate ? errors.reportDate : ''}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ mt: 3 }}
+              />
+            </ModalUpdate>
           </Box>
         </List>
       </CardContent>

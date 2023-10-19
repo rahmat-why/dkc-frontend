@@ -53,16 +53,12 @@ export default function AreaCoordinator(props) {
     formData.append('image', image);
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      try {
-        axios.post(externalApi()+'/api/area-coordinators', formData, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-      } catch (error) {
-        console.error(error);
-      }
+      axios.post(externalApi()+'/api/area-coordinators', formData, config())
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -74,10 +70,10 @@ export default function AreaCoordinator(props) {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/area-coordinators/'+coordinator_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -108,15 +104,19 @@ export default function AreaCoordinator(props) {
       return;
     }
 
-    console.log(coordinator_id)
-
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
-      // axios.put(externalApi()+'/api/dkr/'+dkr_id, formData, config())
-      //   .then(response => {
-      //     window.alert("Data berhasil ditambah!")
-      //     window.location.reload()
-      //   })
-      //   .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      const formData = {
+        name: name,
+        nta: nta,
+        area_id: area_id
+      }
+      
+      axios.put(externalApi()+'/api/area-coordinators/'+coordinator_id, formData, config())
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -168,7 +168,7 @@ export default function AreaCoordinator(props) {
                   sx={{ mt: 3 }}
                 >
                   {areas.map((area) => (
-                    <MenuItem key={area.id} value={area.area_id}>
+                    <MenuItem key={area.area_id} value={area.area_id}>
                       {area.name}
                     </MenuItem>
                   ))}
@@ -201,13 +201,13 @@ export default function AreaCoordinator(props) {
               <TableBody>
                 {dataAreaCoordinator.map((row) => (
                   <TableRow
-                    key={row.name}
+                    key={row.coordinator_id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell align="left">
                       <CardMedia
                         sx={{ height: 140, width: 100 }}
-                        image={externalApi()+row.image}
+                        image={row.image ? externalApi() + row.image : '/Logo.png'}
                         title={row.name}
                       />
                     </TableCell>
@@ -224,46 +224,46 @@ export default function AreaCoordinator(props) {
                     </TableCell>
                   </TableRow>
                 ))}
-                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Koordinator Wilayah" handleClose={handleClose}>
-                  <TextField
-                    label="Nama*"
-                    variant="outlined"
-                    fullWidth
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    error={!!errors.name}
-                    helperText={errors.name ? errors.name : ''}
-                  />
-                  <TextField
-                    label="NTA*"
-                    variant="outlined"
-                    fullWidth
-                    value={nta}
-                    onChange={(e) => setNta(e.target.value)}
-                    error={!!errors.nta}
-                    helperText={errors.nta ? errors.nta : ''}
-                    sx={{ mt: 3 }}
-                  />
-                  <TextField
-                    label="Area*"
-                    variant="outlined"
-                    fullWidth
-                    select
-                    value={area_id}
-                    onChange={(e) => setAreaId(e.target.value)}
-                    error={!!errors.area_id}
-                    helperText={errors.area_id ? errors.area_id : ''}
-                    sx={{ mt: 3 }}
-                  >
-                    {areas.map((area) => (
-                      <MenuItem key={area.id} value={area.area_id}>
-                        {area.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </ModalUpdate>
               </TableBody>
             </Table>
+            <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Koordinator Wilayah" handleClose={handleClose}>
+              <TextField
+                label="Nama*"
+                variant="outlined"
+                fullWidth
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                error={!!errors.name}
+                helperText={errors.name ? errors.name : ''}
+              />
+              <TextField
+                label="NTA*"
+                variant="outlined"
+                fullWidth
+                value={nta}
+                onChange={(e) => setNta(e.target.value)}
+                error={!!errors.nta}
+                helperText={errors.nta ? errors.nta : ''}
+                sx={{ mt: 3 }}
+              />
+              <TextField
+                label="Area*"
+                variant="outlined"
+                fullWidth
+                select
+                value={area_id}
+                onChange={(e) => setAreaId(e.target.value)}
+                error={!!errors.area_id}
+                helperText={errors.area_id ? errors.area_id : ''}
+                sx={{ mt: 3 }}
+              >
+                {areas.map((area) => (
+                  <MenuItem key={area.area_id} value={area.area_id}>
+                    {area.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </ModalUpdate>
           </Box>
         </List>
       </CardContent>

@@ -39,7 +39,6 @@ function Dkr() {
     axios.get(externalApi()+'/api/dkr')
       .then(response => {
         setAreaDkr(response.data.data);
-        console.log(dataAreaDkr)
       })
       .catch(error => {
         console.log(error);

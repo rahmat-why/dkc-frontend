@@ -27,7 +27,7 @@ export default function Visi(props) {
           </Grid>
           <Grid item xs={12} md={9} align="left">
             {dataVisi.map((visi, index) => (
-              <Typography variant="body1" gutterBottom>
+              <Typography variant="body1" gutterBottom key={visi.goal_id}>
                 {visi.description}
               </Typography>
             ))}

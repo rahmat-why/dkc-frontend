@@ -19,25 +19,22 @@ export default function Agenda(props) {
         </Typography>
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
           {dataAgenda.map((agenda, index) => (
-            <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2 }}>
+            <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2 }} key={agenda.agenda_id}>
               <ListItem alignItems="flex-start">
                 <ListItemText
                   primary={agenda.title}
-                  secondary={
-                    <React.Fragment>
-                      <Divider sx={{ mt: 1 }} />
-                      <Typography
-                        component="div"
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mt: 1 }}
-                      >
-                        {formatDate(agenda.scheduleAt)}
-                      </Typography>
-                    </React.Fragment>
-                  }
+                  sx={{ textAlign: 'left', paddingRight: '16px' }}
                 />
               </ListItem>
+              <Divider />
+              <Typography
+                component="div"
+                variant="body2"
+                color="text.secondary"
+                sx={{ mt: 2, mb: 1, textAlign: 'left', paddingLeft: '16px' }}
+              >
+                {formatDate(agenda.scheduleAt)}
+              </Typography>
             </Box>
           ))}
         </List>

@@ -33,8 +33,11 @@ export default function ProgramDkr(props) {
 
   const [program_id, setProgramId] = useState('');
 
+  const fixedYears = [2020, 2021];
   const currentYear = new Date().getFullYear();
-  const years = Array.from(new Array(3), (val, index) => currentYear + index);
+  const rangeOfYears = Array.from(new Array(3), (val, index) => currentYear + index);
+
+  const years = [...fixedYears, ...rangeOfYears];
   const months = [1,2,3,4,5,6,7,8,9,10,11,12];
 
   const handleInputChange = (event) => {
@@ -58,11 +61,11 @@ export default function ProgramDkr(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       axios.post(externalApi()+'/api/program-dkr/'+dataLogin.data.dkr_id, formData, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -70,10 +73,10 @@ export default function ProgramDkr(props) {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
       axios.delete(externalApi()+'/api/program-dkr/'+program_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -102,15 +105,13 @@ export default function ProgramDkr(props) {
       return;
     }
 
-    console.log(program_id)
-
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
       axios.put(externalApi()+'/api/program-dkr/'+program_id, formData, config())
-        .then(response => {
-          window.alert("Data berhasil diperbarui!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -196,7 +197,7 @@ export default function ProgramDkr(props) {
                 <TableBody>
                   {dataProgramDkr.map((row, index) => (
                     <TableRow
-                      key={row.name}
+                      key={row.program_id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell align="center" component="th" scope="row">
@@ -212,60 +213,60 @@ export default function ProgramDkr(props) {
                       </TableCell>
                     </TableRow>
                   ))}
-                  <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Program DKR" handleClose={handleClose}>
-                    <TextField 
-                      label="Name*" 
-                      variant="outlined"
-                      name="program_name"
-                      fullWidth
-                      value={formData.program_name}
-                      onChange={handleInputChange}
-                      error={!!errors.program_name}
-                      helperText={errors.program_name ? errors.program_name : ''}
-                    />
-
-                    <TextField
-                      id="month"
-                      label="Month*"
-                      variant="outlined"
-                      name="month"
-                      select
-                      value={formData.month}
-                      onChange={handleInputChange}
-                      error={!!errors.month}
-                      helperText={errors.month ? errors.month : ''}
-                      fullWidth
-                      sx={{ mt: 3 }}
-                    >
-                      {months.map((month) => (
-                        <MenuItem key={month} value={month}>
-                          {month}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                      
-                    <TextField
-                      id="year"
-                      label="Year*"
-                      name="year"
-                      variant="outlined"
-                      select
-                      value={formData.year}
-                      onChange={handleInputChange}
-                      error={!!errors.year}
-                      helperText={errors.year ? errors.year : ''}
-                      fullWidth
-                      sx={{ mt: 3 }}
-                    >
-                      {years.map((year) => (
-                        <MenuItem key={year} value={year}>
-                          {year}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </ModalUpdate>
                 </TableBody>
               </Table>
+              <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Program DKR" handleClose={handleClose}>
+                <TextField 
+                  label="Name*" 
+                  variant="outlined"
+                  name="program_name"
+                  fullWidth
+                  value={formData.program_name}
+                  onChange={handleInputChange}
+                  error={!!errors.program_name}
+                  helperText={errors.program_name ? errors.program_name : ''}
+                />
+
+                <TextField
+                  id="month"
+                  label="Month*"
+                  variant="outlined"
+                  name="month"
+                  select
+                  value={formData.month}
+                  onChange={handleInputChange}
+                  error={!!errors.month}
+                  helperText={errors.month ? errors.month : ''}
+                  fullWidth
+                  sx={{ mt: 3 }}
+                >
+                  {months.map((month) => (
+                    <MenuItem key={month} value={month}>
+                      {month}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                  
+                <TextField
+                  id="year"
+                  label="Year*"
+                  name="year"
+                  variant="outlined"
+                  select
+                  value={formData.year}
+                  onChange={handleInputChange}
+                  error={!!errors.year}
+                  helperText={errors.year ? errors.year : ''}
+                  fullWidth
+                  sx={{ mt: 3 }}
+                >
+                  {years.map((year) => (
+                    <MenuItem key={year} value={year}>
+                      {year}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </ModalUpdate>
             </TableContainer>
           </Box>
         </List>

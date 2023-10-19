@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Modal, Box, Typography, Divider, Button, IconButton } from "@mui/material"
+import { Modal, Box, Typography, Divider, Button } from "@mui/material"
 
 import { 
   Close as CloseIcon,
   Add as AddIcon,
   CloudUpload as CloudUploadIcon,
-  Edit as EditIcon
+  Edit as EditIcon,
 } from '@mui/icons-material';
 
 const style = {
@@ -37,21 +37,23 @@ export default function ModalCreate({ children, title, handleSubmit, type, handl
 
   const textButton = (type) => {
     if(type === "ADD") {
-      return <Box><IconButton><AddIcon fontSize='small' sx={{ color: "#fff" }} /></IconButton>Add</Box>
+      return <Button sx={{ height: '35px', mt: 2, backgroundColor: '#4040A1' }} variant="contained" onClick={handleClickOpen} endIcon={<AddIcon />}>
+        Add
+      </Button>
     }else if(type === "UPLOAD"){
-      return <Box><IconButton><CloudUploadIcon fontSize='small' sx={{ color: "#fff" }} /></IconButton>Upload</Box>
+      return <Button sx={{ height: '35px', mt: 2, backgroundColor: '#4040A1' }} variant="contained" onClick={handleClickOpen} endIcon={<CloudUploadIcon />}>
+        Upload
+      </Button>
     }else{
-      return <Box><IconButton><EditIcon fontSize='small' sx={{ color: "#fff" }} /></IconButton>Update</Box>
+      return <Button sx={{ height: '35px', mt: 2, backgroundColor: '#4040A1' }} variant="contained" onClick={handleClickOpen} endIcon={<EditIcon />}>
+        Update
+      </Button>
     }
   }
 
   return (
     <div>
-      <Box>
-        <Button sx={{ height: '35px', mt: 2, backgroundColor: '#4040A1' }} variant="contained" onClick={handleClickOpen}>
-          {textButton(type)}
-        </Button>
-      </Box>
+        {textButton(type)}
 
       <Modal
         open={open}

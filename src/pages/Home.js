@@ -69,7 +69,6 @@ function Home() {
           <Grid item md={8} xs={12}>
             <PotensiTd dataPotensi={dataPotensi} />
           </Grid>
-          {console.log(dataAgenda)}
           <Grid item md={4} xs={12}>
             <Agenda dataAgenda={dataAgenda} />
           </Grid>

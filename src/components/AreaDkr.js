@@ -19,7 +19,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -77,7 +77,7 @@ export default function AreaDkr(props) {
             <TabPanel value={value} index={0}>
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 {dataDkr1.map((dkr, index) => (
-                  <Grid item xs={6} md={3} align="center">
+                  <Grid item xs={6} md={3} align="center" key={dkr.dkr_id}>
                     <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
                       <Link to={`/dkr/${dkr.dkr_id}`} className="link">
                         <ListItem alignItems="flex-start">
@@ -96,7 +96,7 @@ export default function AreaDkr(props) {
             <TabPanel value={value} index={1}>
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 {dataDkr2.map((dkr, index) => (
-                  <Grid item xs={6} md={3} align="center">
+                  <Grid item xs={6} md={3} align="center" key={dkr.dkr_id}>
                     <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
                       <Link to={`/dkr/${dkr.dkr_id}`} className="link">
                         <ListItem alignItems="flex-start">
@@ -115,7 +115,7 @@ export default function AreaDkr(props) {
             <TabPanel value={value} index={2}>
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 {dataDkr3.map((dkr, index) => (
-                  <Grid item xs={6} md={3} align="center">
+                  <Grid item xs={6} md={3} align="center" key={dkr.dkr_id}>
                     <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
                       <Link to={`/dkr/${dkr.dkr_id}`} className="link">
                         <ListItem alignItems="flex-start">
@@ -134,7 +134,7 @@ export default function AreaDkr(props) {
             <TabPanel value={value} index={3}>
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 {dataDkr4.map((dkr, index) => (
-                  <Grid item xs={6} md={3} align="center">
+                  <Grid item xs={6} md={3} align="center" key={dkr.dkr_id}>
                     <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
                       <Link to={`/dkr/${dkr.dkr_id}`} className="link">
                         <ListItem alignItems="flex-start">
@@ -153,7 +153,7 @@ export default function AreaDkr(props) {
             <TabPanel value={value} index={4}>
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 {dataDkr5.map((dkr, index) => (
-                  <Grid item xs={6} md={3} align="center">
+                  <Grid item xs={6} md={3} align="center" key={dkr.dkr_id}>
                     <Box sx={{ border: '1px solid #cacaca', p: 1, borderRadius: "12px", mt: 2, maxWidth: 180 }}>
                       <Link to={`/dkr/${dkr.dkr_id}`} className="link">
                         <ListItem alignItems="flex-start">

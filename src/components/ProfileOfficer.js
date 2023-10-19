@@ -19,7 +19,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -78,9 +78,9 @@ export default function ProfileOfficer(props) {
                 <Grid item xs={12} md={3} align="right">
                   <CardMedia 
                     component="img"
-                    alt="Sambutan DKC Kab.Bogor"
+                    alt={row.name}
                     image={externalApi()+row.image}
-                    title="Sambutan DKC Kab.Bogor"
+                    title={row.name}
                   />
                 </Grid>
                 <Grid item xs={12} md={9} align="left">
@@ -139,7 +139,7 @@ export default function ProfileOfficer(props) {
                           <InstagramIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <a href={row.instagram} target="_blank" rel="noopener noreferrer">
+                      <a href={row.instagram} target="_blank" rel="noreferrer">
                         <ListItemText primary={row.instagram} />
                       </a>
                     </ListItem>

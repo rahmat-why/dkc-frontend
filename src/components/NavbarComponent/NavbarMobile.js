@@ -42,7 +42,7 @@ class NavbarMobile extends Component {
             }}
           >
             {pages.map((page) => (
-              <Link className="link text-primary" to={page.url}>
+              <Link className="link text-primary" to={page.url} key={page.name}>
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">
                     {page.icon}

@@ -139,7 +139,7 @@ export default function AreaDkr(props) {
                   sx={{ mt: 3 }}
                 >
                   {areas.map((area) => (
-                    <MenuItem key={area.id} value={area.area_id}>
+                    <MenuItem key={area.area_id} value={area.area_id}>
                       {area.name}
                     </MenuItem>
                   ))}
@@ -179,7 +179,7 @@ export default function AreaDkr(props) {
               <TableBody>
                 {dataAreaDkr.map((row) => (
                   <TableRow
-                    key={row.name}
+                    key={row.dkr_id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
@@ -193,60 +193,60 @@ export default function AreaDkr(props) {
                     </TableCell>
                   </TableRow>
                 ))}
-                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update DKR" handleClose={handleClose}>
-                  <TextField
-                    label="Nama*"
-                    variant="outlined"
-                    name="name"
-                    fullWidth
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    error={!!errors.name}
-                    helperText={errors.name ? errors.name : ''}
-                  />
-                  <TextField
-                    label="Area*"
-                    variant="outlined"
-                    name="area_id"
-                    fullWidth
-                    select
-                    value={formData.area_id}
-                    onChange={handleInputChange}
-                    error={!!errors.area_id}
-                    helperText={errors.area_id ? errors.area_id : ''}
-                    sx={{ mt: 3 }}
-                  >
-                    {areas.map((area) => (
-                      <MenuItem key={area.id} value={area.area_id}>
-                        {area.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                  <TextField
-                    label="Username*"
-                    variant="outlined"
-                    name="username"
-                    fullWidth
-                    value={formData.username}
-                    disabled
-                    error={!!errors.username}
-                    helperText={errors.username ? errors.username : ''}
-                    sx={{ mt: 3 }}
-                  />
-                  <TextField
-                    label="Password*"
-                    variant="outlined"
-                    name="password"
-                    fullWidth
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    error={!!errors.password}
-                    helperText={errors.password ? errors.password : ''}
-                    sx={{ mt: 3 }}
-                  />
-                </ModalUpdate>
               </TableBody>
             </Table>
+            <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update DKR" handleClose={handleClose}>
+              <TextField
+                label="Nama*"
+                variant="outlined"
+                name="name"
+                fullWidth
+                value={formData.name}
+                onChange={handleInputChange}
+                error={!!errors.name}
+                helperText={errors.name ? errors.name : ''}
+              />
+              <TextField
+                label="Area*"
+                variant="outlined"
+                name="area_id"
+                fullWidth
+                select
+                value={formData.area_id}
+                onChange={handleInputChange}
+                error={!!errors.area_id}
+                helperText={errors.area_id ? errors.area_id : ''}
+                sx={{ mt: 3 }}
+              >
+                {areas.map((area) => (
+                  <MenuItem key={area.area_id} value={area.area_id}>
+                    {area.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <TextField
+                label="Username*"
+                variant="outlined"
+                name="username"
+                fullWidth
+                value={formData.username}
+                disabled
+                error={!!errors.username}
+                helperText={errors.username ? errors.username : ''}
+                sx={{ mt: 3 }}
+              />
+              <TextField
+                label="Password*"
+                variant="outlined"
+                name="password"
+                fullWidth
+                value={formData.password}
+                onChange={handleInputChange}
+                error={!!errors.password}
+                helperText={errors.password ? errors.password : ''}
+                sx={{ mt: 3 }}
+              />
+            </ModalUpdate>
           </Box>
         </List>
       </CardContent>

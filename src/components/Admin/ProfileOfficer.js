@@ -75,16 +75,12 @@ export default function ProfileOfficer(props) {
     formData.append('image', image);
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      try {
-        axios.post(externalApi()+'/api/officers', formData, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-      } catch (error) {
-        console.error(error);
-      }
+      axios.post(externalApi()+'/api/officers', formData, config())
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -92,10 +88,10 @@ export default function ProfileOfficer(props) {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/officers/'+officer_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -152,11 +148,11 @@ export default function ProfileOfficer(props) {
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
       axios.put(externalApi()+'/api/officers/'+officer_id, formData, config())
-        .then(response => {
-          window.alert("Data berhasil diperbarui!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -343,7 +339,7 @@ export default function ProfileOfficer(props) {
                     <TableCell align="left">
                       <CardMedia
                         sx={{ height: 140, width: 100 }}
-                        image={externalApi()+row.image}
+                        image={row.image ? externalApi() + row.image : '/Logo.png'}
                         title={row.name}
                       />
                     </TableCell>
@@ -365,136 +361,136 @@ export default function ProfileOfficer(props) {
                     </TableCell>
                   </TableRow>
                 ))}
-                <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Profil" handleClose={handleClose}>
-                  <Grid container spacing={2}>
-                    <Grid item md={6} xs={12}>
-                      <TextField
-                        label="Nama*"
-                        variant="outlined"
-                        name="name"
-                        fullWidth
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        error={!!errors.name}
-                        helperText={errors.name ? errors.name : ''}
-                      />
-                    </Grid>
-                    <Grid item md={6} xs={12}>
-                      <TextField
-                        label="NTA*"
-                        variant="outlined"
-                        name="nta"
-                        fullWidth
-                        value={nta}
-                        onChange={(e) => setNta(e.target.value)}
-                        error={!!errors.nta}
-                        helperText={errors.nta ? errors.nta : ''}
-                      />
-                    </Grid>
-                  </Grid>
-
-                  <Grid container spacing={2}>
-                    <Grid item md={6} xs={12}>
-                      <TextField
-                        id="stage_id"
-                        label="Tingkat*"
-                        variant="outlined"
-                        name="stage_id"
-                        select
-                        value={stage_id}
-                        onChange={(e) => setStageId(e.target.value)}
-                        fullWidth
-                        sx={{ mt: 3 }}
-                      >
-                        {dataStage.map((stage) => (
-                          <MenuItem key={stage.stage_id} value={stage.stage_id}>
-                            {stage.name}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    </Grid>
-                    <Grid item md={6} xs={12}>
-                      <TextField
-                        id="scope_id"
-                        label="Divisi*"
-                        variant="outlined"
-                        name="scope_id"
-                        select
-                        value={scope_id}
-                        onChange={(e) => setScopeId(e.target.value)}
-                        fullWidth
-                        sx={{ mt: 3 }}
-                      >
-                        {dataScope.map((scope) => (
-                          <MenuItem key={scope.scope_id} value={scope.scope_id}>
-                            {scope.name}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    </Grid>
-                  </Grid>
-
+              </TableBody>
+            </Table>
+            <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Profil" handleClose={handleClose}>
+              <Grid container spacing={2}>
+                <Grid item md={6} xs={12}>
                   <TextField
-                    id="position"
-                    label="Jabatan*"
+                    label="Nama*"
                     variant="outlined"
-                    name="position"
+                    name="name"
+                    fullWidth
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name : ''}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    label="NTA*"
+                    variant="outlined"
+                    name="nta"
+                    fullWidth
+                    value={nta}
+                    onChange={(e) => setNta(e.target.value)}
+                    error={!!errors.nta}
+                    helperText={errors.nta ? errors.nta : ''}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={2}>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    id="stage_id"
+                    label="Tingkat*"
+                    variant="outlined"
+                    name="stage_id"
                     select
-                    value={position}
-                    onChange={(e) => setPosition(e.target.value)}
+                    value={stage_id}
+                    onChange={(e) => setStageId(e.target.value)}
                     fullWidth
                     sx={{ mt: 3 }}
                   >
-                    {dataPosition.map((position) => (
-                      <MenuItem key={position} value={position}>
-                        {position}
+                    {dataStage.map((stage) => (
+                      <MenuItem key={stage.stage_id} value={stage.stage_id}>
+                        {stage.name}
                       </MenuItem>
                     ))}
                   </TextField>
-                  
+                </Grid>
+                <Grid item md={6} xs={12}>
                   <TextField
-                    label="Pendidikan*"
+                    id="scope_id"
+                    label="Divisi*"
                     variant="outlined"
-                    name="education"
+                    name="scope_id"
+                    select
+                    value={scope_id}
+                    onChange={(e) => setScopeId(e.target.value)}
                     fullWidth
-                    value={education}
-                    onChange={(e) => setEducation(e.target.value)}
-                    error={!!errors.education}
-                    helperText={errors.education ? errors.education : ''}
                     sx={{ mt: 3 }}
-                    InputProps={{
-                      placeholder: 'Isi dengan nama institusi',
-                    }}
-                  />
-                  <TextField
-                    label="Kota/Kab*"
-                    variant="outlined"
-                    name="city"
-                    fullWidth
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    error={!!errors.city}
-                    helperText={errors.city ? errors.city : ''}
-                    sx={{ mt: 3 }}
-                  />
+                  >
+                    {dataScope.map((scope) => (
+                      <MenuItem key={scope.scope_id} value={scope.scope_id}>
+                        {scope.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+              </Grid>
 
-                  <TextField
-                    label="Akun Instagram*"
-                    variant="outlined"
-                    name="instagram"
-                    fullWidth
-                    value={instagram}
-                    onChange={(e) => setInstagram(e.target.value)}
-                    error={!!errors.instagram}
-                    helperText={errors.instagram ? errors.instagram : ''}
-                    sx={{ mt: 3 }}
-                    InputProps={{
-                      placeholder: 'Awali dengan https://',
-                    }}
-                  />
-                </ModalUpdate>
-              </TableBody>
-            </Table>
+              <TextField
+                id="position"
+                label="Jabatan*"
+                variant="outlined"
+                name="position"
+                select
+                value={position}
+                onChange={(e) => setPosition(e.target.value)}
+                fullWidth
+                sx={{ mt: 3 }}
+              >
+                {dataPosition.map((position) => (
+                  <MenuItem key={position} value={position}>
+                    {position}
+                  </MenuItem>
+                ))}
+              </TextField>
+              
+              <TextField
+                label="Pendidikan*"
+                variant="outlined"
+                name="education"
+                fullWidth
+                value={education}
+                onChange={(e) => setEducation(e.target.value)}
+                error={!!errors.education}
+                helperText={errors.education ? errors.education : ''}
+                sx={{ mt: 3 }}
+                InputProps={{
+                  placeholder: 'Isi dengan nama institusi',
+                }}
+              />
+              <TextField
+                label="Kota/Kab*"
+                variant="outlined"
+                name="city"
+                fullWidth
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                error={!!errors.city}
+                helperText={errors.city ? errors.city : ''}
+                sx={{ mt: 3 }}
+              />
+
+              <TextField
+                label="Akun Instagram*"
+                variant="outlined"
+                name="instagram"
+                fullWidth
+                value={instagram}
+                onChange={(e) => setInstagram(e.target.value)}
+                error={!!errors.instagram}
+                helperText={errors.instagram ? errors.instagram : ''}
+                sx={{ mt: 3 }}
+                InputProps={{
+                  placeholder: 'Awali dengan https://',
+                }}
+              />
+            </ModalUpdate>
           </Box>
         </List>
       </CardContent>

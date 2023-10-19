@@ -14,11 +14,11 @@ import {
   Box,
   TextField,
   MenuItem,
-  IconButton,
   Button
 } from '@mui/material';
   
 import ModalCreate from "./Agenda/ModalCreate"
+import ModalUpdate from "./Agenda/ModalUpdate"
 import ModalPotensi from "./Agenda/ModalPotensi"
 import MenuTooltip from "./Agenda/MenuTooltip"
 
@@ -70,11 +70,11 @@ export default function DataPotensi(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       axios.post(externalApi()+'/api/schools/'+dataLogin.data.dkr_id, formData, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -82,11 +82,17 @@ export default function DataPotensi(props) {
     if (window.confirm("Apakah anda yakin ingin menghpus data ini?")) {
       axios.delete(externalApi()+'/api/schools/'+school_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
+  }
+
+  const handleUpdate = async (school) => {
+    setOpen(true);
+    setSchoolId(school.school_id)
+    setFormData({ school_name: school.school_name, gudep_number: school.gudep_number })
   }
 
   const handleExportDataPotensi = async (e) => {
@@ -148,11 +154,11 @@ export default function DataPotensi(props) {
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
       axios.post(externalApi()+'/api/data-potensi/'+dataLogin.data.dkr_id, formDataPotensi, config())
-        .then(response => {
-          window.alert("Data potensi berhasil diupdate!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diupdate!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -162,12 +168,11 @@ export default function DataPotensi(props) {
   const viewDataPotensi = async(school_id) => {
     setSchoolId(school_id)
     await axios.get(externalApi()+'/api/data-potensi/'+school_id+'/'+dataLogin.data.dkr_id)
-      .then(response => {
-        setDataPotensi(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    .then(response => {
+      window.alert(response.data.message)
+      window.location.reload()
+    })
+    .catch(error => window.alert(error.response.data.message));
     setOpen(true)
   }
 
@@ -197,6 +202,30 @@ export default function DataPotensi(props) {
 
     setDataPotensi(newDataPotensi);
     setFormDataPotensi({school_id: school_id, data: newDataPotensi})
+  }
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!formData.gudep_number) errors.gudep_number = 'No. Gudep harus diisi';
+    if (!formData.school_name) errors.school_name = 'Nama sanggar bakti harus diisi';
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
+      console.log([school_id, formData])
+      axios.put(externalApi()+'/api/schools/'+school_id, formData, config())
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
+    }
   }
 
   return (
@@ -253,7 +282,7 @@ export default function DataPotensi(props) {
                 <TableBody>
                   {dataSchool.map((row) => (
                     <TableRow
-                      key={row.name}
+                      key={row.school_id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell align="center" component="th" scope="row">
@@ -262,10 +291,7 @@ export default function DataPotensi(props) {
                       <TableCell align="center">{row.school_name}</TableCell>
                       <TableCell align="center">
                         {/* View */}
-                        <Button sx={{ height: '35px', backgroundColor: '#4040A1' }} variant="contained" onClick={() => viewDataPotensi(row.school_id)}>
-                          <IconButton>
-                            <CloudUploadIcon fontSize='small' sx={{ color: "#fff" }} />
-                          </IconButton>
+                        <Button sx={{ height: '35px', backgroundColor: '#4040A1' }} variant="contained" onClick={() => viewDataPotensi(row.school_id)} endIcon={<CloudUploadIcon />}>
                           Upload
                         </Button>
                         <ModalPotensi handleClose={handleClose} open={open} handleSubmit={handleSubmitDataPotensi} handleExport={handleExportDataPotensi} title="Update Data Potensi" type="UPDATE">
@@ -280,7 +306,7 @@ export default function DataPotensi(props) {
                             <TableBody>
                               {dataPotensi.map((row, index) => (
                                 <TableRow
-                                  key={row.data_id}
+                                  key={row.stage_id}
                                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                   <TableCell component="th" scope="row">
@@ -312,6 +338,7 @@ export default function DataPotensi(props) {
                       </TableCell>
                       <TableCell>
                         <MenuTooltip style={{ marginLeft: 'auto' }}>
+                          <MenuItem onClick={() => handleUpdate(row)}>Update</MenuItem>
                           <MenuItem onClick={() => handleDelete(row.school_id)}>Delete</MenuItem>
                         </MenuTooltip>
                       </TableCell>
@@ -319,6 +346,30 @@ export default function DataPotensi(props) {
                   ))}
                 </TableBody>
               </Table>
+              <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Program DKR" handleClose={handleClose}>
+                <TextField 
+                  label="No. Gudep*" 
+                  variant="outlined"
+                  name="gudep_number"
+                  fullWidth
+                  value={formData.gudep_number}
+                  onChange={handleInputChange}
+                  error={!!errors.gudep_number}
+                  helperText={errors.gudep_number ? errors.gudep_number : ''}
+                />
+
+                <TextField 
+                  label="Sanggar Bakti*" 
+                  variant="outlined"
+                  name="school_name"
+                  fullWidth
+                  value={formData.school_name}
+                  onChange={handleInputChange}
+                  error={!!errors.school_name}
+                  helperText={errors.school_name ? errors.school_name : ''}
+                  sx={{ mt: 3 }}
+                />
+              </ModalUpdate>
             </TableContainer>
           </Box>
         </List>

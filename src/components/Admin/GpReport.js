@@ -65,16 +65,12 @@ export default function GpReport(props) {
     console.log(type)
 
     if (window.confirm("Apakah anda yakin ingin menyimpan data ini?")) {
-      try {
-        axios.post(externalApi()+'/api/gp-reports/'+dataLogin.data.dkr_id, formData, config())
-        .then(response => {
-          window.alert("Data berhasil ditambah!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal ditambah!"));
-      } catch (error) {
-        window.alert("Terjadi kesalahan! data gagal ditambah!");
-      }
+      axios.post(externalApi()+'/api/gp-reports/'+dataLogin.data.dkr_id, formData, config())
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -82,10 +78,10 @@ export default function GpReport(props) {
     if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
       axios.delete(externalApi()+'/api/gp-reports/'+report_id, config())
       .then(response => {
-        window.alert("Data berhasil dihapus!")
+        window.alert(response.data.message)
         window.location.reload()
       })
-      .catch(error => window.alert("Terjadi kesalahan! data gagal dihapus!"));
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -123,11 +119,11 @@ export default function GpReport(props) {
 
     if (window.confirm("Apakah anda yakin ingin memperbarui data ini?")) {
       axios.put(externalApi()+'/api/gp-reports/'+report_id, formData, config())
-        .then(response => {
-          window.alert("Data berhasil diperbarui!")
-          window.location.reload()
-        })
-        .catch(error => window.alert("Terjadi kesalahan! data gagal diperbarui!"));
+      .then(response => {
+        window.alert(response.data.message)
+        window.location.reload()
+      })
+      .catch(error => window.alert(error.response.data.message));
     }
   }
 
@@ -226,36 +222,36 @@ export default function GpReport(props) {
                       </TableCell>
                     </TableRow>
                   ))}
-                  <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Laporan GP" handleClose={handleClose}>
-                    <TextField 
-                      label="Nama Kegiatan*" 
-                      variant="outlined"
-                      fullWidth
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      error={!!errors.name}
-                      helperText={errors.name ? errors.name : ''}
-                    />
-
-                    <TextField
-                      id="year"
-                      label="Year*"
-                      variant="outlined"
-                      select
-                      value={year}
-                      onChange={(e) => setYear(e.target.value)}
-                      fullWidth
-                      sx={{ mt: 3 }}
-                    >
-                      {years.map((year) => (
-                        <MenuItem key={year} value={year}>
-                          {year}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </ModalUpdate>
                 </TableBody>
               </Table>
+              <ModalUpdate handleSubmit={handleSubmitUpdate} open={open} title="Update Laporan GP" handleClose={handleClose}>
+                <TextField 
+                  label="Nama Kegiatan*" 
+                  variant="outlined"
+                  fullWidth
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  error={!!errors.name}
+                  helperText={errors.name ? errors.name : ''}
+                />
+
+                <TextField
+                  id="year"
+                  label="Year*"
+                  variant="outlined"
+                  select
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                  fullWidth
+                  sx={{ mt: 3 }}
+                >
+                  {years.map((year) => (
+                    <MenuItem key={year} value={year}>
+                      {year}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </ModalUpdate>
             </Box>
           </List>
         </CardContent>
