@@ -30,9 +30,11 @@ import { externalApi, config } from "./../../utils/utils.js"
 
 export default function DataPotensi(props) {
   const [open, setOpen] = useState(false);
+  const [openPotensi, setOpenPotensi] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
+    setOpenPotensi(false);
   };
   
   const dataLogin = JSON.parse(localStorage.getItem('dataLogin'))
@@ -169,11 +171,10 @@ export default function DataPotensi(props) {
     setSchoolId(school_id)
     await axios.get(externalApi()+'/api/data-potensi/'+school_id+'/'+dataLogin.data.dkr_id)
     .then(response => {
-      window.alert(response.data.message)
-      window.location.reload()
+      setDataPotensi(response.data);
     })
     .catch(error => window.alert(error.response.data.message));
-    setOpen(true)
+    setOpenPotensi(true)
   }
 
   function handleChangeMensMember(index, value) {
@@ -294,7 +295,7 @@ export default function DataPotensi(props) {
                         <Button sx={{ height: '35px', backgroundColor: '#4040A1' }} variant="contained" onClick={() => viewDataPotensi(row.school_id)} endIcon={<CloudUploadIcon />}>
                           Upload
                         </Button>
-                        <ModalPotensi handleClose={handleClose} open={open} handleSubmit={handleSubmitDataPotensi} handleExport={handleExportDataPotensi} title="Update Data Potensi" type="UPDATE">
+                        <ModalPotensi handleClose={handleClose} open={openPotensi} handleSubmit={handleSubmitDataPotensi} handleExport={handleExportDataPotensi} title="Update Data Potensi" type="UPDATE">
                           <Table aria-label="simple table">
                             <TableHead>
                               <TableRow>

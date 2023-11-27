@@ -160,7 +160,7 @@ export default function Sidebar(props) {
               <CardMedia 
                 component="img"
                 alt="Logo DKC"
-                image="/Logo.png"
+                image="/dkclogo.png"
                 title="Logo DKC"
                 sx={{ width: 72, height: 72 }}
               />

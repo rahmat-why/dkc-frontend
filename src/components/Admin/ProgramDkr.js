@@ -33,7 +33,7 @@ export default function ProgramDkr(props) {
 
   const [program_id, setProgramId] = useState('');
 
-  const fixedYears = [2020, 2021];
+  const fixedYears = [2020, 2021, 2022];
   const currentYear = new Date().getFullYear();
   const rangeOfYears = Array.from(new Array(3), (val, index) => currentYear + index);
 
